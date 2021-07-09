@@ -1,0 +1,16 @@
+{
+	"th": {
+		"landing_title": "Landing",
+		"login_title": "เข้าสู่ระบบ",
+		"profile_title": "โปรไฟล์",
+		"profile_add_title": "เพิ่มโปรไฟล์",
+		"home_title": "บ้าน",
+		"home_ticket_title": "ตั๋ว",
+		"healthcare_title": "ดูแลรักษา",
+		"healthcare_invite_title": "คำเชิญ",
+		"healthcare_register_title": "สมัคร",
+		"healthcare_code_title": "Code Generator",
+		"healthcare_queue_title": "Queue Manager",
+		"healthcare_staff_title": "Staff"
+	}
+}
