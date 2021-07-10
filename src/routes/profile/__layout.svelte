@@ -18,7 +18,7 @@
 </script>
 
 <div class="flex flex-col">
-	<main class="flex-grow h-content">
+	<main class="flex-grow min-h-content pb-4">
 		<slot />
 	</main>
 	<div>
@@ -32,7 +32,7 @@
 </div>
 
 <style>
-	.h-content {
-		height: calc(100vh - 10rem);
+	.min-h-content {
+		min-height: calc(100vh - 10rem);
 	}
 </style>

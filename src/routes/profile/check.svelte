@@ -36,10 +36,10 @@
 <div class="text-3xl pb-2">
 	{$_('profile_add_title')}
 </div>
-<Input class="pb-2" bind:value={id} label="บัตรประชาชน" on:keyup={() => updateId()} />
+<Input class="pb-2" bind:value={id} label="profile_id_information" on:keyup={() => updateId()} />
 <DatePicker
 	classes="w-full border rounded-lg"
 	bind:value={dob}
 	on:confirmDate={() => updateDOB()}
-	placeholder="วันเดือนปีเกิด"
+	placeholder="profile_dob_information"
 />

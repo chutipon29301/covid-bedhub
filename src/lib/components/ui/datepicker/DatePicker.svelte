@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import { _ } from 'svelte-i18n';
 	import Switcher from './Switcher.svelte';
 	export let placeholder = 'Select Date';
 	export let value: Date;
 	export let visible = false;
 	export let years_map = [1900, new Date().getFullYear()];
 	export let classes = '';
+	export let disabled = false;
 	let date = new Date();
 	let years_count = years_map[1] - years_map[0] + 1;
 	const MONTHS = [
@@ -29,7 +31,7 @@
 	$: DAYS = new Array(new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate())
 		.fill(1)
 		.map((v, i) => v + i);
-	$: _date = value?.toLocaleDateString('en-US') || placeholder;
+	$: _date = value?.toLocaleDateString('en-US') || $_(placeholder);
 	let cancel = () => {
 		visible = false;
 	};
@@ -67,7 +69,7 @@
 		class="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent"
 		readonly
 		on:focus={() => {
-			visible = !visible;
+			visible = !disabled && !visible;
 		}}
 	/>
 	<label
