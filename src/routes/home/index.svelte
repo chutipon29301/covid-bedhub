@@ -6,6 +6,7 @@
 	import Button from '$lib/components/ui/button/index.svelte';
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import Ticket from '$lib/components/ui/ticket/index.svelte';
+	import { onMount } from 'svelte';
 
 	let tickets = [
 		// {
@@ -14,6 +15,26 @@
 		// 	status: '1'
 		// }
 	];
+
+	let disableFindBed = false;
+
+	onMount(() => {
+		if (navigator.geolocation)
+			navigator.geolocation.getCurrentPosition(showPosition, () => (disableFindBed = true));
+		else alert("This website doesn't support this browser");
+	});
+
+	function showPosition(position) {
+		console.log(position);
+	}
+
+	function navigate() {
+		if (disableFindBed) {
+			alert('Please allow the gps');
+			return;
+		}
+		goto(ROUTES.TICKET);
+	}
 </script>
 
 <svelte:head>
@@ -24,7 +45,7 @@
 	<div class="flex">
 		<div class="flex flex-grow">{$_('home_title')}</div>
 		{#if tickets.length}
-			<div on:click={() => goto(ROUTES.TICKET)}>
+			<div on:click={() => navigate()}>
 				<Fa class="cursor-pointer" icon={faPlusCircle} size="2rem" />
 			</div>
 		{/if}
@@ -32,7 +53,7 @@
 	{#if tickets.length === 0}
 		<div class="flex flex-grow flex-col items-center justify-center up-10">
 			<Fa class="pb-2" icon={faBed} size="2rem" />
-			<Button on:click={() => goto(ROUTES.TICKET)} placeholder="find bed" />
+			<Button on:click={() => navigate()} placeholder="find bed" />
 		</div>
 	{:else}
 		{#each tickets as ticket}

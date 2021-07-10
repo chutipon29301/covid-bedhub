@@ -41,6 +41,12 @@
 		"symptom7_label": "แน่นหน้าอกเล็กน้อย",
 		"symptom8_label": "หอบเหนื่อย พูดไม่เป็นประโยคขณะสนทนา",
 		"symptom9_label": "แน่นหน้าอกตลอดเวลา หายใจแล้วเจ็บหน้าอก",
-		"symptom10_label": "เรียกไม่รู้สึกตัว หรือตอบสนองช้า"
+		"symptom10_label": "เรียกไม่รู้สึกตัว หรือตอบสนองช้า",
+		"exam_received_date_label": "วันที่ได้รับผลตรวจ",
+		"exam_localtion_lable": "สถานที่เข้ารับการตรวจ",
+		"exam_date_label": "วันที่เข้ารับการตรวจ",
+		"vaccine_first_dose_label": "วัคซีนโดส 1 ที่ได้รับ",
+		"vaccine_second_dose_label": "วัคซีนโดส 2 ที่ได้รับ",
+		"vaccine_third_dose_label": "วัคซีนโดส 3 ที่ได้รับ"
 	}
 }

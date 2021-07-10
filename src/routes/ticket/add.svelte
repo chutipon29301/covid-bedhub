@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
 	import { page } from '$app/stores';
-	import { form$, setDisabledContinueBtn, setForm } from './store/store';
+	import { setDisabledContinueBtn, setForm } from './store/store';
+	import { userProfile$ } from '$lib/store';
 	import { initProfile } from './store/models';
 	import { onDestroy } from 'svelte';
 	import ProfileForm from '$lib/components/profileForm/index.svelte';
@@ -19,7 +20,7 @@
 		province,
 		postcode,
 		mobile
-	} = !forOther ? $form$ : initProfile;
+	} = !forOther ? $userProfile$ : initProfile;
 
 	$: setDisabledContinueBtn(
 		!id ||
