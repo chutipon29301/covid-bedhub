@@ -4,6 +4,7 @@ export const ROUTES = {
 	HOME: '/home',
 	HOME_TICKET: '/home/ticket',
 	PROFILE: '/profile',
+	PROFILE_CHECK: '/profile/check',
 	PROFILE_ADD: '/profile/add',
 	HEALTHCARE: '/healthcare',
 	HEALTHCARE_INVITE: '/healthcare/invite',

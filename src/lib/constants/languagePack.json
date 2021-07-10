@@ -12,6 +12,11 @@
 		"healthcare_code_title": "Code Generator",
 		"healthcare_queue_title": "Queue Manager",
 		"healthcare_staff_title": "Staff",
-		"button": "test"
+		"button_placeholder": "Button Placeholer",
+		"default_input_placeholder": "Enter Information",
+		"default_input_label": "Input",
+		"login_as_patient": "I'm ผู้ป่วย",
+		"login_as_officer": "I'm เจ้าหน้าที่",
+		"contunue_button": "ดำเนินการต่อ"
 	}
 }

@@ -15,11 +15,11 @@
 
 <div class="flex flex-col items-center">
 	BANNER
-	<Button isFullWidth={true} placeholder={`I'm ผู้ป่วย`} on:click={() => goto(ROUTES.LOGIN)} />
+	<Button isFullWidth={true} placeholder={'login_as_patient'} on:click={() => goto(ROUTES.LOGIN)} />
 	BANNER
 	<Button
 		isFullWidth={true}
-		placeholder={`I'm เจ้าหน้าที่`}
+		placeholder={'login_as_officer'}
 		on:click={() => goto(ROUTES.HEALTHCARE)}
 	/>
 	BANNER

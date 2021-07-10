@@ -11,15 +11,17 @@
 	import '../app.postcss';
 	import { Translate } from '$lib/services/translateService';
 	import { setContext } from 'svelte';
+	import Loading from '$lib/components/loading/index.svelte';
 
 	setContext('translate', new Translate());
 </script>
 
-<div class="flex flex-col h-screen">
+<Loading />
+<div class="flex flex-col min-h-screen">
 	<section class="flex items-center justify-center p-4">
 		<div class="text-lg">COVID-BEDHUB</div>
 	</section>
-	<section class="flex-auto">
+	<section class="flex-auto flex-grow">
 		<main class="p-6">
 			<slot />
 		</main>
