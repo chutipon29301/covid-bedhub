@@ -4,6 +4,8 @@
 
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { goto } from '$app/navigation';
+	import { ROUTES } from '$lib/constants/routes';
 	import Button from '$lib/components/ui/button/index.svelte';
 </script>
 
@@ -11,8 +13,14 @@
 	<title>{$_('home_title')}</title>
 </svelte:head>
 
-<section>
-	{$_('home_title')}
-
-	<Button />
-</section>
+<div class="flex flex-col items-center">
+	BANNER
+	<Button isFullWidth={true} placeholder={`I'm ผู้ป่วย`} on:click={() => goto(ROUTES.LOGIN)} />
+	BANNER
+	<Button
+		isFullWidth={true}
+		placeholder={`I'm เจ้าหน้าที่`}
+		on:click={() => goto(ROUTES.HEALTHCARE)}
+	/>
+	BANNER
+</div>

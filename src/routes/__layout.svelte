@@ -11,15 +11,17 @@
 	import '../app.postcss';
 	import { Translate } from '$lib/services/translateService';
 	import { setContext } from 'svelte';
-	import { ROUTES } from '$lib/constants/routes';
 
 	setContext('translate', new Translate());
 </script>
 
-{#each Object.entries(ROUTES) as [key, value]}
-	<a class="text-blue-700 pr-2" href={value}>{key}</a>
-{/each}
-
-<main>
-	<slot />
-</main>
+<div class="flex flex-col h-screen">
+	<section class="flex items-center justify-center p-4">
+		<div class="text-lg">COVID-BEDHUB</div>
+	</section>
+	<section class="flex-auto">
+		<main class="p-6">
+			<slot />
+		</main>
+	</section>
+</div>

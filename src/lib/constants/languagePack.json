@@ -11,6 +11,7 @@
 		"healthcare_register_title": "สมัคร",
 		"healthcare_code_title": "Code Generator",
 		"healthcare_queue_title": "Queue Manager",
-		"healthcare_staff_title": "Staff"
+		"healthcare_staff_title": "Staff",
+		"button": "test"
 	}
 }
