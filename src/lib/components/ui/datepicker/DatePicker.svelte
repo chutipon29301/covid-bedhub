@@ -63,7 +63,7 @@
 	}
 </script>
 
-<div class="relative {classes}">
+<div class="relative w-full border rounded-lg {classes}">
 	<input
 		type="text"
 		class="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent"

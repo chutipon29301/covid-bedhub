@@ -26,7 +26,7 @@
 		/>
 		<label
 			for="password"
-			class="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 duration-300 origin-0 bg-transparent"
+			class="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 duration-300 origin-0"
 		>
 			{$_(label)}
 		</label>

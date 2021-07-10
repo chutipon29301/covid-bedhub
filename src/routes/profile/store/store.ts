@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { IProfile, initProfile } from './models';
+import { IProfile, initProfile } from '$lib/models';
 
 export const disabledContinueBtn$ = writable<boolean>(false);
 export function setDisabledContinueBtn(status: boolean): void {

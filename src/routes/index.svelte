@@ -19,7 +19,7 @@
 	BANNER
 	<Button
 		isFullWidth={true}
-		placeholder={'login_as_officer'}
+		placeholder="login_as_officer"
 		on:click={() => goto(ROUTES.HEALTHCARE)}
 	/>
 	BANNER

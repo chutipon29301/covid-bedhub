@@ -4,17 +4,19 @@
 	import { onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
 	import Button from '$lib/components/ui/button/index.svelte';
+	import { loginWithLine } from '$lib/services/authService';
 
 	const code = $page.query.get('code');
 
-	onMount(() => {
+	onMount(async () => {
 		if (code) {
-			goto('/profile/add');
+			await loginWithLine(code);
+			goto('/profile/check');
 		}
 	});
 
 	function redirect() {
-		window.location.replace(import.meta.env.VITE_API_URL + '/loginWithLine');
+		window.location.replace(import.meta.env.VITE_API_URL + '/auth/login');
 	}
 </script>
 
@@ -23,4 +25,4 @@
 </svelte:head>
 
 <div class="text-3xl pb-2">{$_('login_title')}</div>
-<Button isFullWidth={true} placeholder={`Login with LINE`} on:click={() => redirect()} />
+<Button isFullWidth={true} placeholder={'login_with_line_button'} on:click={() => redirect()} />

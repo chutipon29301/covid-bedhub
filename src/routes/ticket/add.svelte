@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { page } from '$app/stores';
 	import { form$, setDisabledContinueBtn, setForm } from './store/store';
+	import { initProfile } from './store/models';
 	import { onDestroy } from 'svelte';
 	import ProfileForm from '$lib/components/profileForm/index.svelte';
 
+	const forOther = $page.query.get('other') === 'true';
 	let {
 		id,
 		firstName,
@@ -16,22 +19,21 @@
 		province,
 		postcode,
 		mobile
-	} = $form$;
+	} = !forOther ? $form$ : initProfile;
 
-	$: disabled =
-		!!id &&
-		!!firstName &&
-		!!lastName &&
-		!!dob &&
-		!!sex &&
-		!!address &&
-		!!subDistrict &&
-		!!district &&
-		!!province &&
-		!!postcode &&
-		!!mobile;
-
-	$: setDisabledContinueBtn(!disabled);
+	$: setDisabledContinueBtn(
+		!id ||
+			!firstName ||
+			!lastName ||
+			!dob ||
+			!sex ||
+			!address ||
+			!subDistrict ||
+			!district ||
+			!province ||
+			!postcode ||
+			!mobile
+	);
 
 	onDestroy(() => {
 		setForm({
@@ -66,5 +68,5 @@
 	bind:province
 	bind:postcode
 	bind:mobile
-	disabled={{ id: true, dob: true }}
+	disabled={{}}
 />

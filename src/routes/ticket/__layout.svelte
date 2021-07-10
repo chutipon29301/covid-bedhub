@@ -1,24 +1,22 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { ROUTES } from '$lib/constants/routes';
+	import { disabledContinueBtn$ } from './store/store';
 	import { page } from '$app/stores';
 	import { onDestroy } from 'svelte';
-	import { disabledContinueBtn$, setDisabledContinueBtn } from './store/store';
 	import Button from '$lib/components/ui/button/index.svelte';
 
-	const paths: string[] = [ROUTES.PROFILE_CHECK, ROUTES.PROFILE_ADD, ROUTES.HOME];
+	const paths: string[] = [ROUTES.TICKET_VACCINE, ROUTES.TICKET_SYMPTOM, ROUTES.HOME];
 	let currentRoute: string;
 	const subscription = page.subscribe((p) => (currentRoute = p.path));
-
-	setDisabledContinueBtn(true);
 	onDestroy(() => subscription());
 </script>
 
 <div class="flex flex-col">
-	<main class="min-h-content pb-4">
+	<div class="min-h-content pb-4">
 		<slot />
-	</main>
-	{#if currentRoute !== ROUTES.PROFILE}
+	</div>
+	{#if currentRoute !== ROUTES.TICKET}
 		<div>
 			<Button
 				disabled={$disabledContinueBtn$}

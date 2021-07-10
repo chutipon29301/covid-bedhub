@@ -10,10 +10,18 @@
 <script lang="ts">
 	import '../app.postcss';
 	import { Translate } from '$lib/services/translateService';
-	import { setContext } from 'svelte';
+	import { setIsLogin } from '$lib/store';
+	import { parseCookies } from 'nookies';
+	import { onMount, setContext } from 'svelte';
 	import Loading from '$lib/components/loading/index.svelte';
 
 	setContext('translate', new Translate());
+
+	onMount(() => {
+		console.log('hiii');
+		const { access_token } = parseCookies();
+		if (access_token) setIsLogin(true);
+	});
 </script>
 
 <Loading />
@@ -27,3 +35,11 @@
 		</main>
 	</section>
 </div>
+
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400&display=swap');
+
+	:global(body) {
+		font-family: 'Prompt', sans-serif;
+	}
+</style>

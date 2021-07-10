@@ -9,6 +9,8 @@ isLogin$.subscribe((authState) => (isLogin = authState));
 export async function authGuard({ page }: LoadInput): Promise<LoadOutput> {
 	if (!isLogin && protectedPath.includes(page.path)) {
 		return { status: 302, redirect: ROUTES.LANDING };
+	} else if (isLogin && page.path === ROUTES.LOGIN) {
+		return { status: 302, redirect: ROUTES.HOME };
 	} else {
 		return {};
 	}
