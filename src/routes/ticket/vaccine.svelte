@@ -22,7 +22,7 @@
 
 <DatePicker classes="mb-2" placeholder="exam_received_date_label" bind:value={examReceiveDate} />
 <Input class="pb-2" label="exam_localtion_lable" bind:value={examLocation} />
-<DatePicker classes="mb-2" placeholder="exam_date_label" bind:value={examReceiveDate} />
+<DatePicker classes="mb-2" placeholder="exam_date_label" bind:value={examDate} />
 <Input class="pb-2" label="vaccine_first_dose_label" bind:value={vaccinesInfo1.vaccine} />
 <!-- <DatePicker classes="mb-2" placeholder="profile_dob_information" bind:value={vaccinesInfo1.date} /> -->
 <Input class="pb-2" label="vaccine_second_dose_label" bind:value={vaccinesInfo2.vaccine} />

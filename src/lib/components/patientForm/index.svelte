@@ -12,7 +12,7 @@
 		subDistrict: string,
 		district: string,
 		province: string,
-		postcode: string,
+		zipcode: string,
 		mobile: string,
 		disabled: {
 			id?: boolean;
@@ -24,7 +24,7 @@
 			subDistrict?: boolean;
 			district?: boolean;
 			province?: boolean;
-			postcode?: boolean;
+			zipcode?: boolean;
 			mobile?: boolean;
 		};
 
@@ -101,8 +101,8 @@
 <Input
 	class="pb-2"
 	label="profile_postcode_information"
-	disabled={disabled?.postcode}
-	bind:value={postcode}
+	disabled={disabled?.zipcode}
+	bind:value={zipcode}
 	on:keyup={() => verifyFields()}
 />
 <Input

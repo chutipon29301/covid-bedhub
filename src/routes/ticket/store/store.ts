@@ -1,20 +1,14 @@
 import { writable } from 'svelte/store';
-import {
-	IProfile,
-	initProfile,
-	IVaccineInfo,
-	initVaccineInfo,
-	initSymptoms,
-	ISymptoms
-} from './models';
+import { initPatient, Patient } from '$lib/models';
+import { IVaccineInfo, initVaccineInfo, initSymptoms, ISymptoms } from './models';
 
 export const disabledContinueBtn$ = writable<boolean>(false);
 export function setDisabledContinueBtn(status: boolean): void {
 	disabledContinueBtn$.set(status);
 }
 
-export const form$ = writable<IProfile>(initProfile);
-export function setForm(form: IProfile): void {
+export const form$ = writable<Patient>(initPatient);
+export function setForm(form: Patient): void {
 	form$.set(form);
 }
 

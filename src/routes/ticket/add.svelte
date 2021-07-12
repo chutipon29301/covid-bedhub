@@ -3,9 +3,9 @@
 	import { page } from '$app/stores';
 	import { setDisabledContinueBtn, setForm } from './store/store';
 	import { userProfile$ } from '$lib/store';
-	import { initProfile } from './store/models';
+	import { initPatient } from '$lib/models';
 	import { onDestroy } from 'svelte';
-	import ProfileForm from '$lib/components/profileForm/index.svelte';
+	import PatientForm from '$lib/components/patientForm/index.svelte';
 
 	const forOther = $page.query.get('other') === 'true';
 	let {
@@ -18,9 +18,10 @@
 		subDistrict,
 		district,
 		province,
-		postcode,
-		mobile
-	} = !forOther ? $userProfile$ : initProfile;
+		zipcode,
+		mobile,
+		illnesses
+	} = !forOther ? $userProfile$ : initPatient;
 
 	$: setDisabledContinueBtn(
 		!id ||
@@ -32,8 +33,9 @@
 			!subDistrict ||
 			!district ||
 			!province ||
-			!postcode ||
-			!mobile
+			!zipcode ||
+			!mobile ||
+			!illnesses
 	);
 
 	onDestroy(() => {
@@ -47,8 +49,9 @@
 			subDistrict,
 			district,
 			province,
-			postcode,
-			mobile
+			zipcode,
+			mobile,
+			illnesses
 		});
 	});
 </script>
@@ -57,7 +60,7 @@
 	<title>{$_('profile_add_title')}</title>
 </svelte:head>
 
-<ProfileForm
+<PatientForm
 	bind:id
 	bind:firstName
 	bind:lastName
@@ -67,7 +70,7 @@
 	bind:subDistrict
 	bind:district
 	bind:province
-	bind:postcode
+	bind:zipcode
 	bind:mobile
 	disabled={{}}
 />

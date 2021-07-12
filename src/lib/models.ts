@@ -1,4 +1,4 @@
-export interface IProfile {
+export interface Patient {
 	id: string;
 	dob: Date;
 	firstName: string;
@@ -8,11 +8,12 @@ export interface IProfile {
 	subDistrict: string;
 	district: string;
 	province: string;
-	postcode: string;
+	zipcode: string;
 	mobile: string;
+	illnesses: Illness;
 }
 
-export const initProfile: IProfile = {
+export const initPatient: Patient = {
 	id: null,
 	dob: null,
 	firstName: null,
@@ -22,6 +23,25 @@ export const initProfile: IProfile = {
 	subDistrict: null,
 	district: null,
 	province: null,
-	postcode: null,
-	mobile: null
+	zipcode: null,
+	mobile: null,
+	illnesses: null
 };
+
+export enum Illness {
+	NCDs = 'NCDs', // โรคทางเดินหายใจเรื้อรัง
+	CARDIOVASCULAR = 'CARDIOVASCULAR', // โรคหัวใจและหลอดเลือด
+	CKD = 'CKD', // โรคไตวายเรื้อรัง
+	STROKE = 'STROKE', //โรคหลอดเลือดสมอง
+	OBESITY = 'OBESITY', //โรคอ้วน
+	CANCER = 'CANCER', //โรคมะเร็ง
+	DIABETES = 'DIABETES' //โรคเบาหวาน
+}
+
+export type AccountType = 'reporter' | 'staff' | 'queue_manager' | 'code_generator';
+
+export interface JwtPayload {
+	id: number;
+	accountType: AccountType;
+	hasPatient?: boolean;
+}

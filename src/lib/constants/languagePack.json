@@ -47,6 +47,7 @@
 		"exam_date_label": "วันที่เข้ารับการตรวจ",
 		"vaccine_first_dose_label": "วัคซีนโดส 1 ที่ได้รับ",
 		"vaccine_second_dose_label": "วัคซีนโดส 2 ที่ได้รับ",
-		"vaccine_third_dose_label": "วัคซีนโดส 3 ที่ได้รับ"
+		"vaccine_third_dose_label": "วัคซีนโดส 3 ที่ได้รับ",
+		"find_bed_button": "หาเตียง"
 	}
 }

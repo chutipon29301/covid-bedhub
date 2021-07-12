@@ -14,16 +14,17 @@
 	import { parseCookies } from 'nookies';
 	import { onMount, setContext } from 'svelte';
 	import Loading from '$lib/components/loading/index.svelte';
+	import ErrorHandler from '$lib/components/errorHandler/index.svelte';
 
 	setContext('translate', new Translate());
 
 	onMount(() => {
-		console.log('hiii');
 		const { access_token } = parseCookies();
 		if (access_token) setIsLogin(true);
 	});
 </script>
 
+<ErrorHandler />
 <Loading />
 <div class="flex flex-col min-h-screen">
 	<section class="flex items-center justify-center p-4">

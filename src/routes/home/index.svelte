@@ -7,21 +7,17 @@
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import Ticket from '$lib/components/ui/ticket/index.svelte';
 	import { onMount } from 'svelte';
+	import { getTicket } from '$lib/api/ticket/ticket.api';
 
-	let tickets = [
-		// {
-		// 	name: 'wqasdf asdfsdfaf',
-		// 	id: 'asdfasdf',
-		// 	status: '1'
-		// }
-	];
+	let tickets = [];
 
 	let disableFindBed = false;
 
-	onMount(() => {
+	onMount(async () => {
 		if (navigator.geolocation)
 			navigator.geolocation.getCurrentPosition(showPosition, () => (disableFindBed = true));
 		else alert("This website doesn't support this browser");
+		tickets = await getTicket();
 	});
 
 	function showPosition(position) {
@@ -53,7 +49,7 @@
 	{#if tickets.length === 0}
 		<div class="flex flex-grow flex-col items-center justify-center up-10">
 			<Fa class="pb-2" icon={faBed} size="2rem" />
-			<Button on:click={() => navigate()} placeholder="find bed" />
+			<Button on:click={() => navigate()} placeholder="find_bed_button" />
 		</div>
 	{:else}
 		{#each tickets as ticket}

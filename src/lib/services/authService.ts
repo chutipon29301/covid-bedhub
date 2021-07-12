@@ -1,14 +1,15 @@
-import { patientLogin } from '$lib/api/auth.api';
+import { patientLogin } from '$lib/api/auth/auth.api';
 import { setIsLogin } from '$lib/store';
 import { setCookie } from 'nookies';
-// import jwt_decode from 'jwt-decode';
+import type { JwtPayload } from '$lib/models';
+import jwt_decode from 'jwt-decode';
 
-export async function loginWithLine(code: string): Promise<void> {
+export async function loginWithLine(code: string): Promise<boolean> {
 	const response = await patientLogin(code);
-	setCookie(null, 'access_token', response.token, {
-		maxAge: 60 * 60 * 24 * 7,
-		path: '/'
+	setCookie(null, 'access_token', 'Developer reporter-1', {
+		path: '/',
+		expires: new Date(response.expireDate)
 	});
-	// console.log('*****', jwt_decode(response.token));
 	setIsLogin(true);
+	return jwt_decode<JwtPayload>(response.token).hasPatient;
 }

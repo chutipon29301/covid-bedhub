@@ -1,7 +1,12 @@
-import { IProfile, initProfile } from '$lib/models';
+import { Patient, initPatient } from '$lib/models';
 import { writable } from 'svelte/store';
 
-export const isLogin$ = writable<boolean>(true);
+export const accessToken$ = writable<string>(null);
+export function setAccessToken(token: string): void {
+	accessToken$.set(token);
+}
+
+export const isLogin$ = writable<boolean>(false);
 export function setIsLogin(status: boolean): void {
 	isLogin$.set(status);
 }
@@ -11,7 +16,7 @@ export function setIsLoading(status: boolean): void {
 	isLoading$.set(status);
 }
 
-export const userProfile$ = writable<IProfile>(initProfile);
-export function setUserProfile(userProfile: IProfile): void {
+export const userProfile$ = writable<Patient>(initPatient);
+export function setUserProfile(userProfile: Patient): void {
 	userProfile$.set(userProfile);
 }
