@@ -7,17 +7,26 @@
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import Ticket from '$lib/components/ui/ticket/index.svelte';
 	import { onMount } from 'svelte';
-	import { getTicket } from '$lib/api/ticket/ticket.api';
-
-	let tickets = [];
+	import { MyTickets } from '$lib/generated/graphql';
+	import { setIsLoading } from '$lib/store';
 
 	let disableFindBed = false;
+
+	$: response = MyTickets({});
+	$: setIsLoading($response.loading);
+	$: tickets =
+		$response.data?.me.tickets.map((t) => ({
+			name: `${t.patient.firstName} ${t.patient.lastName}`,
+			id: t.patient.identification,
+			status: t.status,
+			appointmentDate: t.appointedDate,
+			hospitalName: t.hospital?.name
+		})) || [];
 
 	onMount(async () => {
 		if (navigator.geolocation)
 			navigator.geolocation.getCurrentPosition(showPosition, () => (disableFindBed = true));
 		else alert("This website doesn't support this browser");
-		tickets = await getTicket();
 	});
 
 	function showPosition(position) {
@@ -31,6 +40,10 @@
 		}
 		goto(ROUTES.TICKET);
 	}
+
+	// function logout() {
+	// 	document.cookie = 'access_token=; max-age=0; path=/';
+	// }
 </script>
 
 <svelte:head>
@@ -38,6 +51,7 @@
 </svelte:head>
 
 <div class="flex flex-col min-h-content mx-auto">
+	<!-- <Button on:click={() => logout()} /> -->
 	<div class="flex">
 		<div class="flex flex-grow">{$_('home_title')}</div>
 		{#if tickets.length}

@@ -10,17 +10,32 @@
 <script lang="ts">
 	import '../app.postcss';
 	import { Translate } from '$lib/services/translateService';
-	import { setIsLogin } from '$lib/store';
-	import { parseCookies } from 'nookies';
+	import { setIsLogin, setUserProfile } from '$lib/store';
 	import { onMount, setContext } from 'svelte';
+	import cookie from 'cookie';
 	import Loading from '$lib/components/loading/index.svelte';
 	import ErrorHandler from '$lib/components/errorHandler/index.svelte';
 
 	setContext('translate', new Translate());
 
 	onMount(() => {
-		const { access_token } = parseCookies();
-		if (access_token) setIsLogin(true);
+		const { access_token } = cookie.parse(document.cookie);
+		if (access_token) {
+			setIsLogin(true);
+			setUserProfile({
+				id: '1234567890123',
+				dob: new Date('12-02-2020'),
+				firstName: 'Developer',
+				lastName: 'Tester',
+				sex: 'M',
+				address: '123',
+				subDistrict: '456',
+				district: '789',
+				province: '000',
+				zipcode: '12345',
+				mobile: '0123456789'
+			});
+		}
 	});
 </script>
 

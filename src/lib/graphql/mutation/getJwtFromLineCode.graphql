@@ -1,0 +1,6 @@
+mutation GetJwtFromLineCode($code: String!) {
+	getJwtFromLineCode(code: $code) {
+		token
+		expireDate
+	}
+}

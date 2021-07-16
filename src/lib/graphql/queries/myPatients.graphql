@@ -1,0 +1,15 @@
+query MyPatients {
+	me {
+		id
+		patients {
+			id
+			reporterId
+			firstName
+			lastName
+			birthDate
+			sex
+			identification
+			tel
+		}
+	}
+}

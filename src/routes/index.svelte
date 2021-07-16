@@ -7,23 +7,6 @@
 	import { goto } from '$app/navigation';
 	import { ROUTES } from '$lib/constants/routes';
 	import Button from '$lib/components/ui/button/index.svelte';
-	// import { onMount } from 'svelte';
-	// import { client } from '$lib/services/graphql';
-	// import { gql } from '@apollo/client/core/core.cjs.js';
-
-	// onMount(async () => {
-	// 	const query = gql`
-	// 		query {
-	// 			banners {
-	// 				id
-	// 			}
-	// 		}
-	// 	`;
-	// 	const result = await client.query({
-	// 		query
-	// 	});
-	// 	console.log(result);
-	// });
 </script>
 
 <svelte:head>

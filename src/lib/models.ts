@@ -10,7 +10,7 @@ export interface Patient {
 	province: string;
 	zipcode: string;
 	mobile: string;
-	illnesses: Illness;
+	illnesses?: Illness;
 }
 
 export const initPatient: Patient = {

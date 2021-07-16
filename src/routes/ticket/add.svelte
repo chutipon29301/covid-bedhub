@@ -34,8 +34,7 @@
 			!district ||
 			!province ||
 			!zipcode ||
-			!mobile ||
-			!illnesses
+			!mobile
 	);
 
 	onDestroy(() => {

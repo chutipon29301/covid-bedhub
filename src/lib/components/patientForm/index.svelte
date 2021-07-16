@@ -64,7 +64,7 @@
 	on:keyup={() => verifyFields()}
 />
 <Input
-	class="pb-2"
+	class="py-2"
 	label="profile_sex_information"
 	disabled={disabled?.sex}
 	bind:value={sex}

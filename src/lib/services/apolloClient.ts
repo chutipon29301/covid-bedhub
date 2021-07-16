@@ -1,10 +1,11 @@
 import { ApolloClient, createHttpLink } from '@apollo/client/core';
-import { InMemoryCache } from '@apollo/client/cache/';
+import { InMemoryCache, NormalizedCacheObject } from '@apollo/client/cache';
 import { setContext } from '@apollo/client/link/context';
+import cookie from 'cookie';
 
 class Client {
 	static _instance: Client;
-	client: any;
+	client: ApolloClient<NormalizedCacheObject>;
 	constructor() {
 		if (Client._instance) {
 			return Client._instance;
@@ -16,15 +17,15 @@ class Client {
 
 	setupClient() {
 		const httpLink = createHttpLink({
-			uri: `${import.meta.env.VITE_API_URL}/graphql`
+			uri: `http://178.128.221.77:3000/graphql`
 		});
 
 		const authLink = setContext((_, { headers }) => {
-			const token = localStorage.getItem('token');
+			const { access_token } = cookie.parse(document.cookie);
 			return {
 				headers: {
 					...headers,
-					authorization: token ? `Bearer ${token}` : ''
+					authorization: access_token ? `${access_token}` : ''
 				}
 			};
 		});
@@ -37,4 +38,6 @@ class Client {
 	}
 }
 
-export const client = new Client().client;
+const client = new Client().client;
+
+export default client;

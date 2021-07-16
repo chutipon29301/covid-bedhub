@@ -1,0 +1,11 @@
+overwrite: true
+schema: 'http://178.128.221.77:3000/graphql'
+documents: 'src/lib/graphql/**/*.graphql'
+generates:
+  src/lib/generated/graphql.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'graphql-codegen-svelte-apollo'
+config:
+  clientPath: '$lib/services/apolloClient'

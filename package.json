@@ -9,9 +9,14 @@
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
 		"format": "prettier --write --plugin-search-dir=. .",
-		"commit": "cz"
+		"commit": "cz",
+		"commit:full": "yarn format && yarn lint --fix && git add --all && cz && git push",
+		"gen": "graphql-codegen --config codegen.yml"
 	},
 	"devDependencies": {
+		"@graphql-codegen/cli": "1.21.7",
+		"@graphql-codegen/typescript": "1.23.0",
+		"@graphql-codegen/typescript-operations": "1.18.4",
 		"@sveltejs/adapter-vercel": "^1.0.0-next.24",
 		"@sveltejs/kit": "next",
 		"@types/cookie": "^0.4.1",
@@ -23,6 +28,7 @@
 		"eslint": "^7.22.0",
 		"eslint-config-prettier": "^8.1.0",
 		"eslint-plugin-svelte3": "^3.2.0",
+		"graphql-codegen-svelte-apollo": "^1.0.0",
 		"postcss": "^8.3.5",
 		"postcss-load-config": "^3.1.0",
 		"prettier": "~2.2.1",
@@ -38,11 +44,9 @@
 	"dependencies": {
 		"@apollo/client": "^3.3.21",
 		"@fortawesome/free-solid-svg-icons": "^5.15.3",
-		"axios": "^0.21.1",
 		"cookie": "^0.4.1",
 		"graphql": "^15.5.1",
 		"jwt-decode": "^3.1.2",
-		"nookies": "^2.5.2",
 		"svelte-i18n": "^3.3.9"
 	},
 	"config": {

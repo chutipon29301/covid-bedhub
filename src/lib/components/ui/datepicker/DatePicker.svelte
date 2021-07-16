@@ -31,7 +31,7 @@
 	$: DAYS = new Array(new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate())
 		.fill(1)
 		.map((v, i) => v + i);
-	$: _date = value?.toLocaleDateString('en-US') || $_(placeholder);
+	$: _date = value?.toLocaleDateString('en-US');
 	let cancel = () => {
 		visible = false;
 	};
@@ -63,22 +63,25 @@
 	}
 </script>
 
-<div class="relative w-full border rounded-lg {classes}">
-	<input
-		type="text"
-		class="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent"
-		readonly
-		on:focus={() => {
-			visible = !disabled && !visible;
-		}}
-	/>
-	<label
-		for="password"
-		class="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 duration-300 origin-0"
-		class:ml-7={!value}
-	>
-		{_date}
-	</label>
+<div class="mt-2 items-center z-10 {classes}">
+	<div class="f-outline px-2 relative w-full border rounded-lg focus-within:border-indigo-500">
+		<input
+			type="text"
+			class="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent"
+			readonly
+			placeholder=" "
+			bind:value={_date}
+			on:focus={() => {
+				visible = !disabled && !visible;
+			}}
+		/>
+		<label
+			for="password"
+			class="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 duration-300 origin-top-left"
+		>
+			{$_(placeholder)}
+		</label>
+	</div>
 </div>
 {#if visible}
 	<div class="touch-date-popup" bind:this={popup}>
@@ -164,5 +167,9 @@
 	}
 	.day-line {
 		margin: 2px;
+	}
+	.f-outline input:focus-within ~ label,
+	.f-outline input:not(:placeholder-shown) ~ label {
+		transform: translateY(-1.5rem) translatex(-1rem) scaleX(0.8) scaleY(0.8);
 	}
 </style>

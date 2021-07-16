@@ -9,6 +9,7 @@
 	export let label = 'default_input_label';
 	export let disabled = false;
 	const dispatch = createEventDispatcher();
+	let inputDOM;
 </script>
 
 <div class="mt-2 items-center z-10 {clazz}">
@@ -19,6 +20,7 @@
 	>
 		<input
 			placeholder=" "
+			bind:this={inputDOM}
 			bind:value
 			readonly={disabled}
 			on:keyup={(e) => dispatch('keyup', e)}
@@ -26,7 +28,8 @@
 		/>
 		<label
 			for="password"
-			class="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 duration-300 origin-0"
+			on:click={() => inputDOM.focus()}
+			class="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 duration-300 origin-top-left"
 		>
 			{$_(label)}
 		</label>
