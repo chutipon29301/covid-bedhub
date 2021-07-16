@@ -1,6 +1,6 @@
-import { ApolloClient, createHttpLink } from '@apollo/client/core';
-import { InMemoryCache, NormalizedCacheObject } from '@apollo/client/cache';
-import { setContext } from '@apollo/client/link/context';
+import { ApolloClient, createHttpLink } from '@apollo/client/core/core.cjs.js';
+import { InMemoryCache, NormalizedCacheObject } from '@apollo/client/cache/cache.cjs.js';
+import { setContext } from '@apollo/client/link/context/context.cjs.js';
 import cookie from 'cookie';
 
 class Client {
