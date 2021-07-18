@@ -3,12 +3,13 @@
 	import { faBed, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 	import { goto } from '$app/navigation';
 	import { ROUTES } from '$lib/constants/routes';
-	import Button from '$lib/components/ui/button/index.svelte';
-	import Fa from '$lib/components/ui/fa/index.svelte';
-	import Ticket from '$lib/components/ui/ticket/index.svelte';
 	import { onMount } from 'svelte';
 	import { MyTickets } from '$lib/generated/graphql';
 	import { setIsLoading, setLocation } from '$lib/store';
+	import { variables } from '$lib/constants/environment';
+	import Button from '$lib/components/ui/button/index.svelte';
+	import Fa from '$lib/components/ui/fa/index.svelte';
+	import Ticket from '$lib/components/ui/ticket/index.svelte';
 
 	let disableFindBed = false;
 	let tickets = [];
@@ -31,7 +32,7 @@
 	});
 
 	function setGPS() {
-		if (import.meta?.env.VITE_DEVELOP) {
+		if (variables.dev) {
 			setLocation({ lat: 0, lng: 0 });
 			return;
 		}
