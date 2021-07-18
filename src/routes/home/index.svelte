@@ -65,9 +65,13 @@
 	}
 
 	async function cancelTicket(id: string) {
+		setIsLoading(true);
 		const { data } = await CancelTicket({ variables: { id } });
-		successPopupShown = true;
-		ticketId = data.cancelTicket.id;
+		setIsLoading(false);
+		if (data) {
+			successPopupShown = true;
+			ticketId = data.cancelTicket.id;
+		}
 	}
 
 	function onClickOkPopup() {

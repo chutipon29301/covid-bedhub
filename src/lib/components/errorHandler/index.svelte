@@ -5,36 +5,51 @@
 	import { setIsLoading } from '$lib/store';
 	import ErrorModal from '$lib/components/ui/modal/dialog/index.svelte';
 
-	let errorShown = false;
-	let errorHeader: string;
-	let errorMsg: string;
+	let errors: {
+		heading: string;
+		message: string;
+	}[] = [];
 
 	onMount(() => {
 		window.onerror = (e: string) => {
+			console.log('hiiiii', errors);
 			const error = JSON.parse(e.replace('Uncaught Error: ', ''));
-			errorShown = true;
-			errorHeader = error?.title || 'Unhandled Error';
-			errorMsg = error?.message || 'An unexpected error happened';
-			setIsLoading(false);
+			errors = [
+				...errors,
+				{
+					heading: error?.title || 'Unhandled Error',
+					message: error?.message || 'An unexpected error happened'
+				}
+			];
+			console.log('hiiiii', errors);
 		};
 
 		window.onunhandledrejection = async (e: PromiseRejectionEvent) => {
-			errorShown = true;
-			errorHeader = e.reason?.response?.data?.title || 'Unknown Error';
-			errorMsg = e.reason?.response?.data?.msg || e.reason;
+			errors = [
+				...errors,
+				{
+					heading: e.reason?.response?.data?.title || 'Unknown Error',
+					message: e.reason?.response?.data?.msg || e.reason
+				}
+			];
 			setIsLoading(false);
 		};
 	});
+
+	function removeErrors(index: number): void {
+		errors.splice(index, 1);
+		errors = [...errors];
+	}
 </script>
 
-{#if errorShown}
+{#each errors as error, i}
 	<ErrorModal
 		icon={faExclamation}
 		colorTone={EModalColorTone.RED}
-		heading={errorHeader}
+		heading={error.heading}
 		confirmBtn="OK"
-		on:confirm={() => (errorShown = !errorShown)}
+		on:confirm={() => removeErrors(i)}
 	>
-		<p>{errorMsg}</p>
+		<p>{error.message}</p>
 	</ErrorModal>
-{/if}
+{/each}
