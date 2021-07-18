@@ -23,7 +23,7 @@
 	});
 
 	async function getJwt() {
-		const { data } = await GetJwtFromLineCode({ variables: { code }, errorPolicy: 'all' });
+		const { data } = await GetJwtFromLineCode({ variables: { code } });
 		return data.getJwtFromLineCode;
 	}
 

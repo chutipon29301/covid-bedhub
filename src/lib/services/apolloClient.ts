@@ -1,4 +1,4 @@
-import { ApolloClient, createHttpLink, from } from '@apollo/client/core/core.cjs.js';
+import { ApolloClient, createHttpLink, from } from '@apollo/client/core';
 import { InMemoryCache, NormalizedCacheObject } from '@apollo/client/cache/cache.cjs.js';
 import { setContext } from '@apollo/client/link/context/context.cjs.js';
 import { onError } from '@apollo/client/link/error/error.cjs.js';
@@ -44,7 +44,18 @@ class Client {
 
 		const client = new ApolloClient({
 			link: from([errorLink, authLink, httpLink]),
-			cache: new InMemoryCache()
+			cache: new InMemoryCache(),
+			defaultOptions: {
+				watchQuery: {
+					errorPolicy: 'all'
+				},
+				query: {
+					errorPolicy: 'all'
+				},
+				mutate: {
+					errorPolicy: 'all'
+				}
+			}
 		});
 		return client;
 	}

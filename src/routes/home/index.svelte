@@ -1,45 +1,45 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { faBed, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+	import { faBed, faUnlink, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 	import { goto } from '$app/navigation';
 	import { ROUTES } from '$lib/constants/routes';
 	import { onMount } from 'svelte';
-	import { MyTickets } from '$lib/generated/graphql';
+	import { CancelTicket, MyTickets } from '$lib/generated/graphql';
 	import { setIsLoading, setLocation } from '$lib/store';
 	import { variables } from '$lib/constants/environment';
+	import { TICKET_STATUS } from '$lib/constants/constant';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import Ticket from '$lib/components/ui/ticket/index.svelte';
+	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
+	import { EModalColorTone } from '$lib/components/ui/modal/model';
 
 	let disableFindBed = false;
 	let tickets = [];
+	let successPopupShown = false;
+	let ticketId: string;
 
-	$: response = MyTickets({ errorPolicy: 'all' });
-
-	onMount(async () => {
+	onMount(() => {
 		setGPS();
-		response.subscribe(({ data, loading }) => {
+		loadMyTickets();
+	});
+
+	function loadMyTickets() {
+		const response = MyTickets({ fetchPolicy: 'network-only' });
+		const sub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			tickets =
 				data?.me.tickets.map((t) => ({
+					ticketId: t.id,
 					name: `${t.patient.firstName} ${t.patient.lastName}`,
 					id: t.patient.identification,
 					status: t.status,
 					appointmentDate: t.appointedDate,
 					hospitalName: t.hospital?.name
 				})) || [];
-			// inactiveTickets =
-			// 	data?.me.tickets
-			// 		.map((t) => ({
-			// 			name: `${t.patient.firstName} ${t.patient.lastName}`,
-			// 			id: t.patient.identification,
-			// 			status: t.status,
-			// 			appointmentDate: t.appointedDate,
-			// 			hospitalName: t.hospital?.name
-			// 		}))
-			// 		.filter((t) => t.status === 'HOSPITAL_CANCEL' || t.status === 'PATIENT_CANCEL') || [];
+			if (!loading) sub();
 		});
-	});
+	}
 
 	function setGPS() {
 		if (variables.dev) {
@@ -63,12 +63,38 @@
 		}
 		goto(ROUTES.TICKET);
 	}
+
+	async function cancelTicket(id: string) {
+		const { data } = await CancelTicket({ variables: { id } });
+		successPopupShown = true;
+		ticketId = data.cancelTicket.id;
+	}
+
+	function onClickOkPopup() {
+		successPopupShown = false;
+		loadMyTickets();
+	}
+
+	function onClickEdit(id: string) {
+		goto(`${ROUTES.TICKET_SYMPTOM}/${id}`);
+	}
 </script>
 
 <svelte:head>
 	<title>{$_('home_title')}</title>
 </svelte:head>
 
+{#if successPopupShown}
+	<Modal
+		icon={faUnlink}
+		heading={$_('request_popup_heading')}
+		confirmBtn={'OK'}
+		colorTone={EModalColorTone.RED}
+		on:confirm={onClickOkPopup}
+	>
+		{$_('cancel_request_popup_message', { values: { ticketId } })}
+	</Modal>
+{/if}
 <div class="flex flex-col min-h-content mx-auto">
 	<div class="flex">
 		<div class="flex flex-grow text-3xl">{$_('home_title')}</div>
@@ -84,7 +110,10 @@
 			<Button on:click={() => navigate()} placeholder="find_bed_button" />
 		</div>
 	{:else}
-		{#each tickets.filter((t) => t.status === 'REQUEST' || t.status === 'MATCH') as ticket}
+		{#if tickets.filter((t) => t.status === TICKET_STATUS.REQUEST || t.status === TICKET_STATUS.MATCH).length === 0}
+			<div class="flex justify-center pt-8 text-lg">{$_('no_information_label')}</div>
+		{/if}
+		{#each tickets.filter((t) => t.status === TICKET_STATUS.REQUEST || t.status === TICKET_STATUS.MATCH) as ticket}
 			<div class="pt-4">
 				<Ticket
 					name={ticket.name}
@@ -92,11 +121,13 @@
 					status={ticket.status}
 					appointmentDate={ticket?.appointmentDate}
 					hospitalName={ticket?.hospitalName}
+					on:clickButton={() => cancelTicket(ticket.ticketId)}
+					on:clickEdit={() => onClickEdit(ticket.ticketId)}
 				/>
 			</div>
 		{/each}
 		<div class="text-3xl pt-8">{$_('home_history_title')}</div>
-		{#if tickets.filter((t) => t.status === 'HOSPITAL_CANCEL' || t.status === 'PATIENT_CANCEL').length === 0}
+		{#if tickets.filter((t) => t.status === TICKET_STATUS.HOSPITAL_CANCEL || t.status === TICKET_STATUS.PATIENT_CANCEL).length === 0}
 			<div class="flex justify-center py-8 text-lg">{$_('no_information_label')}</div>
 		{/if}
 		{#each tickets.filter((t) => t.status === 'HOSPITAL_CANCEL' || t.status === 'PATIENT_CANCEL') as ticket}
@@ -107,8 +138,6 @@
 					status={ticket.status}
 					appointmentDate={ticket?.appointmentDate}
 					hospitalName={ticket?.hospitalName}
-					on:clickButton={() => {}}
-					on:clickEdit={() => {}}
 				/>
 			</div>
 		{/each}

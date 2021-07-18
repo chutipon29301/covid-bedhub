@@ -10,15 +10,17 @@
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import { illnessToChecklist } from '$lib/util';
 
-	$: response = MyPatients({ errorPolicy: 'all' });
+	$: response = MyPatients({});
 
 	let patients = [];
 
 	onMount(() => {
-		response.subscribe(({ data, loading }) => {
+		const sub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			patients =
 				data?.me.patients.map((t) => ({ name: `${t.firstName} ${t.lastName}`, id: t.id })) || [];
+
+			if (!loading) sub();
 		});
 	});
 

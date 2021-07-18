@@ -47,8 +47,7 @@
 					tel: $form$.mobile,
 					illnesses: checklistToEnum<Illness>($illnesses$)
 				}
-			},
-			errorPolicy: 'all'
+			}
 		});
 		return data.createPatient.id;
 	}
@@ -65,8 +64,7 @@
 					illnesses: checklistToEnum<Illness>($illnesses$)
 				},
 				id: id
-			},
-			errorPolicy: 'all'
+			}
 		});
 		return id;
 	}
@@ -84,8 +82,7 @@
 					lat: $location$.lat,
 					lng: $location$.lng
 				}
-			},
-			errorPolicy: 'all'
+			}
 		});
 
 		ticketId = data.createTicket.id;
@@ -147,11 +144,6 @@
 					/>
 				</div>
 			{/if}
-			<!-- <Input
-				class="pb-2"
-				label={$_('vaccine_dose_label', { values: { order: i + 1 } })}
-				bind:value={vaccine.name}
-			/> -->
 
 			<Dropdown
 				class="pb-2"

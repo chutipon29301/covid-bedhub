@@ -67,6 +67,11 @@
 		"no_information_label": "ไม่มีข้อมูล",
 		"cancel_request_button": "ยกเลิกการขอรับเตียง",
 		"see_hospital_button": "ดูข้อมูล รพ.",
-		"cancel_request_success_label": "ยกเลิกการขอรับเตียงแล้ว"
+		"cancel_request_success_label": "ยกเลิกการขอรับเตียงแล้ว",
+		"cancel_request_popup_message": "หมายเลขคำร้อง #{ticketId} ได้ถูกยกเลิกแล้ว",
+		"edit_symptoms_title": "แก้ไขข้อมูลเพื่อหาเตียง",
+		"edit_symptoms_name_label": "ชื่อ-นามสกุล",
+		"edit_symptoms_status_label": "สถานะ",
+		"save_button": "บันทึก"
 	}
 }

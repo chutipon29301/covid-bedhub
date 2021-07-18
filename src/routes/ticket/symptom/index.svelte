@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { setSymptoms, symptoms$ } from './store/store';
+	import { setSymptoms, symptoms$ } from '../store/store';
 	import { onDestroy } from 'svelte';
 	import Checkbox from '$lib/components/ui/checkbox/index.svelte';
 	import Template from '$lib/components/ticketLayout/index.svelte';
