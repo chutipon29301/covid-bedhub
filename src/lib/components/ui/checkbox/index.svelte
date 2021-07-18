@@ -17,5 +17,5 @@
 		<input type="checkbox" bind:checked class="opacity-0 absolute" />
 		<Fa class={!checked ? 'hidden' : 'block'} icon={faCheck} />
 	</div>
-	<div class="select-none">{$_(placeholder)}</div>
+	<div on:click={() => (checked = !checked)} class="select-none">{$_(placeholder)}</div>
 </div>
