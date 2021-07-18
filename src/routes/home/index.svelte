@@ -8,29 +8,41 @@
 	import Ticket from '$lib/components/ui/ticket/index.svelte';
 	import { onMount } from 'svelte';
 	import { MyTickets } from '$lib/generated/graphql';
-	import { setIsLoading } from '$lib/store';
+	import { setIsLoading, setLocation } from '$lib/store';
 
 	let disableFindBed = false;
+	let tickets = [];
 
-	$: response = MyTickets({});
-	$: setIsLoading($response.loading);
-	$: tickets =
-		$response.data?.me.tickets.map((t) => ({
-			name: `${t.patient.firstName} ${t.patient.lastName}`,
-			id: t.patient.identification,
-			status: t.status,
-			appointmentDate: t.appointedDate,
-			hospitalName: t.hospital?.name
-		})) || [];
+	$: response = MyTickets({ errorPolicy: 'all' });
 
 	onMount(async () => {
-		if (navigator.geolocation)
-			navigator.geolocation.getCurrentPosition(showPosition, () => (disableFindBed = true));
-		else alert("This website doesn't support this browser");
+		setGPS();
+		response.subscribe(({ data, loading }) => {
+			setIsLoading(loading);
+			tickets =
+				data?.me.tickets.map((t) => ({
+					name: `${t.patient.firstName} ${t.patient.lastName}`,
+					id: t.patient.identification,
+					status: t.status,
+					appointmentDate: t.appointedDate,
+					hospitalName: t.hospital?.name
+				})) || [];
+		});
 	});
 
-	function showPosition(position) {
-		console.log(position);
+	function setGPS() {
+		if (import.meta?.env.VITE_DEVELOP) {
+			setLocation({ lat: 0, lng: 0 });
+			return;
+		}
+
+		if (navigator.geolocation)
+			navigator.geolocation.getCurrentPosition(
+				(position) =>
+					setLocation({ lat: position.coords.latitude, lng: position.coords.longitude }),
+				() => (disableFindBed = true)
+			);
+		else alert("This website doesn't support this browser");
 	}
 
 	function navigate() {
@@ -40,10 +52,6 @@
 		}
 		goto(ROUTES.TICKET);
 	}
-
-	// function logout() {
-	// 	document.cookie = 'access_token=; max-age=0; path=/';
-	// }
 </script>
 
 <svelte:head>
@@ -51,7 +59,6 @@
 </svelte:head>
 
 <div class="flex flex-col min-h-content mx-auto">
-	<!-- <Button on:click={() => logout()} /> -->
 	<div class="flex">
 		<div class="flex flex-grow">{$_('home_title')}</div>
 		{#if tickets.length}

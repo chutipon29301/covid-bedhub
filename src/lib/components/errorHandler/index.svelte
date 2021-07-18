@@ -10,10 +10,11 @@
 	let errorMsg: string;
 
 	onMount(() => {
-		window.onerror = (e) => {
+		window.onerror = (e: string) => {
+			const error = JSON.parse(e.replace('Uncaught Error: ', ''));
 			errorShown = true;
-			errorHeader = 'Unhandled Error';
-			errorMsg = e.toString();
+			errorHeader = error?.title || 'Unhandled Error';
+			errorMsg = error?.message || 'An unexpected error happened';
 			setIsLoading(false);
 		};
 

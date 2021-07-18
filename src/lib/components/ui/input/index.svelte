@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { _ } from 'svelte-i18n';
 	import { createEventDispatcher } from 'svelte';
 
 	let clazz = '';
 	export { clazz as class };
 	export let value: string | number;
 	export let errorMessage = '';
-	export let label = 'default_input_label';
+	export let label = 'label';
 	export let disabled = false;
 	const dispatch = createEventDispatcher();
 	let inputDOM;
@@ -31,7 +30,7 @@
 			on:click={() => inputDOM.focus()}
 			class="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 duration-300 origin-top-left"
 		>
-			{$_(label)}
+			{label}
 		</label>
 	</div>
 

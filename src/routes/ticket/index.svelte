@@ -1,15 +1,56 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
+	import { faPlusCircle, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 	import { goto } from '$app/navigation';
 	import { ROUTES } from '$lib/constants/routes';
-	import { MyPatients } from '$lib/generated/graphql';
+	import { MyPatients, Patient } from '$lib/generated/graphql';
 	import { setIsLoading } from '$lib/store';
+	import { onMount } from 'svelte';
+	import { setForm, setIllnesses, setPatientId, setSymptoms, setVaccine } from './store/store';
 	import Fa from '$lib/components/ui/fa/index.svelte';
+	import { illnessToChecklist } from '$lib/util';
 
-	$: response = MyPatients({});
-	$: setIsLoading($response.loading);
-	$: patients = $response.data?.me.patients.map((t) => `${t.firstName} ${t.lastName}`) || [];
+	$: response = MyPatients({ errorPolicy: 'all' });
+
+	let patients = [];
+
+	onMount(() => {
+		response.subscribe(({ data, loading }) => {
+			setIsLoading(loading);
+			patients =
+				data?.me.patients.map((t) => ({ name: `${t.firstName} ${t.lastName}`, id: t.id })) || [];
+		});
+	});
+
+	function addNewPatient() {
+		setPatientId(null);
+		setIllnesses(null);
+		setSymptoms(null);
+		setVaccine(null);
+		setForm(null);
+		goto(ROUTES.TICKET_ILLNESSES);
+	}
+
+	function getPatient(id: string) {
+		Patient({ variables: { id }, errorPolicy: 'all' }).subscribe(({ data, loading, errors }) => {
+			setIsLoading(loading);
+			if (!loading && !errors) {
+				setPatientId(id);
+				setIllnesses(illnessToChecklist(data?.patient.illnesses));
+				setSymptoms(null);
+				setVaccine(null);
+				setForm({
+					id: data?.patient.identification,
+					dob: new Date(data?.patient.birthDate),
+					firstName: data?.patient.firstName,
+					lastName: data?.patient.lastName,
+					sex: data?.patient.sex,
+					mobile: data?.patient.tel
+				});
+				goto(ROUTES.TICKET_ILLNESSES);
+			}
+		});
+	}
 </script>
 
 <svelte:head>
@@ -17,29 +58,22 @@
 </svelte:head>
 
 <section>{$_('profile_title')}</section>
-<div class="grid grid-cols-2">
-	<div
-		class="flex items-center flex-col cursor-pointer"
-		on:click={() => goto(`${ROUTES.TICKET_ADD}`)}
-	>
-		<Fa class="text-gray-700" icon={faUser} size="5rem" />
-		<p class="pt-1">{$_('book_for_yourself_label')}</p>
-	</div>
-	<div
-		class="flex items-center flex-col cursor-pointer"
-		on:click={() => goto(`${ROUTES.TICKET_ADD}?other=true`)}
-	>
-		<Fa class="text-gray-700" icon={faUsers} size="5rem" />
-		<p class="pt-1">{$_('book_for_other_label')}</p>
-	</div>
+<div
+	on:click={() => addNewPatient()}
+	class="border border-dashed px-4 py-2 w-full border-indigo-700 rounded-md flex justify-center cursor-pointer mb-4 bg-transparent text-indigo-400"
+>
+	<Fa class="mt-1 pr-2" icon={faPlusCircle} />
+	{$_('add_new_patient')}
 </div>
-
-<div class="pt-2">
-	รายชื่อล่าสุด
-
-	{#each patients as patient}
-		<p>
-			{patient}
-		</p>
-	{/each}
-</div>
+{#each patients as patient}
+	<div
+		on:click={() => getPatient(patient.id)}
+		class="border px-4 py-2 w-full rounded-md flex justify-between cursor-pointer mb-4 bg-gray-100 drop-shadow-md"
+	>
+		<div>{patient.name}</div>
+		<div class="flex">
+			<span class="pr-4 text-gray-700">|</span>
+			<Fa class="mt-1 text-gray-600" icon={faChevronRight} />
+		</div>
+	</div>
+{/each}

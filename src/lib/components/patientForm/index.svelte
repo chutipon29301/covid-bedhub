@@ -8,11 +8,6 @@
 		lastName: string,
 		dob: Date,
 		sex: string,
-		address: string,
-		subDistrict: string,
-		district: string,
-		province: string,
-		zipcode: string,
 		mobile: string,
 		disabled: {
 			id?: boolean;
@@ -20,11 +15,6 @@
 			lastName?: boolean;
 			dob?: boolean;
 			sex?: boolean;
-			address?: boolean;
-			subDistrict?: boolean;
-			district?: boolean;
-			province?: boolean;
-			zipcode?: boolean;
 			mobile?: boolean;
 		};
 
@@ -38,76 +28,41 @@
 </div>
 <Input
 	class="pb-2"
-	label="profile_id_information"
+	label={$_('profile_id_information')}
 	disabled={disabled?.id}
 	bind:value={id}
 	on:keyup={() => verifyFields()}
 />
 <Input
 	class="pb-2"
-	label="profile_first_name_information"
+	label={$_('profile_first_name_information')}
 	disabled={disabled?.firstName}
 	bind:value={firstName}
 	on:keyup={() => verifyFields()}
 />
 <Input
 	class="pb-2"
-	label="profile_last_name_information"
+	label={$_('profile_last_name_information')}
 	disabled={disabled?.lastName}
 	bind:value={lastName}
 	on:keyup={() => verifyFields()}
 />
 <DatePicker
-	placeholder="profile_dob_information"
+	placeholder={$_('profile_dob_information')}
 	disabled={disabled?.dob}
 	bind:value={dob}
 	on:keyup={() => verifyFields()}
 />
 <Input
 	class="py-2"
-	label="profile_sex_information"
+	label={$_('profile_sex_information')}
 	disabled={disabled?.sex}
 	bind:value={sex}
 	on:keyup={() => verifyFields()}
 />
 <Input
 	class="pb-2"
-	label="profile_address_information"
-	disabled={disabled?.address}
-	bind:value={address}
-	on:keyup={() => verifyFields()}
-/>
-<Input
-	class="pb-2"
-	label="profile_disbtrict_information"
-	disabled={disabled?.subDistrict}
-	bind:value={subDistrict}
-	on:keyup={() => verifyFields()}
-/>
-<Input
-	class="pb-2"
-	label="profile_sub_district_information"
-	disabled={disabled?.district}
-	bind:value={district}
-	on:keyup={() => verifyFields()}
-/>
-<Input
-	class="pb-2"
-	label="profile_province_information"
-	disabled={disabled?.province}
-	bind:value={province}
-	on:keyup={() => verifyFields()}
-/>
-<Input
-	class="pb-2"
-	label="profile_postcode_information"
-	disabled={disabled?.zipcode}
-	bind:value={zipcode}
-	on:keyup={() => verifyFields()}
-/>
-<Input
-	class="pb-2"
-	label="profile_mobile_information"
+	label={$_('profile_mobile_information')}
 	disabled={disabled?.mobile}
 	bind:value={mobile}
 	on:keyup={() => verifyFields()}

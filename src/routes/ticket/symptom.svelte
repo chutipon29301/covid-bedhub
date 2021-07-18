@@ -1,60 +1,56 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { setDisabledContinueBtn, setSymptoms } from './store/store';
+	import { setSymptoms, symptoms$ } from './store/store';
 	import { onDestroy } from 'svelte';
 	import Checkbox from '$lib/components/ui/checkbox/index.svelte';
+	import Template from '$lib/components/ticketLayout/index.svelte';
+	import { goto } from '$app/navigation';
+	import { ROUTES } from '$lib/constants/routes';
 
-	let symptom1 = false,
-		symptom2 = false,
-		symptom3 = false,
-		symptom4 = false,
-		symptom5 = false,
-		symptom6 = false,
-		symptom7 = false,
-		symptom8 = false,
-		symptom9 = false,
-		symptom10 = false;
-
-	$: setDisabledContinueBtn(
-		!symptom1 &&
-			!symptom2 &&
-			!symptom3 &&
-			!symptom4 &&
-			!symptom5 &&
-			!symptom6 &&
-			!symptom7 &&
-			!symptom8 &&
-			!symptom9 &&
-			!symptom10
-	);
+	let FEVER = $symptoms$?.FEVER,
+		COUGH = $symptoms$?.COUGH,
+		SMELLESS_RASH = $symptoms$?.SMELLESS_RASH,
+		DIARRHEA = $symptoms$?.DIARRHEA,
+		TIRED_HEADACHE = $symptoms$?.TIRED_HEADACHE,
+		DIFFICULT_BREATHING = $symptoms$?.DIFFICULT_BREATHING,
+		ANGINA = $symptoms$?.ANGINA,
+		EXHAUSTED = $symptoms$?.EXHAUSTED,
+		CHEST_PAIN = $symptoms$?.CHEST_PAIN,
+		UNCONCIOUS = $symptoms$?.UNCONCIOUS;
 
 	onDestroy(() =>
 		setSymptoms({
-			symptom1,
-			symptom2,
-			symptom3,
-			symptom4,
-			symptom5,
-			symptom6,
-			symptom7,
-			symptom8,
-			symptom9,
-			symptom10
+			FEVER,
+			COUGH,
+			SMELLESS_RASH,
+			DIARRHEA,
+			TIRED_HEADACHE,
+			DIFFICULT_BREATHING,
+			ANGINA,
+			EXHAUSTED,
+			CHEST_PAIN,
+			UNCONCIOUS
 		})
 	);
+
+	function onClickProceed() {
+		goto(ROUTES.TICKET_ADD);
+	}
 </script>
 
 <svelte:head>
 	<title>{$_('home_ticket_title')}</title>
 </svelte:head>
 
-<Checkbox class="pb-5" bind:checked={symptom1} placeholder="symptom1_label" />
-<Checkbox class="pb-5" bind:checked={symptom2} placeholder="symptom2_label" />
-<Checkbox class="pb-5" bind:checked={symptom3} placeholder="symptom3_label" />
-<Checkbox class="pb-5" bind:checked={symptom4} placeholder="symptom4_label" />
-<Checkbox class="pb-5" bind:checked={symptom5} placeholder="symptom5_label" />
-<Checkbox class="pb-5" bind:checked={symptom6} placeholder="symptom6_label" />
-<Checkbox class="pb-5" bind:checked={symptom7} placeholder="symptom7_label" />
-<Checkbox class="pb-5" bind:checked={symptom8} placeholder="symptom8_label" />
-<Checkbox class="pb-5" bind:checked={symptom9} placeholder="symptom9_label" />
-<Checkbox class="pb-5" bind:checked={symptom10} placeholder="symptom10_label" />
+<Template btnPlaceholer={'contunue_button'} on:click={() => onClickProceed()}>
+	<Checkbox class="pb-5" bind:checked={FEVER} placeholder="symptom1_label" />
+	<Checkbox class="pb-5" bind:checked={COUGH} placeholder="symptom2_label" />
+	<Checkbox class="pb-5" bind:checked={SMELLESS_RASH} placeholder="symptom3_label" />
+	<Checkbox class="pb-5" bind:checked={DIARRHEA} placeholder="symptom4_label" />
+	<Checkbox class="pb-5" bind:checked={TIRED_HEADACHE} placeholder="symptom5_label" />
+	<Checkbox class="pb-5" bind:checked={DIFFICULT_BREATHING} placeholder="symptom6_label" />
+	<Checkbox class="pb-5" bind:checked={ANGINA} placeholder="symptom7_label" />
+	<Checkbox class="pb-5" bind:checked={EXHAUSTED} placeholder="symptom8_label" />
+	<Checkbox class="pb-5" bind:checked={CHEST_PAIN} placeholder="symptom9_label" />
+	<Checkbox class="pb-5" bind:checked={UNCONCIOUS} placeholder="symptom10_label" />
+</Template>

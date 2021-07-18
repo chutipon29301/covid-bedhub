@@ -1,23 +1,28 @@
 import { writable } from 'svelte/store';
-import { initPatient, Patient } from '$lib/models';
-import { IVaccineInfo, initVaccineInfo, initSymptoms, ISymptoms } from './models';
+import type { IllnessChecklist, Patient, SymptomChecklist } from '$lib/models';
+import type { VaccineInfo } from './models';
 
-export const disabledContinueBtn$ = writable<boolean>(false);
-export function setDisabledContinueBtn(status: boolean): void {
-	disabledContinueBtn$.set(status);
-}
-
-export const form$ = writable<Patient>(initPatient);
+export const form$ = writable<Patient>(null);
 export function setForm(form: Patient): void {
 	form$.set(form);
 }
 
-export const vaccine$ = writable<IVaccineInfo>(initVaccineInfo);
-export function setVaccine(vaccine: IVaccineInfo): void {
+export const vaccine$ = writable<VaccineInfo>(null);
+export function setVaccine(vaccine: VaccineInfo): void {
 	vaccine$.set(vaccine);
 }
 
-export const symptoms$ = writable<ISymptoms>(initSymptoms);
-export function setSymptoms(symptoms: ISymptoms): void {
+export const symptoms$ = writable<SymptomChecklist>(null);
+export function setSymptoms(symptoms: SymptomChecklist): void {
 	symptoms$.set(symptoms);
+}
+
+export const illnesses$ = writable<IllnessChecklist>(null);
+export function setIllnesses(illnesses: IllnessChecklist): void {
+	illnesses$.set(illnesses);
+}
+
+export const patientId$ = writable<string>(null);
+export function setPatientId(id: string): void {
+	patientId$.set(id);
 }

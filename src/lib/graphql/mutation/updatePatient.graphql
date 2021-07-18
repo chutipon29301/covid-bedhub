@@ -1,0 +1,6 @@
+mutation UpdatePatient($data: UpdatePatientDto!, $id: ID!) {
+	updatePatient(data: $data, id: $id) {
+		id
+		updatedAt
+	}
+}

@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
 	import { ROUTES } from '$lib/constants/routes';
-	import { setIsLogin } from '$lib/store';
+	import { setIsLoading, setIsLogin } from '$lib/store';
 	import { GetJwtFromLineCode } from '$lib/generated/graphql';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import { storeToken } from '$lib/util';
@@ -14,17 +14,16 @@
 	onMount(async () => {
 		if (!code) return;
 
+		setIsLoading(true);
 		const response = await getJwt();
-		const { hasPatient } = storeToken(response.token, response.expireDate);
-
-		if (hasPatient) goto(ROUTES.HOME);
-		else goto(ROUTES.PATIENT_CHECK);
+		setIsLogin(true);
+		storeToken(response.token, response.expireDate);
+		setIsLoading(false);
+		goto(ROUTES.HOME);
 	});
 
 	async function getJwt() {
-		setIsLogin(true);
-		const { data } = await GetJwtFromLineCode({ variables: { code } });
-		setIsLogin(false);
+		const { data } = await GetJwtFromLineCode({ variables: { code }, errorPolicy: 'all' });
 		return data.getJwtFromLineCode;
 	}
 

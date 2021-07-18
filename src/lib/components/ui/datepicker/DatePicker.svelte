@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { _ } from 'svelte-i18n';
 	import Switcher from './Switcher.svelte';
 	export let placeholder = 'Select Date';
 	export let value: Date;
@@ -71,15 +70,14 @@
 			readonly
 			placeholder=" "
 			bind:value={_date}
-			on:focus={() => {
-				visible = !disabled && !visible;
-			}}
+			on:focus={() => (visible = !disabled && !visible)}
 		/>
 		<label
+			on:click={() => (visible = !disabled && !visible)}
 			for="password"
 			class="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 duration-300 origin-top-left"
 		>
-			{$_(placeholder)}
+			{placeholder}
 		</label>
 	</div>
 </div>

@@ -45,9 +45,19 @@
 		"exam_received_date_label": "วันที่ได้รับผลตรวจ",
 		"exam_localtion_lable": "สถานที่เข้ารับการตรวจ",
 		"exam_date_label": "วันที่เข้ารับการตรวจ",
-		"vaccine_first_dose_label": "วัคซีนโดส 1 ที่ได้รับ",
-		"vaccine_second_dose_label": "วัคซีนโดส 2 ที่ได้รับ",
-		"vaccine_third_dose_label": "วัคซีนโดส 3 ที่ได้รับ",
-		"find_bed_button": "หาเตียง"
+		"vaccine_dose_label": "วัคซีนโดส {order} ที่ได้รับ",
+		"vaccine_date_label": "วันที่ได้รับวัคซีนโดสที่ {order}",
+		"find_bed_button": "หาเตียง",
+		"add_new_patient": "ผู้ป่วยใหม่",
+		"illness1_label": "โรคทางเดินหายใจเรื้อรัง",
+		"illness2_label": "โรคหัวใจและหลอดเลือด",
+		"illness3_label": "โรคไตวายเรื้อรัง",
+		"illness4_label": "โรคหลอดเลือดสมอง",
+		"illness5_label": "โรคอ้วน",
+		"illness6_label": "โรคมะเร็ง",
+		"illness7_label": "โรคเบาหวาน",
+		"add_new_vaccine": "เพิ่มข้อมูลวัคซีน",
+		"request_popup_heading": "คำร้องของคุณได้ถูกส่งไปแล้ว",
+		"request_popup_message": "หมายเลขคำร้อง #{ticketId} ได้ถูกส่งไปแล้ว"
 	}
 }

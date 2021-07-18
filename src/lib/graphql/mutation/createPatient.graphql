@@ -1,0 +1,5 @@
+mutation CreatePatient($data: CreatePatientDto!) {
+	createPatient(data: $data) {
+		id
+	}
+}

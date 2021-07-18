@@ -18,6 +18,11 @@ export const _colorToneMapping = {
 		circle: 'bg-yellow-100',
 		icon: 'text-yellow-500',
 		button: 'bg-yellow-500 focus:ring-yellow-500 hover:bg-yellow-600'
+	},
+	GREEN: {
+		circle: 'bg-green-100',
+		icon: 'text-green-500',
+		button: 'bg-green-500 focus:ring-green-500 hover:bg-green-600'
 	}
 };
 
@@ -25,7 +30,8 @@ export enum EModalColorTone {
 	RED = 'RED',
 	GRAY = 'GRAY',
 	WHITE = 'WHITE',
-	YELLOW = 'YELLOW'
+	YELLOW = 'YELLOW',
+	GREEN = 'GREEN'
 }
 
 export enum EModalSize {

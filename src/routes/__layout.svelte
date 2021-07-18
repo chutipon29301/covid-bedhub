@@ -10,11 +10,16 @@
 <script lang="ts">
 	import '../app.postcss';
 	import { Translate } from '$lib/services/translateService';
-	import { setIsLogin, setUserProfile } from '$lib/store';
+	import { isLogin$, setIsLogin } from '$lib/store';
 	import { onMount, setContext } from 'svelte';
+	import { faSignOutAlt, faTimes, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 	import cookie from 'cookie';
 	import Loading from '$lib/components/loading/index.svelte';
 	import ErrorHandler from '$lib/components/errorHandler/index.svelte';
+	import Fa from '$lib/components/ui/fa/index.svelte';
+	import { goto } from '$app/navigation';
+	import { ROUTES, TICKET_FLOW } from '$lib/constants/routes';
+	import { page } from '$app/stores';
 
 	setContext('translate', new Translate());
 
@@ -22,28 +27,52 @@
 		const { access_token } = cookie.parse(document.cookie);
 		if (access_token) {
 			setIsLogin(true);
-			setUserProfile({
-				id: '1234567890123',
-				dob: new Date('12-02-2020'),
-				firstName: 'Developer',
-				lastName: 'Tester',
-				sex: 'M',
-				address: '123',
-				subDistrict: '456',
-				district: '789',
-				province: '000',
-				zipcode: '12345',
-				mobile: '0123456789'
-			});
+			// setUserProfile({
+			// 	id: '1234567890123',
+			// 	dob: new Date('12-02-2020'),
+			// 	firstName: 'Developer',
+			// 	lastName: 'Tester',
+			// 	sex: 'M',
+			// 	address: '123',
+			// 	subDistrict: '456',
+			// 	district: '789',
+			// 	province: '000',
+			// 	zipcode: '12345',
+			// 	mobile: '0123456789'
+			// });
 		}
 	});
+
+	function logout() {
+		document.cookie = 'access_token=; max-age=0;';
+		setIsLogin(false);
+		goto(ROUTES.LANDING);
+		location.reload();
+	}
 </script>
 
 <ErrorHandler />
 <Loading />
 <div class="flex flex-col min-h-screen">
 	<section class="flex items-center justify-center p-4">
+		{#if TICKET_FLOW.includes($page.path)}
+			<div class="absolute left-6 cursor-pointer p-1" on:click={() => window.history.back()}>
+				<Fa class="text-gray-700" size="lg" icon={faChevronLeft} />
+			</div>
+		{/if}
 		<div class="text-lg">COVID-BEDHUB</div>
+		{#if $isLogin$ && $page.path !== ROUTES.LANDING && $page.path === ROUTES.HOME}
+			<div
+				class="border rounded-full bg-red-100 absolute right-6 cursor-pointer p-1"
+				on:click={() => logout()}
+			>
+				<Fa class="text-red-500" size="lg" icon={faSignOutAlt} />
+			</div>
+		{:else if $isLogin$ && $page.path !== ROUTES.LANDING}
+			<div class="absolute right-6 cursor-pointer p-1" on:click={() => goto(ROUTES.HOME)}>
+				<Fa class="text-gray-700" size="2rem" icon={faTimes} />
+			</div>
+		{/if}
 	</section>
 	<section class="flex-auto flex-grow">
 		<main class="p-6">
