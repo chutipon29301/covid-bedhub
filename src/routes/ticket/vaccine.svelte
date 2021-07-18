@@ -118,7 +118,11 @@
 		{$_('request_popup_message', { values: { ticketId } })}
 	</Modal>
 {/if}
-<Template btnPlaceholer={'contunue_button'} on:click={() => onClickProceed()}>
+<Template
+	title={$_('patient_add_title')}
+	btnPlaceholer={'contunue_button'}
+	on:click={() => onClickProceed()}
+>
 	<DatePicker
 		classes="mb-4"
 		placeholder={$_('exam_received_date_label')}

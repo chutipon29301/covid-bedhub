@@ -28,6 +28,16 @@
 					appointmentDate: t.appointedDate,
 					hospitalName: t.hospital?.name
 				})) || [];
+			// inactiveTickets =
+			// 	data?.me.tickets
+			// 		.map((t) => ({
+			// 			name: `${t.patient.firstName} ${t.patient.lastName}`,
+			// 			id: t.patient.identification,
+			// 			status: t.status,
+			// 			appointmentDate: t.appointedDate,
+			// 			hospitalName: t.hospital?.name
+			// 		}))
+			// 		.filter((t) => t.status === 'HOSPITAL_CANCEL' || t.status === 'PATIENT_CANCEL') || [];
 		});
 	});
 
@@ -61,7 +71,7 @@
 
 <div class="flex flex-col min-h-content mx-auto">
 	<div class="flex">
-		<div class="flex flex-grow">{$_('home_title')}</div>
+		<div class="flex flex-grow text-3xl">{$_('home_title')}</div>
 		{#if tickets.length}
 			<div on:click={() => navigate()}>
 				<Fa class="cursor-pointer" icon={faPlusCircle} size="2rem" />
@@ -74,7 +84,7 @@
 			<Button on:click={() => navigate()} placeholder="find_bed_button" />
 		</div>
 	{:else}
-		{#each tickets as ticket}
+		{#each tickets.filter((t) => t.status === 'REQUEST' || t.status === 'MATCH') as ticket}
 			<div class="pt-4">
 				<Ticket
 					name={ticket.name}
@@ -82,6 +92,23 @@
 					status={ticket.status}
 					appointmentDate={ticket?.appointmentDate}
 					hospitalName={ticket?.hospitalName}
+				/>
+			</div>
+		{/each}
+		<div class="text-3xl pt-8">{$_('home_history_title')}</div>
+		{#if tickets.filter((t) => t.status === 'HOSPITAL_CANCEL' || t.status === 'PATIENT_CANCEL').length === 0}
+			<div class="flex justify-center py-8 text-lg">{$_('no_information_label')}</div>
+		{/if}
+		{#each tickets.filter((t) => t.status === 'HOSPITAL_CANCEL' || t.status === 'PATIENT_CANCEL') as ticket}
+			<div class="pt-4">
+				<Ticket
+					name={ticket.name}
+					id={ticket.id}
+					status={ticket.status}
+					appointmentDate={ticket?.appointmentDate}
+					hospitalName={ticket?.hospitalName}
+					on:clickButton={() => {}}
+					on:clickEdit={() => {}}
 				/>
 			</div>
 		{/each}

@@ -4,12 +4,18 @@
 
 	export let disabledContinueBtn = false;
 	export let btnPlaceholer: string;
+	export let title = 'title';
+	export let description = '';
 
 	const dispatch = createEventDispatcher();
 </script>
 
-<div class="flex flex-col">
-	<div class="min-h-content pb-4">
+<div class="flex flex-col min-h-content">
+	<div class="flex-grow pb-4">
+		<div class="text-3xl pb-4">{title}</div>
+		{#if description}
+			<div class="text-md pb-4">{description}</div>
+		{/if}
 		<slot />
 	</div>
 	<div>
@@ -24,6 +30,6 @@
 
 <style>
 	.min-h-content {
-		min-height: calc(100vh - 10rem);
+		min-height: calc(100vh - 7rem);
 	}
 </style>

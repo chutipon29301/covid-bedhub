@@ -54,10 +54,10 @@
 </script>
 
 <svelte:head>
-	<title>{$_('profile_title')}</title>
+	<title>{$_('patient_title')}</title>
 </svelte:head>
 
-<section>{$_('profile_title')}</section>
+<div class="text-3xl pb-4">{$_('patient_title')}</div>
 <div
 	on:click={() => addNewPatient()}
 	class="border border-dashed px-4 py-2 w-full border-indigo-700 rounded-md flex justify-center cursor-pointer mb-4 bg-transparent text-indigo-400"

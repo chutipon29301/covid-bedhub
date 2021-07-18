@@ -1,0 +1,13 @@
+export const TICKET_STATUS = {
+	REQUEST: 'REQUEST',
+	MATCH: 'MATCH',
+	HOSPITAL_CANCEL: 'HOSPITAL_CANCEL',
+	PATIENT_CANCEL: 'PATIENT_CANCEL'
+};
+
+export const TICKET_STATUS_LABEL = {
+	REQUEST: 'Requested',
+	MATCH: 'Matched',
+	HOSPITAL_CANCEL: 'Cancelled',
+	PATIENT_CANCEL: 'Cancelled'
+};

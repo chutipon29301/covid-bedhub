@@ -53,9 +53,15 @@ export function checklistToEnum<T>(checklist: SymptomChecklist | IllnessChecklis
 }
 
 export function vaccinePopulate(vaccines: Vaccine[]): CreateVaccine[] {
-	return vaccines.map((v, i) => ({
-		vaccineReceiveDate: dateToStringFormat(v.dateReceived),
-		doseNumber: i + 1,
-		vaccineName: VaccineName[v.name]
-	}));
+	return vaccines
+		.map((v, i) =>
+			v.name
+				? {
+						vaccineReceiveDate: dateToStringFormat(v.dateReceived),
+						doseNumber: i + 1,
+						vaccineName: VaccineName[v.name]
+				  }
+				: null
+		)
+		.filter((v) => v);
 }

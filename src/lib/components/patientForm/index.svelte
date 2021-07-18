@@ -23,46 +23,43 @@
 	}
 </script>
 
-<div class="text-3xl pb-2">
-	{$_('profile_add_title')}
-</div>
 <Input
 	class="pb-2"
-	label={$_('profile_id_information')}
+	label={$_('patient_id_information')}
 	disabled={disabled?.id}
 	bind:value={id}
 	on:keyup={() => verifyFields()}
 />
 <Input
 	class="pb-2"
-	label={$_('profile_first_name_information')}
+	label={$_('patient_first_name_information')}
 	disabled={disabled?.firstName}
 	bind:value={firstName}
 	on:keyup={() => verifyFields()}
 />
 <Input
 	class="pb-2"
-	label={$_('profile_last_name_information')}
+	label={$_('patient_last_name_information')}
 	disabled={disabled?.lastName}
 	bind:value={lastName}
 	on:keyup={() => verifyFields()}
 />
 <DatePicker
-	placeholder={$_('profile_dob_information')}
+	placeholder={$_('patient_dob_information')}
 	disabled={disabled?.dob}
 	bind:value={dob}
 	on:keyup={() => verifyFields()}
 />
 <Input
 	class="py-2"
-	label={$_('profile_sex_information')}
+	label={$_('patient_sex_information')}
 	disabled={disabled?.sex}
 	bind:value={sex}
 	on:keyup={() => verifyFields()}
 />
 <Input
 	class="pb-2"
-	label={$_('profile_mobile_information')}
+	label={$_('patient_mobile_information')}
 	disabled={disabled?.mobile}
 	bind:value={mobile}
 	on:keyup={() => verifyFields()}

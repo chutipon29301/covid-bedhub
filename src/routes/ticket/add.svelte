@@ -33,9 +33,13 @@
 </script>
 
 <svelte:head>
-	<title>{$_('profile_add_title')}</title>
+	<title>{$_('patient_add_title')}</title>
 </svelte:head>
-
-<Template {disabledContinueBtn} btnPlaceholer={'contunue_button'} on:click={() => onClickProceed()}>
+<Template
+	title={$_('patient_add_title')}
+	{disabledContinueBtn}
+	btnPlaceholer={'contunue_button'}
+	on:click={() => onClickProceed()}
+>
 	<PatientForm bind:id bind:firstName bind:lastName bind:dob bind:sex bind:mobile disabled={{}} />
 </Template>

@@ -32,7 +32,12 @@
 	<title>{$_('home_ticket_title')}</title>
 </svelte:head>
 
-<Template btnPlaceholer={'contunue_button'} on:click={() => onClickProceed()}>
+<Template
+	title={$_('find_bed_information_label')}
+	description={$_('illness_information_title')}
+	btnPlaceholer={'contunue_button'}
+	on:click={() => onClickProceed()}
+>
 	<Checkbox class="pb-5" bind:checked={NCDs} placeholder="illness1_label" />
 	<Checkbox class="pb-5" bind:checked={CARDIOVASCULAR} placeholder="illness2_label" />
 	<Checkbox class="pb-5" bind:checked={CKD} placeholder="illness3_label" />
