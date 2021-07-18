@@ -72,6 +72,9 @@
 		"edit_symptoms_title": "แก้ไขข้อมูลเพื่อหาเตียง",
 		"edit_symptoms_name_label": "ชื่อ-นามสกุล",
 		"edit_symptoms_status_label": "สถานะ",
-		"save_button": "บันทึก"
+		"save_button": "บันทึก",
+		"ok_button": "OK",
+		"edit_symptoms_popup_heading": "แก้ไขข้อมูลเรียบร้อย",
+		"edit_symptoms_popup_message": "ข้อมูลอาการของ #{ticketId} ถูกแก้ไขเรียบร้อย"
 	}
 }

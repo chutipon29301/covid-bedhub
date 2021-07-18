@@ -47,10 +47,12 @@ class Client {
 			cache: new InMemoryCache(),
 			defaultOptions: {
 				watchQuery: {
-					errorPolicy: 'all'
+					errorPolicy: 'all',
+					fetchPolicy: 'network-only'
 				},
 				query: {
-					errorPolicy: 'all'
+					errorPolicy: 'all',
+					fetchPolicy: 'network-only'
 				},
 				mutate: {
 					errorPolicy: 'all'

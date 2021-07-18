@@ -1,0 +1,5 @@
+mutation EditSymptom($id: ID!, $data: EditSymptomDto!) {
+	editSymptom(id: $id, data: $data) {
+		id
+	}
+}

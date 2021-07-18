@@ -1,0 +1,12 @@
+query MyTicketSymptoms($id: ID!) {
+	myTicket(id: $id) {
+		patient {
+			firstName
+			lastName
+			identification
+			tel
+		}
+		status
+		symptoms
+	}
+}

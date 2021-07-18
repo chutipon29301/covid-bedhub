@@ -435,6 +435,20 @@ export type CreateTicketMutation = (
   ) }
 );
 
+export type EditSymptomMutationVariables = Exact<{
+  id: Scalars['ID'];
+  data: EditSymptomDto;
+}>;
+
+
+export type EditSymptomMutation = (
+  { __typename?: 'Mutation' }
+  & { editSymptom: (
+    { __typename?: 'Ticket' }
+    & Pick<Ticket, 'id'>
+  ) }
+);
+
 export type GetJwtFromLineCodeMutationVariables = Exact<{
   code: Scalars['String'];
 }>;
@@ -547,6 +561,13 @@ export const CreatePatientDoc = gql`
 export const CreateTicketDoc = gql`
     mutation CreateTicket($data: CreateTicketDto!) {
   createTicket(data: $data) {
+    id
+  }
+}
+    `;
+export const EditSymptomDoc = gql`
+    mutation EditSymptom($id: ID!, $data: EditSymptomDto!) {
+  editSymptom(id: $id, data: $data) {
     id
   }
 }
@@ -665,6 +686,18 @@ export const CreateTicket = (
           ) => {
             const m = client.mutate<CreateTicketMutation, CreateTicketMutationVariables>({
               mutation: CreateTicketDoc,
+              ...options,
+            });
+            return m;
+          }
+export const EditSymptom = (
+            options: Omit<
+              MutationOptions<any, EditSymptomMutationVariables>, 
+              "mutation"
+            >
+          ) => {
+            const m = client.mutate<EditSymptomMutation, EditSymptomMutationVariables>({
+              mutation: EditSymptomDoc,
               ...options,
             });
             return m;

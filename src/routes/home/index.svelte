@@ -25,7 +25,7 @@
 	});
 
 	function loadMyTickets() {
-		const response = MyTickets({ fetchPolicy: 'network-only' });
+		const response = MyTickets({});
 		const sub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			tickets =
