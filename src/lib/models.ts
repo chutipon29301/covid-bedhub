@@ -30,7 +30,14 @@ export interface SymptomChecklist {
 	UNCONCIOUS: boolean;
 }
 
-export type AccountType = 'reporter' | 'staff' | 'queue_manager' | 'code_generator';
+// export type AccountType = 'reporter' | 'staff' | 'queue_manager' | 'code_generator';
+
+export enum AccountType {
+	REPORTER = 'reporter',
+	STAFF = 'staff',
+	QUEUE = 'queue_manager',
+	CODE = 'code_generator'
+}
 
 export interface GPSLocation {
 	lat: number;
@@ -40,4 +47,8 @@ export interface GPSLocation {
 export interface Vaccine {
 	name: string;
 	dateReceived: Date;
+}
+
+export interface DecodedJwt {
+	accountType: string;
 }

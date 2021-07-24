@@ -142,6 +142,7 @@ export type Mutation = {
 	editSymptom: Ticket;
 	cancelTicket: Ticket;
 	acceptTicket: Ticket;
+	editAppointment: Ticket;
 	cancelAppointment: Ticket;
 	getJwtFromLineCode: JwtTokenInfo;
 	officerLogin: JwtTokenInfo;
@@ -420,6 +421,14 @@ export type GetJwtFromLineCodeMutation = { __typename?: 'Mutation' } & {
 	getJwtFromLineCode: { __typename?: 'JwtTokenInfo' } & Pick<JwtTokenInfo, 'token' | 'expireDate'>;
 };
 
+export type OfficerLoginMutationVariables = Exact<{
+	data: LoginWithUsernameDto;
+}>;
+
+export type OfficerLoginMutation = { __typename?: 'Mutation' } & {
+	officerLogin: { __typename?: 'JwtTokenInfo' } & Pick<JwtTokenInfo, 'token' | 'expireDate'>;
+};
+
 export type UpdatePatientMutationVariables = Exact<{
 	data: UpdatePatientDto;
 	id: Scalars['ID'];
@@ -491,6 +500,25 @@ export type PatientQuery = { __typename?: 'Query' } & {
 	>;
 };
 
+export type RequestedTicketQueryVariables = Exact<{ [key: string]: never }>;
+
+export type RequestedTicketQuery = { __typename?: 'Query' } & {
+	requestedTicket: Array<
+		{ __typename?: 'Ticket' } & Pick<Ticket, 'id' | 'createdAt' | 'riskLevel' | 'status'> & {
+				patient: { __typename?: 'Patient' } & Pick<
+					Patient,
+					'firstName' | 'lastName' | 'sex' | 'birthDate'
+				>;
+			}
+	>;
+};
+
+export type TestQueryVariables = Exact<{ [key: string]: never }>;
+
+export type TestQuery = { __typename?: 'Query' } & {
+	pingAllowUnauthenticated: { __typename?: 'PingResponseDto' } & Pick<PingResponseDto, 'msg'>;
+};
+
 export const CancelTicketDoc = gql`
 	mutation CancelTicket($id: ID!) {
 		cancelTicket(id: $id) {
@@ -522,6 +550,14 @@ export const EditSymptomDoc = gql`
 export const GetJwtFromLineCodeDoc = gql`
 	mutation GetJwtFromLineCode($code: String!) {
 		getJwtFromLineCode(code: $code) {
+			token
+			expireDate
+		}
+	}
+`;
+export const OfficerLoginDoc = gql`
+	mutation OfficerLogin($data: LoginWithUsernameDto!) {
+		officerLogin(data: $data) {
 			token
 			expireDate
 		}
@@ -601,6 +637,29 @@ export const PatientDoc = gql`
 		}
 	}
 `;
+export const RequestedTicketDoc = gql`
+	query RequestedTicket {
+		requestedTicket {
+			id
+			patient {
+				firstName
+				lastName
+				sex
+				birthDate
+			}
+			createdAt
+			riskLevel
+			status
+		}
+	}
+`;
+export const TestDoc = gql`
+	query Test {
+		pingAllowUnauthenticated {
+			msg
+		}
+	}
+`;
 export const CancelTicket = (
 	options: Omit<MutationOptions<any, CancelTicketMutationVariables>, 'mutation'>
 ) => {
@@ -642,6 +701,15 @@ export const GetJwtFromLineCode = (
 ) => {
 	const m = client.mutate<GetJwtFromLineCodeMutation, GetJwtFromLineCodeMutationVariables>({
 		mutation: GetJwtFromLineCodeDoc,
+		...options
+	});
+	return m;
+};
+export const OfficerLogin = (
+	options: Omit<MutationOptions<any, OfficerLoginMutationVariables>, 'mutation'>
+) => {
+	const m = client.mutate<OfficerLoginMutation, OfficerLoginMutationVariables>({
+		mutation: OfficerLoginDoc,
 		...options
 	});
 	return m;
@@ -738,6 +806,52 @@ export const Patient = (
 	const result = readable<
 		ApolloQueryResult<PatientQuery> & {
 			query: ObservableQuery<PatientQuery, PatientQueryVariables>;
+		}
+	>({ data: null, loading: true, error: null, networkStatus: 1, query: null }, (set) => {
+		q.subscribe((v) => {
+			set({ ...v, query: q });
+		});
+	});
+	return result;
+};
+
+export const RequestedTicket = (
+	options: Omit<WatchQueryOptions<RequestedTicketQueryVariables>, 'query'>
+): Readable<
+	ApolloQueryResult<RequestedTicketQuery> & {
+		query: ObservableQuery<RequestedTicketQuery, RequestedTicketQueryVariables>;
+	}
+> => {
+	const q = client.watchQuery({
+		query: RequestedTicketDoc,
+		...options
+	});
+	const result = readable<
+		ApolloQueryResult<RequestedTicketQuery> & {
+			query: ObservableQuery<RequestedTicketQuery, RequestedTicketQueryVariables>;
+		}
+	>({ data: null, loading: true, error: null, networkStatus: 1, query: null }, (set) => {
+		q.subscribe((v) => {
+			set({ ...v, query: q });
+		});
+	});
+	return result;
+};
+
+export const Test = (
+	options: Omit<WatchQueryOptions<TestQueryVariables>, 'query'>
+): Readable<
+	ApolloQueryResult<TestQuery> & {
+		query: ObservableQuery<TestQuery, TestQueryVariables>;
+	}
+> => {
+	const q = client.watchQuery({
+		query: TestDoc,
+		...options
+	});
+	const result = readable<
+		ApolloQueryResult<TestQuery> & {
+			query: ObservableQuery<TestQuery, TestQueryVariables>;
 		}
 	>({ data: null, loading: true, error: null, networkStatus: 1, query: null }, (set) => {
 		q.subscribe((v) => {

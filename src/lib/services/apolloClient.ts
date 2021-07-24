@@ -18,15 +18,17 @@ class Client {
 
 	setupClient() {
 		const httpLink = createHttpLink({
-			uri: `http://178.128.221.77:3000/graphql`
+			uri: `${import.meta.env.VITE_API_URL}/graphql`
 		});
 
 		const authLink = setContext((_, { headers }) => {
-			const { access_token } = cookie.parse(document.cookie);
+			const token = import.meta.env.VITE_DEVELOP
+				? 'Developer queue_manager-1'
+				: `Bearer ${cookie.parse(document.cookie).access_token}`;
 			return {
 				headers: {
 					...headers,
-					authorization: access_token ? `${access_token}` : ''
+					authorization: token ? `${token}` : ''
 				}
 			};
 		});

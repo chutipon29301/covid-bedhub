@@ -37,4 +37,4 @@
 </svelte:head>
 
 <div class="text-3xl pb-2">{$_('login_title')}</div>
-<Button isFullWidth={true} placeholder={'login_with_line_button'} on:click={() => redirect()} />
+<Button class="w-full" placeholder={$_('login_with_line_button')} on:click={() => redirect()} />

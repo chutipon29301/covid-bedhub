@@ -23,24 +23,17 @@
 
 	setContext('translate', new Translate());
 
+	let logoutButtonDisplay = [
+		ROUTES.HOME,
+		ROUTES.HEALTHCARE_CODE,
+		ROUTES.HEALTHCARE_STAFF,
+		ROUTES.HEALTHCARE_QUEUE,
+		ROUTES.HEALTHCARE_QUEUE_HISTORY
+	];
+
 	onMount(() => {
 		const { access_token } = cookie.parse(document.cookie);
-		if (access_token) {
-			setIsLogin(true);
-			// setUserProfile({
-			// 	id: '1234567890123',
-			// 	dob: new Date('12-02-2020'),
-			// 	firstName: 'Developer',
-			// 	lastName: 'Tester',
-			// 	sex: 'M',
-			// 	address: '123',
-			// 	subDistrict: '456',
-			// 	district: '789',
-			// 	province: '000',
-			// 	zipcode: '12345',
-			// 	mobile: '0123456789'
-			// });
-		}
+		if (access_token) setIsLogin(true);
 	});
 
 	function logout() {
@@ -61,7 +54,7 @@
 			</div>
 		{/if}
 		<div class="text-lg">COVID-BEDHUB</div>
-		{#if $isLogin$ && $page.path !== ROUTES.LANDING && $page.path === ROUTES.HOME}
+		{#if $isLogin$ && $page.path !== ROUTES.LANDING && logoutButtonDisplay.includes($page.path)}
 			<div
 				class="border rounded-full bg-red-100 absolute right-6 cursor-pointer p-1"
 				on:click={() => logout()}

@@ -3,14 +3,10 @@ import { CreateVaccine, Illness, Symptom, VaccineName } from './generated/graphq
 import type { IllnessChecklist, SymptomChecklist, Vaccine } from './models';
 
 export function storeToken(token: string, expires: Date): void {
-	document.cookie = cookie.serialize(
-		'access_token',
-		import.meta.env.VITE_DEVELOP ? 'Developer reporter-1' : `Bearer ${token}`,
-		{
-			path: '/',
-			expires: new Date(expires)
-		}
-	);
+	document.cookie = cookie.serialize('access_token', token, {
+		path: '/',
+		expires: new Date(expires)
+	});
 }
 
 export function dateToStringFormat(date: Date): string {

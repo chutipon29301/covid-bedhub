@@ -38,7 +38,7 @@
 <Template
 	title={$_('patient_add_title')}
 	{disabledContinueBtn}
-	btnPlaceholer={'contunue_button'}
+	btnPlaceholer={$_('continue_button')}
 	on:click={() => onClickProceed()}
 >
 	<PatientForm bind:id bind:firstName bind:lastName bind:dob bind:sex bind:mobile disabled={{}} />

@@ -8,7 +8,7 @@
 	import Card from '$lib/components/ui/card/detailed/index.svelte';
 	import Button from '$lib/components/ui/button/index.svelte';
 
-	let headers = Headers,
+	let headers = [...Headers, { field: 'appointedDate', label: 'appointedDate' }],
 		content = [],
 		selectedTicket = null;
 
@@ -31,6 +31,7 @@
 					age: t.patient.birthDate,
 					riskLevel: t.riskLevel,
 					status: t.status,
+					appointedDate: 'asdfasdf',
 					id: t.id
 				})) || [];
 			if (!loading) sub();

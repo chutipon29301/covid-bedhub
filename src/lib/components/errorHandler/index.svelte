@@ -12,7 +12,6 @@
 
 	onMount(() => {
 		window.onerror = (e: string) => {
-			console.log('hiiiii', errors);
 			const error = JSON.parse(e.replace('Uncaught Error: ', ''));
 			errors = [
 				...errors,
@@ -21,7 +20,7 @@
 					message: error?.message || 'An unexpected error happened'
 				}
 			];
-			console.log('hiiiii', errors);
+			setIsLoading(false);
 		};
 
 		window.onunhandledrejection = async (e: PromiseRejectionEvent) => {

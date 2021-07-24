@@ -45,7 +45,7 @@
 <Template
 	title={$_('find_bed_information_label')}
 	description={$_('current_symptom_label')}
-	btnPlaceholer={'contunue_button'}
+	btnPlaceholer={$_('continue_button')}
 	on:click={() => onClickProceed()}
 >
 	<Checkbox class="pb-5" bind:checked={FEVER} placeholder="symptom1_label" />

@@ -1,13 +1,6 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-	import Button from '$lib/components/ui/button/index.svelte';
-
-	export let disabledContinueBtn = false;
-	export let btnPlaceholer: string;
 	export let title = 'title';
 	export let description = '';
-
-	const dispatch = createEventDispatcher();
 </script>
 
 <div class="flex flex-col min-h-content">
@@ -16,15 +9,10 @@
 		{#if description}
 			<div class="text-md pb-4">{description}</div>
 		{/if}
-		<slot />
+		<slot name="content" />
 	</div>
 	<div>
-		<Button
-			disabled={disabledContinueBtn}
-			class="w-full"
-			on:click={() => dispatch('click')}
-			placeholder={btnPlaceholer}
-		/>
+		<slot name="footer" />
 	</div>
 </div>
 

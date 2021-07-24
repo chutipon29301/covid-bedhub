@@ -7,8 +7,13 @@
 	export let errorMessage = '';
 	export let label = 'label';
 	export let disabled = false;
+	export let type = 'text';
 	const dispatch = createEventDispatcher();
-	let inputDOM;
+	let inputDOM: HTMLElement;
+
+	function typeAction(node: HTMLInputElement) {
+		node.type = type;
+	}
 </script>
 
 <div class="mt-2 items-center z-10 {clazz}">
@@ -22,6 +27,7 @@
 			bind:this={inputDOM}
 			bind:value
 			readonly={disabled}
+			use:typeAction
 			on:keyup={(e) => dispatch('keyup', e)}
 			class="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent"
 		/>

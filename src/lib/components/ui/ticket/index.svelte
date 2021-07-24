@@ -30,36 +30,44 @@
 		</div>
 	{/if}
 	<div class="p-2 w-full h-full overflow-y-auto text-gray-100">
-		<div class="flex text-gray-500 my-1">
-			<Fa class="mt-1 pr-4" icon={faUser} />
-			{name}
+		<div class="grid grid-cols-12 text-gray-500 my-1">
+			<div class="flex justify-center items-center">
+				<Fa class="pr-4" icon={faUser} />
+			</div>
+			<span class="col-span-11">{name}</span>
 		</div>
-		<div class="flex text-gray-500 my-1">
-			<Fa class="mt-1 pr-4" icon={faIdCard} />
-			{id}
+		<div class="grid grid-cols-12 text-gray-500 my-1">
+			<div class="flex justify-center items-center">
+				<Fa class="pr-4" icon={faIdCard} />
+			</div>
+			<span class="col-span-11">{id}</span>
 		</div>
 		{#if appointmentDate}
-			<div class="flex text-gray-500 my-1">
-				<Fa class="mt-1 pr-4" icon={faCalendarAlt} />
-				{appointmentDate}
+			<div class="grid grid-cols-12 text-gray-500 my-1">
+				<div class="flex justify-center items-center">
+					<Fa class="pr-4" icon={faCalendarAlt} />
+				</div>
+				<span class="col-span-11">{appointmentDate}</span>
 			</div>
-			<div class="flex text-gray-500 my-1">
-				<Fa class="mt-1 pr-4" icon={faHospitalAlt} />
-				{hospitalName}
+			<div class="grid grid-cols-12 text-gray-500 my-1">
+				<div class="flex justify-center items-center">
+					<Fa class="pr-4" icon={faHospitalAlt} />
+				</div>
+				<span class="col-span-11">{hospitalName}</span>
 			</div>
 		{/if}
 		<div class="pt-4">
 			{#if status === TICKET_STATUS.REQUEST}
 				<Button
-					color="bg-red-400 hover:bg-red-500"
+					class="w-full"
+					color="red"
 					on:click={() => dispatch('clickButton')}
-					isFullWidth={true}
 					placeholder={$_('cancel_request_button')}
 				/>
 			{:else if status === TICKET_STATUS.MATCH}
 				<Button
 					on:click={() => dispatch('clickButton')}
-					isFullWidth={true}
+					class="w-full"
 					placeholder={$_('see_hospital_button')}
 				/>
 			{:else}

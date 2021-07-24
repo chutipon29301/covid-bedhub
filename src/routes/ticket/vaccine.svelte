@@ -70,7 +70,7 @@
 	}
 
 	async function createTix(id: string): Promise<void> {
-		const { data } = await CreateTicket({
+		const response = await CreateTicket({
 			variables: {
 				data: {
 					patientId: +id,
@@ -85,8 +85,10 @@
 			}
 		});
 
-		ticketId = data.createTicket.id;
-		successPopupShown = true;
+		if (response?.data) {
+			ticketId = response?.data.createTicket.id;
+			successPopupShown = true;
+		}
 	}
 
 	async function onClickProceed() {
@@ -117,7 +119,7 @@
 {/if}
 <Template
 	title={$_('patient_add_title')}
-	btnPlaceholer={'contunue_button'}
+	btnPlaceholer={$_('continue_button')}
 	on:click={() => onClickProceed()}
 >
 	<DatePicker

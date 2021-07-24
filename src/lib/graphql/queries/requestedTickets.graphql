@@ -1,0 +1,14 @@
+query RequestedTicket {
+	requestedTicket {
+		id
+		patient {
+			firstName
+			lastName
+			sex
+			birthDate
+		}
+		createdAt
+		riskLevel
+		status
+	}
+}
