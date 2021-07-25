@@ -1,0 +1,5 @@
+mutation CreateTicket($data: CreateTicketDto!) {
+	createTicket(data: $data) {
+		id
+	}
+}

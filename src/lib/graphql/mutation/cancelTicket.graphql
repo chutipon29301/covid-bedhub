@@ -1,0 +1,5 @@
+mutation CancelTicket($id: ID!) {
+	cancelTicket(id: $id) {
+		id
+	}
+}

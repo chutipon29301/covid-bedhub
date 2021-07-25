@@ -1,0 +1,20 @@
+query MyTickets {
+	me {
+		id
+		tickets {
+			id
+			status
+			appointedDate
+			patient {
+				id
+				firstName
+				lastName
+				identification
+			}
+			hospital {
+				id
+				name
+			}
+		}
+	}
+}

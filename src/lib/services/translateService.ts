@@ -16,10 +16,6 @@ export class Translate {
 		});
 	}
 
-	instant(key: string): string {
-		return copywriting[this.currentLang][key] || key;
-	}
-
 	changeLang(): void {
 		const lang = this.currentLang === 'en' ? 'th' : 'en';
 		locale.set(lang);

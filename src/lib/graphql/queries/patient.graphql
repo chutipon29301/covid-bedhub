@@ -1,0 +1,11 @@
+query Patient($id: ID!) {
+	patient(id: $id) {
+		firstName
+		lastName
+		birthDate
+		sex
+		identification
+		tel
+		illnesses
+	}
+}

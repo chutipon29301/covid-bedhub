@@ -1,9 +1,32 @@
 <script lang="ts">
-	import { _ } from 'svelte-i18n';
+	import { createEventDispatcher } from 'svelte';
+	import { COLOR } from './models';
 
-	export let placeholder = 'Button';
+	let clazz = '';
+	export { clazz as class };
+	export let placeholder = 'button_placeholder';
+	export let disabled = false;
+	export let color: 'red' | 'blue' | 'white' = 'blue';
+	const dispatch = createEventDispatcher();
+
+	$: _colorCss = getColorCss(color);
+
+	function getColorCss(color: string) {
+		switch (color) {
+			case 'red':
+				return COLOR.RED;
+			case 'blue':
+				return COLOR.BLUE;
+			case 'white':
+				return COLOR.WHITE;
+		}
+	}
 </script>
 
-<button class="bg-blue-500 px-4 py-3 rounded text-gray-200 font-semibold hover:bg-blue-600">
-	{$_(placeholder)}
+<button
+	on:click={() => dispatch('click')}
+	class="{clazz} {_colorCss} hover:opacity-75 px-4 py-3 rounded font-semibold disabled:bg-gray-200 disabled:cursor-default disabled:text-gray-400"
+	{disabled}
+>
+	{placeholder}
 </button>

@@ -10,16 +10,74 @@
 <script lang="ts">
 	import '../app.postcss';
 	import { Translate } from '$lib/services/translateService';
-	import { setContext } from 'svelte';
-	import { ROUTES } from '$lib/constants/routes';
+	import { isLogin$, setIsLogin } from '$lib/store';
+	import { onMount, setContext } from 'svelte';
+	import { faSignOutAlt, faTimes, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+	import cookie from 'cookie';
+	import Loading from '$lib/components/loading/index.svelte';
+	import ErrorHandler from '$lib/components/errorHandler/index.svelte';
+	import Fa from '$lib/components/ui/fa/index.svelte';
+	import { goto } from '$app/navigation';
+	import { ROUTES, TICKET_FLOW } from '$lib/constants/routes';
+	import { page } from '$app/stores';
 
 	setContext('translate', new Translate());
+
+	let logoutButtonDisplay = [
+		ROUTES.HOME,
+		ROUTES.HEALTHCARE_CODE,
+		ROUTES.HEALTHCARE_STAFF,
+		ROUTES.HEALTHCARE_QUEUE,
+		ROUTES.HEALTHCARE_QUEUE_HISTORY
+	];
+
+	onMount(() => {
+		const { access_token } = cookie.parse(document.cookie);
+		if (access_token) setIsLogin(true);
+	});
+
+	function logout() {
+		document.cookie = 'access_token=; max-age=0;';
+		setIsLogin(false);
+		goto(ROUTES.LANDING);
+		location.reload();
+	}
 </script>
 
-{#each Object.entries(ROUTES) as [key, value]}
-	<a class="text-blue-700 pr-2" href={value}>{key}</a>
-{/each}
+<ErrorHandler />
+<Loading />
+<div class="flex flex-col min-h-screen">
+	<section class="flex items-center justify-center p-4">
+		{#if TICKET_FLOW.includes($page.path)}
+			<div class="absolute left-6 cursor-pointer p-1" on:click={() => window.history.back()}>
+				<Fa class="text-gray-700" size="lg" icon={faChevronLeft} />
+			</div>
+		{/if}
+		<div class="text-lg">COVID-BEDHUB</div>
+		{#if $isLogin$ && $page.path !== ROUTES.LANDING && logoutButtonDisplay.includes($page.path)}
+			<div
+				class="border rounded-full bg-red-100 absolute right-6 cursor-pointer p-1"
+				on:click={() => logout()}
+			>
+				<Fa class="text-red-500" size="lg" icon={faSignOutAlt} />
+			</div>
+		{:else if $isLogin$ && $page.path !== ROUTES.LANDING}
+			<div class="absolute right-6 cursor-pointer p-1" on:click={() => goto(ROUTES.HOME)}>
+				<Fa class="text-gray-700" size="2rem" icon={faTimes} />
+			</div>
+		{/if}
+	</section>
+	<section class="flex-auto flex-grow">
+		<main class="p-6">
+			<slot />
+		</main>
+	</section>
+</div>
 
-<main>
-	<slot />
-</main>
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400&display=swap');
+
+	:global(body) {
+		font-family: 'Prompt', sans-serif;
+	}
+</style>

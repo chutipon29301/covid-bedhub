@@ -1,0 +1,6 @@
+mutation OfficerLogin($data: LoginWithUsernameDto!) {
+	officerLogin(data: $data) {
+		token
+		expireDate
+	}
+}
