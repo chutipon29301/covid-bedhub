@@ -6,19 +6,27 @@ import {
 	PROTECTED_ROUTES,
 	ROUTES
 } from '$lib/constants/routes';
-import { isLogin$ } from '$lib/store';
-import type { LoadInput, LoadOutput } from '@sveltejs/kit';
+import { accessToken$, isLogin$ } from '$lib/store';
 import { AccountType } from '$lib/models';
+import type { LoadInput, LoadOutput } from '@sveltejs/kit';
 import type { DecodedJwt } from '$lib/models';
 import jwt_decoder from 'jwt-decode';
 import cookie from 'cookie';
 
 let isLogin = false;
+let accessToken = '';
 const protectedPath = PROTECTED_ROUTES;
-isLogin$.subscribe((authState) => (isLogin = authState));
+const loginUnsub = isLogin$.subscribe((authState) => {
+	isLogin = authState;
+	if (authState) loginUnsub();
+});
+const tokenUnsub = accessToken$.subscribe((token) => {
+	accessToken = token;
+	if (token) tokenUnsub();
+});
 
 export async function authGuard({ session, page }: LoadInput): Promise<LoadOutput> {
-	const { access_token } = session;
+	const access_token = session.access_token || accessToken;
 	const loggedIn = access_token || isLogin;
 
 	if (!loggedIn) return guardUnauthentication(page.path);

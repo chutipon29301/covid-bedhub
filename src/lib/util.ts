@@ -1,8 +1,10 @@
 import cookie from 'cookie';
 import { CreateVaccine, Illness, Symptom, VaccineName } from './generated/graphql';
+import { setAccessToken } from './store';
 import type { IllnessChecklist, SymptomChecklist, Vaccine } from './models';
 
 export function storeToken(token: string, expires: Date): void {
+	setAccessToken(token);
 	document.cookie = cookie.serialize('access_token', token, {
 		path: '/',
 		expires: new Date(expires)
