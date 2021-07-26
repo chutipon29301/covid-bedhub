@@ -234,6 +234,7 @@ export type Patient = {
 	tel: Scalars['String'];
 	sex: Scalars['String'];
 	illnesses: Array<Illness>;
+	age: Scalars['Int'];
 };
 
 export type PingResponseDto = {
@@ -261,7 +262,7 @@ export type Query = {
 	patient: Patient;
 	myOfficer: Officer;
 	myTicket?: Maybe<Ticket>;
-	requestedTicket: Array<Ticket>;
+	requestedTicket: TicketPaginationDto;
 	ticketByNationalId: Ticket;
 	pingAllowUnauthenticated: PingResponseDto;
 	pingAllowAnyPermission: PingResponseDto;
@@ -288,6 +289,10 @@ export type QueryMyTicketArgs = {
 	id: Scalars['ID'];
 };
 
+export type QueryRequestedTicketArgs = {
+	data?: Maybe<RequestTicketQueryDto>;
+};
+
 export type QueryTicketByNationalIdArgs = {
 	nid: Scalars['String'];
 };
@@ -299,6 +304,12 @@ export type Reporter = {
 	updatedAt: Scalars['DateTime'];
 	patients: Array<Patient>;
 	tickets: Array<Ticket>;
+};
+
+export type RequestTicketQueryDto = {
+	take?: Maybe<Scalars['Float']>;
+	skip?: Maybe<Scalars['Float']>;
+	riskLevel?: Maybe<Scalars['Float']>;
 };
 
 export enum Symptom {
@@ -334,6 +345,12 @@ export type Ticket = {
 	patient: Patient;
 	hospital?: Maybe<Hospital>;
 	vaccines: Array<Vaccine>;
+};
+
+export type TicketPaginationDto = {
+	__typename?: 'TicketPaginationDto';
+	tickets: Array<Ticket>;
+	count: Scalars['Float'];
 };
 
 export enum TicketStatus {
@@ -429,6 +446,16 @@ export type OfficerLoginMutation = { __typename?: 'Mutation' } & {
 	officerLogin: { __typename?: 'JwtTokenInfo' } & Pick<JwtTokenInfo, 'token' | 'expireDate'>;
 };
 
+export type UpdateAccessCodeMutationVariables = Exact<{
+	data: UpdateAccessCodeDto;
+}>;
+
+export type UpdateAccessCodeMutation = { __typename?: 'Mutation' } & {
+	updateAccessCode: { __typename?: 'Hospital' } & {
+		accessCodes: Array<{ __typename?: 'AccessCode' } & Pick<AccessCode, 'accessCode' | 'userType'>>;
+	};
+};
+
 export type UpdatePatientMutationVariables = Exact<{
 	data: UpdatePatientDto;
 	id: Scalars['ID'];
@@ -436,6 +463,14 @@ export type UpdatePatientMutationVariables = Exact<{
 
 export type UpdatePatientMutation = { __typename?: 'Mutation' } & {
 	updatePatient: { __typename?: 'Patient' } & Pick<Patient, 'id' | 'updatedAt'>;
+};
+
+export type GetAccessCodeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAccessCodeQuery = { __typename?: 'Query' } & {
+	myHospital: { __typename?: 'Hospital' } & {
+		accessCodes: Array<{ __typename?: 'AccessCode' } & Pick<AccessCode, 'accessCode' | 'userType'>>;
+	};
 };
 
 export type MyPatientsQueryVariables = Exact<{ [key: string]: never }>;
@@ -500,17 +535,21 @@ export type PatientQuery = { __typename?: 'Query' } & {
 	>;
 };
 
-export type RequestedTicketQueryVariables = Exact<{ [key: string]: never }>;
+export type RequestedTicketQueryVariables = Exact<{
+	data?: Maybe<RequestTicketQueryDto>;
+}>;
 
 export type RequestedTicketQuery = { __typename?: 'Query' } & {
-	requestedTicket: Array<
-		{ __typename?: 'Ticket' } & Pick<Ticket, 'id' | 'createdAt' | 'riskLevel' | 'status'> & {
-				patient: { __typename?: 'Patient' } & Pick<
-					Patient,
-					'firstName' | 'lastName' | 'sex' | 'birthDate'
-				>;
-			}
-	>;
+	requestedTicket: { __typename?: 'TicketPaginationDto' } & Pick<TicketPaginationDto, 'count'> & {
+			tickets: Array<
+				{ __typename?: 'Ticket' } & Pick<Ticket, 'id' | 'createdAt' | 'riskLevel' | 'status'> & {
+						patient: { __typename?: 'Patient' } & Pick<
+							Patient,
+							'firstName' | 'lastName' | 'sex' | 'age'
+						>;
+					}
+			>;
+		};
 };
 
 export type TestQueryVariables = Exact<{ [key: string]: never }>;
@@ -563,11 +602,31 @@ export const OfficerLoginDoc = gql`
 		}
 	}
 `;
+export const UpdateAccessCodeDoc = gql`
+	mutation UpdateAccessCode($data: UpdateAccessCodeDto!) {
+		updateAccessCode(data: $data) {
+			accessCodes {
+				accessCode
+				userType
+			}
+		}
+	}
+`;
 export const UpdatePatientDoc = gql`
 	mutation UpdatePatient($data: UpdatePatientDto!, $id: ID!) {
 		updatePatient(data: $data, id: $id) {
 			id
 			updatedAt
+		}
+	}
+`;
+export const GetAccessCodeDoc = gql`
+	query GetAccessCode {
+		myHospital {
+			accessCodes {
+				accessCode
+				userType
+			}
 		}
 	}
 `;
@@ -638,18 +697,21 @@ export const PatientDoc = gql`
 	}
 `;
 export const RequestedTicketDoc = gql`
-	query RequestedTicket {
-		requestedTicket {
-			id
-			patient {
-				firstName
-				lastName
-				sex
-				birthDate
+	query RequestedTicket($data: RequestTicketQueryDto) {
+		requestedTicket(data: $data) {
+			tickets {
+				id
+				patient {
+					firstName
+					lastName
+					sex
+					age
+				}
+				createdAt
+				riskLevel
+				status
 			}
-			createdAt
-			riskLevel
-			status
+			count
 		}
 	}
 `;
@@ -714,6 +776,15 @@ export const OfficerLogin = (
 	});
 	return m;
 };
+export const UpdateAccessCode = (
+	options: Omit<MutationOptions<any, UpdateAccessCodeMutationVariables>, 'mutation'>
+) => {
+	const m = client.mutate<UpdateAccessCodeMutation, UpdateAccessCodeMutationVariables>({
+		mutation: UpdateAccessCodeDoc,
+		...options
+	});
+	return m;
+};
 export const UpdatePatient = (
 	options: Omit<MutationOptions<any, UpdatePatientMutationVariables>, 'mutation'>
 ) => {
@@ -723,6 +794,29 @@ export const UpdatePatient = (
 	});
 	return m;
 };
+export const GetAccessCode = (
+	options: Omit<WatchQueryOptions<GetAccessCodeQueryVariables>, 'query'>
+): Readable<
+	ApolloQueryResult<GetAccessCodeQuery> & {
+		query: ObservableQuery<GetAccessCodeQuery, GetAccessCodeQueryVariables>;
+	}
+> => {
+	const q = client.watchQuery({
+		query: GetAccessCodeDoc,
+		...options
+	});
+	const result = readable<
+		ApolloQueryResult<GetAccessCodeQuery> & {
+			query: ObservableQuery<GetAccessCodeQuery, GetAccessCodeQueryVariables>;
+		}
+	>({ data: null, loading: true, error: null, networkStatus: 1, query: null }, (set) => {
+		q.subscribe((v) => {
+			set({ ...v, query: q });
+		});
+	});
+	return result;
+};
+
 export const MyPatients = (
 	options: Omit<WatchQueryOptions<MyPatientsQueryVariables>, 'query'>
 ): Readable<

@@ -18,6 +18,7 @@ const protectedPath = PROTECTED_ROUTES;
 isLogin$.subscribe((authState) => (isLogin = authState));
 
 export async function authGuard({ session, page }: LoadInput): Promise<LoadOutput> {
+	if (import.meta.env.VITE_DEVELOP) return {};
 	const { access_token } = session;
 	const loggedIn = access_token || isLogin;
 

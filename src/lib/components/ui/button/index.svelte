@@ -6,7 +6,7 @@
 	export { clazz as class };
 	export let placeholder = 'button_placeholder';
 	export let disabled = false;
-	export let color: 'red' | 'blue' | 'white' = 'blue';
+	export let color: 'red' | 'blue' | 'white' | 'white-red' = 'blue';
 	const dispatch = createEventDispatcher();
 
 	$: _colorCss = getColorCss(color);
@@ -18,7 +18,9 @@
 			case 'blue':
 				return COLOR.BLUE;
 			case 'white':
-				return COLOR.WHITE;
+				return COLOR.WHITE_BLUE;
+			case 'white-red':
+				return COLOR.WHITE_RED;
 		}
 	}
 </script>

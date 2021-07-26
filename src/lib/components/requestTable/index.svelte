@@ -9,6 +9,9 @@
 
 	export let headers: TableHeader[];
 	export let content: TableData[];
+	export let noOfPages: number;
+	export let currentPage: number;
+	export let totalItems: number;
 
 	const dispatch = createEventDispatcher();
 
@@ -31,14 +34,23 @@
 			</div>
 		</div>
 		<div class="flex gap-2 justify-end col-span-3">
-			<p class="flex items-center mt-2">Risk Level:</p>
+			<p class="flex items-center mt-2">{$_('rish_level_label')}:</p>
 			<Options
 				class="mt-1"
 				options={options.map((v) => $_(v.label, { values: { amount: '99+' } }))}
 			/>
 		</div>
 	</div>
-	<Table {headers} {content} on:rowClick={(e) => dispatch('rowClick', e.detail.id)} />
+	<Table
+		{headers}
+		{content}
+		{noOfPages}
+		{currentPage}
+		{totalItems}
+		on:rowClick={(e) => dispatch('rowClick', e.detail.id)}
+		on:goPrev={() => dispatch('goPrev')}
+		on:goNext={() => dispatch('goNext')}
+	/>
 </div>
 
 <style>

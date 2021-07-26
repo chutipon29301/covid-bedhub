@@ -104,6 +104,8 @@
 		"high_label": "สูง({amount})",
 		"normal_label": "ปานกลาง({amount})",
 		"low_label": "ต่ำ({amount})",
-		"rish_level_label": "ความเสี่ยง"
+		"rish_level_label": "ความเสี่ยง",
+		"cancel_appointment_label": "ยกเลิกนัดหมาย",
+		"change_appointment_label": "เปลี่ยนวันนัดหมาย"
 	}
 }

@@ -10,31 +10,52 @@
 
 	let headers = Headers,
 		content = [],
-		selectedTicket = null;
+		selectedTicket = null,
+		noOfPages = 0,
+		skip = 0,
+		currentPage = 0,
+		defaultPageSize = 10,
+		totalItems = 0;
 
 	onMount(() => {
 		loadTickets();
 	});
 
 	function loadTickets() {
-		const response = RequestedTicket({});
+		const response = RequestedTicket({ variables: { data: { skip } } });
 		const sub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			content =
-				data?.requestedTicket.map((t) => ({
+				data?.requestedTicket.tickets.map((t) => ({
 					createdAt: [
 						new Date(t.createdAt).toDateString(),
 						new Date(t.createdAt).toLocaleTimeString()
 					],
 					name: `${t.patient.firstName} ${t.patient.lastName}`,
 					sex: t.patient.sex,
-					age: t.patient.birthDate,
+					age: t.patient.age,
 					riskLevel: t.riskLevel,
 					status: t.status,
 					id: t.id
 				})) || [];
+			totalItems = data?.requestedTicket.count;
+			noOfPages = data?.requestedTicket.count / defaultPageSize;
 			if (!loading) sub();
 		});
+	}
+
+	function goNext() {
+		if (currentPage > noOfPages - 2) return;
+		skip += defaultPageSize;
+		currentPage++;
+		loadTickets();
+	}
+
+	function goPrev() {
+		if (!currentPage) return;
+		skip -= defaultPageSize;
+		currentPage--;
+		loadTickets();
 	}
 </script>
 
@@ -42,8 +63,17 @@
 	<title>{$_('home_title')}</title>
 </svelte:head>
 
-<div class="w-full flex xl:flex-row gap-4 flex-col-reverse">
-	<RequestTable on:rowClick={(v) => (selectedTicket = v.detail)} {headers} {content} />
+<div class="w-full flex xl:flex-row gap-4 flex-col">
+	<RequestTable
+		on:rowClick={(v) => (selectedTicket = v.detail)}
+		on:goNext={goNext}
+		on:goPrev={goPrev}
+		{headers}
+		{content}
+		{noOfPages}
+		{currentPage}
+		{totalItems}
+	/>
 	{#if selectedTicket}
 		<Card class="sticky top-20" title={$_('patient_information_label')} tag="very high">
 			<span slot="title-detail">

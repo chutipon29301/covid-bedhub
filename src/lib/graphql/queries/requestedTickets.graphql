@@ -1,14 +1,17 @@
-query RequestedTicket {
-	requestedTicket {
-		id
-		patient {
-			firstName
-			lastName
-			sex
-			birthDate
+query RequestedTicket($data: RequestTicketQueryDto) {
+	requestedTicket(data: $data) {
+		tickets {
+			id
+			patient {
+				firstName
+				lastName
+				sex
+				age
+			}
+			createdAt
+			riskLevel
+			status
 		}
-		createdAt
-		riskLevel
-		status
+		count
 	}
 }

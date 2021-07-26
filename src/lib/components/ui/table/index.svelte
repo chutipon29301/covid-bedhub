@@ -60,6 +60,7 @@
 			<nav class="inline-flex shadow-sm pb-4">
 				{#if noOfPages}
 					<div
+						on:click={() => dispatch('goPrev')}
 						class="inline-flex items-center p-2 rounded-l-md border border-gray-300 text-sm font-medium text-gray-500
             {currentPage === 0
 							? 'bg-gray-100'
@@ -68,6 +69,7 @@
 						<Fa class="h-5 w-5 p-1" icon={faChevronLeft} />
 					</div>
 					<div
+						on:click={() => dispatch('goNext')}
 						class=" -ml-px inline-flex items-center p-2 rounded-r-md border border-gray-300  text-sm font-medium text-gray-500 
             {currentPage === noOfPages - 1
 							? 'bg-gray-100'

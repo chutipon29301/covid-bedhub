@@ -8,11 +8,11 @@
 	import { setIsLoading, setLocation } from '$lib/store';
 	import { variables } from '$lib/constants/environment';
 	import { TICKET_STATUS } from '$lib/constants/constant';
+	import { EModalColorTone } from '$lib/components/ui/modal/model';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import Ticket from '$lib/components/ui/ticket/index.svelte';
 	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
-	import { EModalColorTone } from '$lib/components/ui/modal/model';
 
 	let disableFindBed = false;
 	let tickets = [];
@@ -111,7 +111,7 @@
 	{#if tickets.length === 0}
 		<div class="flex flex-grow flex-col items-center justify-center up-10">
 			<Fa class="pb-2" icon={faBed} size="2rem" />
-			<Button on:click={() => navigate()} placeholder="find_bed_button" />
+			<Button on:click={() => navigate()} placeholder={$_('find_bed_button')} />
 		</div>
 	{:else}
 		{#if tickets.filter((t) => t.status === TICKET_STATUS.REQUEST || t.status === TICKET_STATUS.MATCH).length === 0}

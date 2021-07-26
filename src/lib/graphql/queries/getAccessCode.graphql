@@ -1,0 +1,8 @@
+query GetAccessCode {
+	myHospital {
+		accessCodes {
+			accessCode
+			userType
+		}
+	}
+}
