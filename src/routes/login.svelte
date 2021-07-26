@@ -28,6 +28,12 @@
 	}
 
 	function redirect() {
+		if (import.meta.env.VITE_DEVELOP) {
+			setIsLogin(true);
+			storeToken('reporter-1', new Date(8640000000000000));
+			goto(ROUTES.HOME);
+			return;
+		}
 		window.location.replace(import.meta.env.VITE_API_URL + '/auth/login');
 	}
 </script>

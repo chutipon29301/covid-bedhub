@@ -22,13 +22,16 @@ class Client {
 		});
 
 		const authLink = setContext((_, { headers }) => {
-			const token = import.meta.env.VITE_DEVELOP
-				? 'Developer queue_manager-1'
-				: `Bearer ${cookie.parse(document.cookie).access_token}`;
+			const accessToken = cookie.parse(document.cookie).access_token;
+			if (!accessToken) return { headers };
+
+			const authorization = import.meta.env.VITE_DEVELOP
+				? `Developer ${accessToken}`
+				: `Bearer ${accessToken}`;
 			return {
 				headers: {
 					...headers,
-					authorization: token ? `${token}` : ''
+					authorization
 				}
 			};
 		});
