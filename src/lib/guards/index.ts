@@ -48,18 +48,18 @@ function guardUnauthentication(path: string) {
 }
 
 function guardAuthentication(accountType: string, path: string) {
-	if (accountType === AccountType.CODE && routeCheck(path, HEALTHCARE_CODE_ROUTES))
+	if (accountType === AccountType.CODE && allowedRoutes(path, HEALTHCARE_CODE_ROUTES))
 		return { status: 302, redirect: ROUTES.HEALTHCARE_CODE };
-	if (accountType === AccountType.QUEUE && routeCheck(path, HEALTHCARE_QUEUE_ROUTES))
+	if (accountType === AccountType.QUEUE && allowedRoutes(path, HEALTHCARE_QUEUE_ROUTES))
 		return { status: 302, redirect: ROUTES.HEALTHCARE_QUEUE };
-	if (accountType === AccountType.STAFF && routeCheck(path, HEALTHCARE_STAFF_ROUTES))
+	if (accountType === AccountType.STAFF && allowedRoutes(path, HEALTHCARE_STAFF_ROUTES))
 		return { status: 302, redirect: ROUTES.HEALTHCARE_STAFF };
-	if (accountType === AccountType.REPORTER && routeCheck(path, REPORTER_ROUTES))
+	if (accountType === AccountType.REPORTER && allowedRoutes(path, REPORTER_ROUTES))
 		return { status: 302, redirect: ROUTES.HOME };
 	return {};
 }
 
-function routeCheck(path: string, routes: string[]) {
+function allowedRoutes(path: string, routes: string[]) {
 	if (path === '/') return false;
 	return !routes.some((r) => path.includes(r));
 }

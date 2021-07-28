@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { GetAccessCode, UpdateAccessCode } from '$lib/generated/graphql';
+	import { GetAccessCode, UpdateAccessCode, UserType } from '$lib/generated/graphql';
 	import { onMount } from 'svelte';
 	import { setIsLoading } from '$lib/store';
 	import CodeCard from '$lib/components/codeCard/index.svelte';
@@ -20,15 +20,17 @@
 		});
 	});
 
-	async function saveNewCode(accessCode: string, userType: string) {
+	async function saveNewCode(accessCode: string, userType: UserType) {
 		setIsLoading(true);
-		const { data } = await UpdateAccessCode({ variables: { data: { accessCode, userType } } });
+		const { data } = await UpdateAccessCode({
+			variables: { data: { accessCode: accessCode.toUpperCase(), userType } }
+		});
 		setIsLoading(false);
-		if (data) {
-			queueCode = data.updateAccessCode.accessCodes.find((c) => c.userType === 'QUEUE_MANAGER')
-				?.accessCode;
-			staffCode = data.updateAccessCode.accessCodes.find((c) => c.userType === 'STAFF')?.accessCode;
+		if (userType === UserType.Staff) {
+			staffCode = data.updateAccessCode.accessCode;
+			return;
 		}
+		queueCode = data.updateAccessCode.accessCode;
 	}
 </script>
 
@@ -40,6 +42,10 @@
 <CodeCard
 	title="queue_manager_label"
 	code={queueCode}
-	on:save={(v) => saveNewCode(v.detail, 'QUEUE_MANAGER')}
+	on:save={(v) => saveNewCode(v.detail, UserType.QueueManager)}
 />
-<CodeCard title="staff_label" code={staffCode} on:save={(v) => saveNewCode(v.detail, 'STAFF')} />
+<CodeCard
+	title="staff_label"
+	code={staffCode}
+	on:save={(v) => saveNewCode(v.detail, UserType.Staff)}
+/>

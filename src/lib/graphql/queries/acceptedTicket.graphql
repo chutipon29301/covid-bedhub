@@ -1,0 +1,26 @@
+query AcceptedTicket($id: ID!) {
+	acceptedTicket(id: $id) {
+		id
+		patient {
+			firstName
+			lastName
+			sex
+			age
+			identification
+			tel
+			illnesses
+		}
+		createdAt
+		riskLevel
+		appointedDate
+		symptoms
+		vaccines {
+			vaccineName
+			doseNumber
+			vaccineReceiveDate
+		}
+		examDate
+		examLocation
+		examReceiveDate
+	}
+}

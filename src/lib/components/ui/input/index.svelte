@@ -3,6 +3,7 @@
 
 	let clazz = '';
 	export { clazz as class };
+	export let classInput = '';
 	export let value: string | number;
 	export let errorMessage = '';
 	export let label = 'label';
@@ -29,7 +30,7 @@
 			readonly={disabled}
 			use:typeAction
 			on:keyup={(e) => dispatch('keyup', e)}
-			class="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent"
+			class="{classInput} block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent"
 		/>
 		<label
 			for="password"

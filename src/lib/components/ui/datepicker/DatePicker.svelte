@@ -50,7 +50,7 @@
 				0
 			).getDate();
 			let day = Math.min(date.getDate(), maxDayInSelectedMonth);
-			newDate = new Date(1900 + changedData, date.getMonth(), day);
+			newDate = new Date(years_map[0] + changedData, date.getMonth(), day);
 		}
 		date = newDate;
 		dispatch('dateChange', { date });
@@ -98,7 +98,7 @@
 					<Switcher
 						type="year"
 						data={YEARS.map((v) => v.toString())}
-						selected={date.getFullYear() - 1899}
+						selected={date.getFullYear() - years_map[0] + 1}
 						on:dateChange={dateChanged}
 					/>
 				</div>

@@ -12,6 +12,7 @@ export function storeToken(token: string, expires: Date): void {
 }
 
 export function dateToStringFormat(date: Date): string {
+	if (!date) return null;
 	const d = new Date(date);
 	return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
 }
@@ -62,4 +63,14 @@ export function vaccinePopulate(vaccines: Vaccine[]): CreateVaccine[] {
 				: null
 		)
 		.filter((v) => v);
+}
+
+export function convertRiskLevelToLabel(riskLevel: number): string {
+	const mapping = {
+		1: 'Low',
+		2: 'Medium',
+		3: 'High',
+		4: 'Very High'
+	};
+	return mapping[riskLevel];
 }

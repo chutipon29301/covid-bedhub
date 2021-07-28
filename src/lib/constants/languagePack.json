@@ -106,6 +106,13 @@
 		"low_label": "ต่ำ({amount})",
 		"rish_level_label": "ความเสี่ยง",
 		"cancel_appointment_label": "ยกเลิกนัดหมาย",
-		"change_appointment_label": "เปลี่ยนวันนัดหมาย"
+		"change_appointment_label": "เปลี่ยนวันนัดหมาย",
+		"requested_date": "วันที่ส่งคำขอ",
+		"age_label": "อายุ",
+		"sex_label": "เพศ",
+		"illness_label": "โรคประจำตัว",
+		"covid_exam_label": "ข้อมูลการตรวจผลโควิด",
+		"select_appointment_date_label": "เลือกวันที่เข้ารับการรักษา",
+		"message_label": "ข้อความ"
 	}
 }

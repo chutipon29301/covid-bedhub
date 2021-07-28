@@ -2,8 +2,8 @@
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit';
 
 	export async function load({ page }: LoadInput): Promise<LoadOutput> {
-		let slug = page.params.slug;
-		return { props: { slug } };
+		let ticketId = page.params.ticketId;
+		return { props: { ticketId } };
 	}
 </script>
 
@@ -24,7 +24,7 @@
 	import { EModalColorTone } from '$lib/components/ui/modal/model';
 
 	$: response = MyTicketSymptoms({
-		variables: { id: $page.params.slug }
+		variables: { id: $page.params.ticketId }
 	});
 
 	let symptoms = symptomToChecklist([]);
@@ -53,7 +53,10 @@
 	async function onClickProceed() {
 		setIsLoading(true);
 		const { data } = await EditSymptom({
-			variables: { id: $page.params.slug, data: { symptoms: checklistToEnum<Symptom>(symptoms) } }
+			variables: {
+				id: $page.params.ticketId,
+				data: { symptoms: checklistToEnum<Symptom>(symptoms) }
+			}
 		});
 		if (data) {
 			setIsLoading(false);
@@ -79,12 +82,12 @@
 		colorTone={EModalColorTone.GREEN}
 		on:confirm={onClickOkPopup}
 	>
-		{$_('edit_symptoms_popup_message', { values: { ticketId: $page.params.slug } })}
+		{$_('edit_symptoms_popup_message', { values: { ticketId: $page.params.ticketId } })}
 	</Modal>
 {/if}
 <Template
 	title={$_('edit_symptoms_title')}
-	btnPlaceholer={'save_button'}
+	btnPlaceholer={$_('save_button')}
 	on:click={() => onClickProceed()}
 >
 	{#if found}

@@ -43,7 +43,7 @@
 
 	function setGPS() {
 		if (variables.dev) {
-			setLocation({ lat: 0, lng: 0 });
+			setLocation({ lat: 13.966461495650773, lng: 100.54753924040311 });
 			return;
 		}
 

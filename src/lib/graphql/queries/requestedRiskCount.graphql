@@ -1,0 +1,6 @@
+query requestedRiskCount {
+	requestedTicketByRiskLevelCount {
+		riskLevel
+		count
+	}
+}

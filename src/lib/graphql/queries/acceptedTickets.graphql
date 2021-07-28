@@ -1,5 +1,5 @@
-query RequestedTickets($data: RequestTicketQueryDto) {
-	requestedTickets(data: $data) {
+query AcceptedTickets($data: RequestTicketQueryDto) {
+	acceptedTickets(data: $data) {
 		tickets {
 			id
 			patient {
@@ -11,6 +11,7 @@ query RequestedTickets($data: RequestTicketQueryDto) {
 			createdAt
 			riskLevel
 			status
+			appointedDate
 		}
 		count
 	}

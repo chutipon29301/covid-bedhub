@@ -1,8 +1,5 @@
 mutation UpdateAccessCode($data: UpdateAccessCodeDto!) {
 	updateAccessCode(data: $data) {
-		accessCodes {
-			accessCode
-			userType
-		}
+		accessCode
 	}
 }

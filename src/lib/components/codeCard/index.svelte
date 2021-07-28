@@ -31,8 +31,8 @@
 	}
 
 	function saveNewCode() {
-		if (value.length > 6) {
-			errorMessage = 'The code cannot exceed 6 characters';
+		if (value.length < 6) {
+			errorMessage = 'The code must exceed 6 characters';
 			return;
 		}
 		dispatch('save', value);
@@ -57,7 +57,13 @@
 	<span slot="content">
 		{#if editing}
 			<span class="card-content">
-				<Input class="min-h-70px pt-2" bind:value label={$_('invitation_code')} {errorMessage} />
+				<Input
+					class="min-h-70px pt-2"
+					classInput="uppercase"
+					bind:value
+					label={$_('invitation_code')}
+					{errorMessage}
+				/>
 			</span>
 		{:else}
 			<div class="card-content bg-gray-100 rounded-lg">
