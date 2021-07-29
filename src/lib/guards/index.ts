@@ -30,6 +30,7 @@ export async function authGuard({ session, page }: LoadInput): Promise<LoadOutpu
 	const access_token = session.access_token || accessToken;
 	const { init_path } = session;
 	const loggedIn = access_token || isLogin;
+	console.log('*****', access_token);
 
 	if (!loggedIn) return guardUnauthentication(page.path, init_path);
 
