@@ -2,10 +2,6 @@ export const ROUTES = {
 	LANDING: '/',
 	LOGIN: '/login',
 	HOME: '/home',
-	HOME_TICKET: '/home/ticket',
-	PATIENT: '/patient',
-	PATIENT_CHECK: '/patient/check',
-	PATIENT_ADD: '/patient/add',
 	TICKET: '/ticket',
 	TICKET_ILLNESSES: '/ticket/illnesses',
 	TICKET_SYMPTOM: '/ticket/symptom',
@@ -22,10 +18,6 @@ export const ROUTES = {
 
 export const PROTECTED_ROUTES = [
 	ROUTES.HOME,
-	ROUTES.HOME_TICKET,
-	ROUTES.PATIENT,
-	ROUTES.PATIENT_CHECK,
-	ROUTES.PATIENT_ADD,
 	ROUTES.TICKET,
 	ROUTES.TICKET_ILLNESSES,
 	ROUTES.TICKET_SYMPTOM,

@@ -15,12 +15,12 @@
 	let patients = [];
 
 	onMount(() => {
-		const sub = response.subscribe(({ data, loading }) => {
+		const unsub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			patients =
 				data?.me.patients.map((t) => ({ name: `${t.firstName} ${t.lastName}`, id: t.id })) || [];
 
-			if (!loading) sub();
+			if (!loading) unsub();
 		});
 	});
 

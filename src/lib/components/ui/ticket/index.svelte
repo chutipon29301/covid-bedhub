@@ -61,12 +61,12 @@
 				<Button
 					class="w-full"
 					color="red"
-					on:click={() => dispatch('clickButton')}
+					on:click={() => dispatch('clickButton', status)}
 					placeholder={$_('cancel_request_button')}
 				/>
 			{:else if status === TICKET_STATUS.MATCH}
 				<Button
-					on:click={() => dispatch('clickButton')}
+					on:click={() => dispatch('clickButton', status)}
 					class="w-full"
 					placeholder={$_('see_hospital_button')}
 				/>

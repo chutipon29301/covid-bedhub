@@ -33,7 +33,7 @@
 	let successPopupShown = false;
 
 	onMount(() => {
-		const sub = response.subscribe(({ data, loading }) => {
+		const unsub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			found =
 				data?.myTicket &&
@@ -46,7 +46,7 @@
 				mobile: data?.myTicket?.patient.tel,
 				status: data?.myTicket?.status
 			};
-			if (!loading) sub();
+			if (!loading) unsub();
 		});
 	});
 

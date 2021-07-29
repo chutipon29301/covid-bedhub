@@ -11,12 +11,12 @@
 		staffCode = null;
 
 	onMount(() => {
-		const sub = response.subscribe(({ data, loading }) => {
+		const unsub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			queueCode = data?.myHospital.accessCodes.find((c) => c.userType === 'QUEUE_MANAGER')
 				?.accessCode;
 			staffCode = data?.myHospital.accessCodes.find((c) => c.userType === 'STAFF')?.accessCode;
-			if (!loading) sub();
+			if (!loading) unsub();
 		});
 	});
 

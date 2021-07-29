@@ -6,7 +6,12 @@
 	import { goto } from '$app/navigation';
 	import { patientId$, setVaccine, vaccine$, form$, symptoms$, illnesses$ } from './store/store';
 	import { CreatePatient, CreateTicket, UpdatePatient } from '$lib/generated/graphql';
-	import { checklistToEnum, dateToStringFormat, vaccinePopulate } from '$lib/util';
+	import {
+		checklistToEnum,
+		dateToStringFormat,
+		noFutureValidation,
+		vaccinePopulate
+	} from '$lib/util';
 	import { location$ } from '$lib/store';
 	import { EModalColorTone } from '$lib/components/ui/modal/model';
 	import type { Illness, Symptom } from '$lib/generated/graphql';
@@ -17,6 +22,18 @@
 	import Template from '$lib/components/ticketLayout/index.svelte';
 	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
 	import Dropdown from '$lib/components/ui/dropdown/index.svelte';
+
+	$: disabledContinueBtn =
+		!$form$?.firstName ||
+		!$form$?.lastName ||
+		!$form$?.dob ||
+		!$form$?.sex ||
+		!$form$?.mobile ||
+		!examReceiveDate ||
+		!examLocation ||
+		!examDate ||
+		!noFutureValidation(examReceiveDate) ||
+		!noFutureValidation(examDate);
 
 	let successPopupShown = false;
 	let vaccineList = ['Astrazeneca', 'Moderna', 'Pfizer', 'Sinopharm', 'Sinovac'];
@@ -92,6 +109,7 @@
 	}
 
 	async function onClickProceed() {
+		if (disabledContinueBtn) return;
 		const id = $patientId$ ? await existedPatient($patientId$) : await newPatient();
 		await createTix(id);
 	}
@@ -120,15 +138,22 @@
 <Template
 	title={$_('patient_add_title')}
 	btnPlaceholer={$_('continue_button')}
+	{disabledContinueBtn}
 	on:click={() => onClickProceed()}
 >
 	<DatePicker
 		classes="mb-4"
 		placeholder={$_('exam_received_date_label')}
 		bind:value={examReceiveDate}
+		errorMessage={noFutureValidation(examReceiveDate) ? '' : $_('validation_inline_error')}
 	/>
 	<Input class="pb-2" label={$_('exam_localtion_lable')} bind:value={examLocation} />
-	<DatePicker classes="mb-4" placeholder={$_('exam_date_label')} bind:value={examDate} />
+	<DatePicker
+		classes="mb-4"
+		placeholder={$_('exam_date_label')}
+		bind:value={examDate}
+		errorMessage={noFutureValidation(examDate) ? '' : $_('validation_inline_error')}
+	/>
 	{#each vaccines as vaccine, i}
 		<div
 			class={i === 0 ? '' : 'border border-dashed pt-2 relative hover:border-red-400 rounded-md'}
@@ -157,6 +182,7 @@
 				classes="mb-2"
 				placeholder={$_('vaccine_date_label', { values: { order: i + 1 } })}
 				bind:value={vaccine.dateReceived}
+				errorMessage={noFutureValidation(vaccine.dateReceived) ? '' : $_('validation_inline_error')}
 			/>
 		</div>
 	{/each}

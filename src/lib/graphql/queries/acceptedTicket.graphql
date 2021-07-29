@@ -22,5 +22,6 @@ query AcceptedTicket($id: ID!) {
 		examDate
 		examLocation
 		examReceiveDate
+		notes
 	}
 }

@@ -1,15 +1,22 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { acceptedRiskCount, AcceptedTicket, AcceptedTickets } from '$lib/generated/graphql';
+	import {
+		acceptedRiskCount,
+		AcceptedTicket,
+		AcceptedTickets,
+		CancelAppointment,
+		EditAppointment
+	} from '$lib/generated/graphql';
 	import { setIsLoading } from '$lib/store';
 	import { onMount } from 'svelte';
 	import { Headers } from './models';
-	import { illnessToChecklist, symptomToChecklist } from '$lib/util';
+	import { dateToStringFormat, illnessToChecklist, symptomToChecklist } from '$lib/util';
 	import type { PatientDetail } from '$lib/models';
 	import QueueTable from '$lib/components/queueTable/index.svelte';
 	import PatientCard from '$lib/components/patientCard/index.svelte';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import AppointmentModal from '$lib/components/appointmentModal/index.svelte';
+	import Modal from '$lib/components/ui/modal/confirm/index.svelte';
 
 	let headers = [
 			...Headers,
@@ -22,8 +29,10 @@
 		filterAmount: number[] = [],
 		riskLevel = null,
 		editTicketModalShown = false,
+		cancelTicketModalShown = false,
 		appointmentDate: Date,
-		notes = '';
+		notes = '',
+		datepickerError: string;
 
 	onMount(() => {
 		getRiskCount();
@@ -31,8 +40,8 @@
 	});
 
 	function loadTickets() {
-		const response = AcceptedTickets({ variables: { data: { skip } } });
-		const sub = response.subscribe(({ data, loading }) => {
+		const response = AcceptedTickets({ variables: { data: { skip, riskLevel } } });
+		const unsub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			content =
 				data?.acceptedTickets.tickets.map((t) => ({
@@ -49,7 +58,7 @@
 					appointmentDate: t.appointedDate
 				})) || [];
 			totalItems = data?.acceptedTickets.count;
-			if (!loading) sub();
+			if (!loading) unsub();
 		});
 	}
 
@@ -77,6 +86,10 @@
 					symptops: symptomToChecklist(data.acceptedTicket.symptoms),
 					illnesses: illnessToChecklist(data.acceptedTicket.patient.illnesses)
 				};
+				notes = data.acceptedTicket.notes;
+				appointmentDate = data.acceptedTicket.appointedDate
+					? new Date(data.acceptedTicket.appointedDate)
+					: null;
 			}
 			if (!loading) unsub();
 		});
@@ -115,20 +128,39 @@
 		loadTickets();
 	}
 
-	function handleButtonClick(action: 'edit' | 'cancel') {
-		if (action === 'edit') editTicket(selectedTicket.id);
-		if (action === 'cancel') cancelTicket(selectedTicket.id);
+	async function handleButtonClick(action: 'edit' | 'cancel') {
+		let success = false;
+		if (action === 'edit') success = await editTicket(selectedTicket.id);
+		if (action === 'cancel') success = await cancelTicket(selectedTicket.id);
+		if (!success) return;
 		selectedTicket = null;
 		editTicketModalShown = false;
+		cancelTicketModalShown = false;
 		loadTickets();
 	}
 
-	function editTicket(id: number) {
-		console.log(id);
+	async function editTicket(id: number): Promise<boolean> {
+		if (!appointmentDate) {
+			datepickerError = 'Please select appointment date.';
+			alert(datepickerError);
+			return false;
+		}
+		datepickerError = null;
+		setIsLoading(true);
+		await EditAppointment({
+			variables: {
+				data: { id: id.toString(), appointedDate: dateToStringFormat(appointmentDate), notes }
+			}
+		});
+		setIsLoading(false);
+		return true;
 	}
 
-	function cancelTicket(id: number) {
-		console.log(id);
+	async function cancelTicket(id: number): Promise<boolean> {
+		setIsLoading(true);
+		await CancelAppointment({ variables: { id: id.toString() } });
+		setIsLoading(false);
+		return true;
 	}
 </script>
 
@@ -136,9 +168,26 @@
 	<title>{$_('home_title')}</title>
 </svelte:head>
 
+{#if cancelTicketModalShown}
+	<Modal
+		heading="ยืนยันการปฎิเสธ"
+		confirmBtn="ปฎิเสธการรับ"
+		cancelBtn="ปิด"
+		on:cancel={() => (cancelTicketModalShown = false)}
+		on:confirm={() => handleButtonClick('cancel')}
+	>
+		<div class="text-sm">
+			<p>{selectedTicket.name}</p>
+			<p>{`${$_('sex_label')}: ${selectedTicket.sex}`}</p>
+			<p>{`${$_('age_label')}: ${selectedTicket.age}`}</p>
+			<p>{`${$_('patient_id_information')}: ${selectedTicket.identification.slice(0, 13)}`}</p>
+			<p>{`${$_('patient_mobile_information')}: ${selectedTicket.mobile}`}</p>
+		</div>
+	</Modal>
+{/if}
 {#if editTicketModalShown}
 	<AppointmentModal
-		{appointmentDate}
+		bind:appointmentDate
 		name={selectedTicket.name}
 		sex={selectedTicket.sex}
 		age={selectedTicket.age}
@@ -163,7 +212,7 @@
 	<PatientCard class="sticky top-20" {selectedTicket}>
 		<span class="grid grid-cols-2 gap-2">
 			<Button
-				on:click={() => handleButtonClick('cancel')}
+				on:click={() => (cancelTicketModalShown = true)}
 				color="white-red"
 				placeholder={$_('cancel_appointment_label')}
 			/>

@@ -24,8 +24,9 @@
 		filterAmount: number[] = [],
 		riskLevel = null,
 		acceptTicketModalShown = false,
+		notes = '',
 		appointmentDate: Date,
-		notes = '';
+		datepickerError: string;
 
 	onMount(() => {
 		getRiskCount();
@@ -34,7 +35,7 @@
 
 	function loadTickets() {
 		const response = RequestedTickets({ variables: { data: { skip, riskLevel } } });
-		const sub = response.subscribe(({ data, loading }) => {
+		const unsub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			content =
 				data?.requestedTickets.tickets.map((t) => ({
@@ -50,7 +51,7 @@
 					id: t.id
 				})) || [];
 			totalItems = data?.requestedTickets.count;
-			if (!loading) sub();
+			if (!loading) unsub();
 		});
 	}
 
@@ -116,15 +117,23 @@
 		loadTickets();
 	}
 
-	function handleButtonClick(action: 'accept' | 'deny') {
-		if (action === 'accept') acceptTicket(selectedTicket.id);
-		if (action === 'deny') denyTicket(selectedTicket.id);
+	async function handleButtonClick(action: 'accept' | 'deny') {
+		let success = false;
+		if (action === 'accept') success = await acceptTicket(selectedTicket.id);
+		if (action === 'deny') success = await denyTicket(selectedTicket.id);
+		if (!success) return;
 		selectedTicket = null;
 		acceptTicketModalShown = false;
 		loadTickets();
 	}
 
-	async function acceptTicket(id: number) {
+	async function acceptTicket(id: number): Promise<boolean> {
+		if (!appointmentDate) {
+			datepickerError = 'Please select appointment date.';
+			alert(datepickerError);
+			return false;
+		}
+		datepickerError = null;
 		setIsLoading(true);
 		await AcceptTicket({
 			variables: {
@@ -132,10 +141,12 @@
 			}
 		});
 		setIsLoading(false);
+		return true;
 	}
 
-	function denyTicket(id: number) {
+	async function denyTicket(id: number): Promise<boolean> {
 		console.log(id);
+		return true;
 	}
 </script>
 
@@ -145,13 +156,13 @@
 
 {#if acceptTicketModalShown}
 	<AppointmentModal
-		{appointmentDate}
+		bind:appointmentDate
+		bind:notes
 		name={selectedTicket.name}
 		sex={selectedTicket.sex}
 		age={selectedTicket.age}
 		identification={selectedTicket.identification}
 		mobile={selectedTicket.mobile}
-		{notes}
 		on:close={() => (acceptTicketModalShown = false)}
 		on:confirm={() => handleButtonClick('accept')}
 	/>
@@ -168,12 +179,7 @@
 		{filterAmount}
 	/>
 	<PatientCard class="sticky top-10" {selectedTicket}>
-		<span class="grid grid-cols-2 gap-2">
-			<Button
-				on:click={() => handleButtonClick('deny')}
-				color="red"
-				placeholder={$_('deny_request')}
-			/>
+		<span class="grid gap-2">
 			<Button on:click={() => (acceptTicketModalShown = true)} placeholder={$_('accept_request')} />
 		</span>
 	</PatientCard>

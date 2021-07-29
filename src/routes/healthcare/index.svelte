@@ -12,8 +12,8 @@
 	import Layout from '$lib/components/ui/fullscreenLayout/index.svelte';
 	import jwt_decoder from 'jwt-decode';
 
-	let username = 'queue';
-	let password = 'password';
+	let username: string;
+	let password: string;
 
 	async function login() {
 		if (import.meta.env.VITE_DEVELOP) {

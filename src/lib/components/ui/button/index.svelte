@@ -27,7 +27,8 @@
 
 <button
 	on:click={() => dispatch('click')}
-	class="{clazz} {_colorCss} hover:opacity-75 px-4 py-3 rounded font-semibold disabled:bg-gray-200 disabled:cursor-default disabled:text-gray-400"
+	class="{clazz} {_colorCss} px-4 py-3 rounded font-semibold disabled:bg-gray-200 disabled:cursor-default disabled:text-gray-400"
+	class:hover:opacity-75={!disabled}
 	{disabled}
 >
 	{placeholder}

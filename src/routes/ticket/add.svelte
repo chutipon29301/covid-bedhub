@@ -6,8 +6,25 @@
 	import Template from '$lib/components/ticketLayout/index.svelte';
 	import { ROUTES } from '$lib/constants/routes';
 	import { goto } from '$app/navigation';
+	import {
+		noFutureValidation,
+		identificationValidation,
+		mobileNumberValidation,
+		nameValidation
+	} from '$lib/util';
 
-	$: disabledContinueBtn = !id || !firstName || !lastName || !dob || !sex || !mobile;
+	$: disabledContinueBtn =
+		!id ||
+		!firstName ||
+		!lastName ||
+		!dob ||
+		!sex ||
+		!mobile ||
+		!nameValidation(firstName) ||
+		!nameValidation(firstName) ||
+		!identificationValidation(id) ||
+		!mobileNumberValidation(mobile) ||
+		!noFutureValidation(dob);
 
 	let id: string = $form$?.id,
 		firstName: string = $form$?.firstName,

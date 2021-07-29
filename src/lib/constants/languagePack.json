@@ -113,6 +113,10 @@
 		"illness_label": "โรคประจำตัว",
 		"covid_exam_label": "ข้อมูลการตรวจผลโควิด",
 		"select_appointment_date_label": "เลือกวันที่เข้ารับการรักษา",
-		"message_label": "ข้อความ"
+		"message_label": "ข้อความ",
+		"validation_inline_error": "พบข้อผิดพลาดในข้อมูลที่ใส่",
+		"general_error_headline": "พบข้อผิดพลาด",
+		"access_code_invalid_error": "รหัสเชิญชวนไม่ถูกต้อง",
+		"required_field_error": "จำเป็นต้องกรอกข้อมูล"
 	}
 }

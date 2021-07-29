@@ -36,6 +36,19 @@ export type AccessCode = {
 	updatedAt: Scalars['DateTime'];
 	accessCode: Scalars['String'];
 	userType: UserType;
+	hospital: AccessCodeHospital;
+};
+
+export type AccessCodeHospital = {
+	__typename?: 'AccessCodeHospital';
+	name: Scalars['String'];
+	tel: Scalars['String'];
+};
+
+export type AppointmentInfoDto = {
+	__typename?: 'AppointmentInfoDto';
+	ticket?: Maybe<Ticket>;
+	hospital?: Maybe<Hospital>;
 };
 
 export type CreateHospitalDto = {
@@ -55,6 +68,7 @@ export type CreateOfficerDto = {
 	lastName: Scalars['String'];
 	employeeId?: Maybe<Scalars['String']>;
 	accessCode: Scalars['String'];
+	password: Scalars['String'];
 };
 
 export type CreatePatientDto = {
@@ -143,7 +157,6 @@ export type LoginWithUsernameDto = {
 export type Mutation = {
 	__typename?: 'Mutation';
 	createHospital: Hospital;
-	updateAccessCode: AccessCode;
 	editHospital: Hospital;
 	createPatient: Patient;
 	updatePatient: Patient;
@@ -158,14 +171,11 @@ export type Mutation = {
 	cancelAppointment: Ticket;
 	getJwtFromLineCode: JwtTokenInfo;
 	officerLogin: JwtTokenInfo;
+	updateAccessCode: AccessCode;
 };
 
 export type MutationCreateHospitalArgs = {
 	data: CreateHospitalDto;
-};
-
-export type MutationUpdateAccessCodeArgs = {
-	data: UpdateAccessCodeDto;
 };
 
 export type MutationEditHospitalArgs = {
@@ -227,6 +237,10 @@ export type MutationOfficerLoginArgs = {
 	data: LoginWithUsernameDto;
 };
 
+export type MutationUpdateAccessCodeArgs = {
+	data: UpdateAccessCodeDto;
+};
+
 export type Officer = {
 	__typename?: 'Officer';
 	id: Scalars['ID'];
@@ -278,7 +292,6 @@ export type Query = {
 	hospitals: Array<Hospital>;
 	hospital?: Maybe<Hospital>;
 	myHospital: Hospital;
-	checkAccessCode: Hospital;
 	patient: Patient;
 	myOfficer: Officer;
 	requestedTicket?: Maybe<Ticket>;
@@ -289,7 +302,7 @@ export type Query = {
 	requestedAndAcceptedTicketsCount: RequestedAndAcceptedTicketCountDto;
 	requestedTickets: TicketPaginationDto;
 	acceptedTickets: TicketPaginationDto;
-	ticketByNationalId: Ticket;
+	ticketByNationalId: AppointmentInfoDto;
 	pingAllowUnauthenticated: PingResponseDto;
 	pingAllowAnyPermission: PingResponseDto;
 	pingReporter: PingResponseDto;
@@ -297,14 +310,11 @@ export type Query = {
 	pingQueueManager: PingResponseDto;
 	pingCodeGenerator: PingResponseDto;
 	me: Reporter;
+	checkAccessCode?: Maybe<AccessCode>;
 };
 
 export type QueryHospitalArgs = {
 	id: Scalars['ID'];
-};
-
-export type QueryCheckAccessCodeArgs = {
-	access_code: Scalars['String'];
 };
 
 export type QueryPatientArgs = {
@@ -335,6 +345,10 @@ export type QueryAcceptedTicketsArgs = {
 
 export type QueryTicketByNationalIdArgs = {
 	nid: Scalars['String'];
+};
+
+export type QueryCheckAccessCodeArgs = {
+	access_code: Scalars['String'];
 };
 
 export type Reporter = {
@@ -391,8 +405,8 @@ export type Ticket = {
 	notes?: Maybe<Scalars['String']>;
 	riskLevel: Scalars['Int'];
 	location: Point;
-	hospitalId: Scalars['Float'];
-	updatedById: Scalars['Float'];
+	hospitalId?: Maybe<Scalars['Float']>;
+	updatedById?: Maybe<Scalars['Float']>;
 	patient: Patient;
 	hospital?: Maybe<Hospital>;
 	vaccines: Array<Vaccine>;
@@ -436,6 +450,7 @@ export type UpdateAccessCodeDto = {
 export type UpdateOfficerDto = {
 	username: Scalars['String'];
 	employeeCode: Scalars['String'];
+	password: Scalars['String'];
 };
 
 export type UpdatePatientDto = {
@@ -478,12 +493,28 @@ export type AcceptTicketMutation = { __typename?: 'Mutation' } & {
 	acceptTicket: { __typename?: 'Ticket' } & Pick<Ticket, 'id'>;
 };
 
+export type CancelAppointmentMutationVariables = Exact<{
+	id: Scalars['ID'];
+}>;
+
+export type CancelAppointmentMutation = { __typename?: 'Mutation' } & {
+	cancelAppointment: { __typename?: 'Ticket' } & Pick<Ticket, 'id'>;
+};
+
 export type CancelTicketMutationVariables = Exact<{
 	id: Scalars['ID'];
 }>;
 
 export type CancelTicketMutation = { __typename?: 'Mutation' } & {
 	cancelTicket: { __typename?: 'Ticket' } & Pick<Ticket, 'id'>;
+};
+
+export type CreateOfficerMutationVariables = Exact<{
+	data: CreateOfficerDto;
+}>;
+
+export type CreateOfficerMutation = { __typename?: 'Mutation' } & {
+	createOfficer: { __typename?: 'Officer' } & Pick<Officer, 'id'>;
 };
 
 export type CreatePatientMutationVariables = Exact<{
@@ -500,6 +531,14 @@ export type CreateTicketMutationVariables = Exact<{
 
 export type CreateTicketMutation = { __typename?: 'Mutation' } & {
 	createTicket: { __typename?: 'Ticket' } & Pick<Ticket, 'id'>;
+};
+
+export type EditAppointmentMutationVariables = Exact<{
+	data: EditAppointmentDto;
+}>;
+
+export type EditAppointmentMutation = { __typename?: 'Mutation' } & {
+	editAppointment: { __typename?: 'Ticket' } & Pick<Ticket, 'id'>;
 };
 
 export type EditSymptomMutationVariables = Exact<{
@@ -571,6 +610,7 @@ export type AcceptedTicketQuery = { __typename?: 'Query' } & {
 			| 'examDate'
 			| 'examLocation'
 			| 'examReceiveDate'
+			| 'notes'
 		> & {
 				patient: { __typename?: 'Patient' } & Pick<
 					Patient,
@@ -604,6 +644,18 @@ export type AcceptedTicketsQuery = { __typename?: 'Query' } & {
 					}
 			>;
 		};
+};
+
+export type CheckAccessCodeQueryVariables = Exact<{
+	access_code: Scalars['String'];
+}>;
+
+export type CheckAccessCodeQuery = { __typename?: 'Query' } & {
+	checkAccessCode?: Maybe<
+		{ __typename?: 'AccessCode' } & Pick<AccessCode, 'accessCode' | 'userType'> & {
+				hospital: { __typename?: 'AccessCodeHospital' } & Pick<AccessCodeHospital, 'name'>;
+			}
+	>;
 };
 
 export type GetAccessCodeQueryVariables = Exact<{ [key: string]: never }>;
@@ -749,6 +801,21 @@ export type TestQuery = { __typename?: 'Query' } & {
 	pingAllowUnauthenticated: { __typename?: 'PingResponseDto' } & Pick<PingResponseDto, 'msg'>;
 };
 
+export type TicketByNationalIdQueryVariables = Exact<{
+	nid: Scalars['String'];
+}>;
+
+export type TicketByNationalIdQuery = { __typename?: 'Query' } & {
+	ticketByNationalId: { __typename?: 'AppointmentInfoDto' } & {
+		ticket?: Maybe<
+			{ __typename?: 'Ticket' } & Pick<Ticket, 'appointedDate'> & {
+					patient: { __typename?: 'Patient' } & Pick<Patient, 'firstName' | 'lastName'>;
+				}
+		>;
+		hospital?: Maybe<{ __typename?: 'Hospital' } & Pick<Hospital, 'name'>>;
+	};
+};
+
 export const AcceptTicketDoc = gql`
 	mutation AcceptTicket($data: AcceptTicketDto!) {
 		acceptTicket(data: $data) {
@@ -756,9 +823,23 @@ export const AcceptTicketDoc = gql`
 		}
 	}
 `;
+export const CancelAppointmentDoc = gql`
+	mutation CancelAppointment($id: ID!) {
+		cancelAppointment(id: $id) {
+			id
+		}
+	}
+`;
 export const CancelTicketDoc = gql`
 	mutation CancelTicket($id: ID!) {
 		cancelTicket(id: $id) {
+			id
+		}
+	}
+`;
+export const CreateOfficerDoc = gql`
+	mutation CreateOfficer($data: CreateOfficerDto!) {
+		createOfficer(data: $data) {
 			id
 		}
 	}
@@ -773,6 +854,13 @@ export const CreatePatientDoc = gql`
 export const CreateTicketDoc = gql`
 	mutation CreateTicket($data: CreateTicketDto!) {
 		createTicket(data: $data) {
+			id
+		}
+	}
+`;
+export const EditAppointmentDoc = gql`
+	mutation EditAppointment($data: EditAppointmentDto!) {
+		editAppointment(data: $data) {
 			id
 		}
 	}
@@ -848,6 +936,7 @@ export const AcceptedTicketDoc = gql`
 			examDate
 			examLocation
 			examReceiveDate
+			notes
 		}
 	}
 `;
@@ -868,6 +957,17 @@ export const AcceptedTicketsDoc = gql`
 				appointedDate
 			}
 			count
+		}
+	}
+`;
+export const CheckAccessCodeDoc = gql`
+	query CheckAccessCode($access_code: String!) {
+		checkAccessCode(access_code: $access_code) {
+			accessCode
+			userType
+			hospital {
+				name
+			}
 		}
 	}
 `;
@@ -1016,6 +1116,22 @@ export const TestDoc = gql`
 		}
 	}
 `;
+export const TicketByNationalIdDoc = gql`
+	query TicketByNationalId($nid: String!) {
+		ticketByNationalId(nid: $nid) {
+			ticket {
+				patient {
+					firstName
+					lastName
+				}
+				appointedDate
+			}
+			hospital {
+				name
+			}
+		}
+	}
+`;
 export const AcceptTicket = (
 	options: Omit<MutationOptions<any, AcceptTicketMutationVariables>, 'mutation'>
 ) => {
@@ -1025,11 +1141,29 @@ export const AcceptTicket = (
 	});
 	return m;
 };
+export const CancelAppointment = (
+	options: Omit<MutationOptions<any, CancelAppointmentMutationVariables>, 'mutation'>
+) => {
+	const m = client.mutate<CancelAppointmentMutation, CancelAppointmentMutationVariables>({
+		mutation: CancelAppointmentDoc,
+		...options
+	});
+	return m;
+};
 export const CancelTicket = (
 	options: Omit<MutationOptions<any, CancelTicketMutationVariables>, 'mutation'>
 ) => {
 	const m = client.mutate<CancelTicketMutation, CancelTicketMutationVariables>({
 		mutation: CancelTicketDoc,
+		...options
+	});
+	return m;
+};
+export const CreateOfficer = (
+	options: Omit<MutationOptions<any, CreateOfficerMutationVariables>, 'mutation'>
+) => {
+	const m = client.mutate<CreateOfficerMutation, CreateOfficerMutationVariables>({
+		mutation: CreateOfficerDoc,
 		...options
 	});
 	return m;
@@ -1048,6 +1182,15 @@ export const CreateTicket = (
 ) => {
 	const m = client.mutate<CreateTicketMutation, CreateTicketMutationVariables>({
 		mutation: CreateTicketDoc,
+		...options
+	});
+	return m;
+};
+export const EditAppointment = (
+	options: Omit<MutationOptions<any, EditAppointmentMutationVariables>, 'mutation'>
+) => {
+	const m = client.mutate<EditAppointmentMutation, EditAppointmentMutationVariables>({
+		mutation: EditAppointmentDoc,
 		...options
 	});
 	return m;
@@ -1157,6 +1300,29 @@ export const AcceptedTickets = (
 	const result = readable<
 		ApolloQueryResult<AcceptedTicketsQuery> & {
 			query: ObservableQuery<AcceptedTicketsQuery, AcceptedTicketsQueryVariables>;
+		}
+	>({ data: null, loading: true, error: null, networkStatus: 1, query: null }, (set) => {
+		q.subscribe((v) => {
+			set({ ...v, query: q });
+		});
+	});
+	return result;
+};
+
+export const CheckAccessCode = (
+	options: Omit<WatchQueryOptions<CheckAccessCodeQueryVariables>, 'query'>
+): Readable<
+	ApolloQueryResult<CheckAccessCodeQuery> & {
+		query: ObservableQuery<CheckAccessCodeQuery, CheckAccessCodeQueryVariables>;
+	}
+> => {
+	const q = client.watchQuery({
+		query: CheckAccessCodeDoc,
+		...options
+	});
+	const result = readable<
+		ApolloQueryResult<CheckAccessCodeQuery> & {
+			query: ObservableQuery<CheckAccessCodeQuery, CheckAccessCodeQueryVariables>;
 		}
 	>({ data: null, loading: true, error: null, networkStatus: 1, query: null }, (set) => {
 		q.subscribe((v) => {
@@ -1387,6 +1553,29 @@ export const Test = (
 	const result = readable<
 		ApolloQueryResult<TestQuery> & {
 			query: ObservableQuery<TestQuery, TestQueryVariables>;
+		}
+	>({ data: null, loading: true, error: null, networkStatus: 1, query: null }, (set) => {
+		q.subscribe((v) => {
+			set({ ...v, query: q });
+		});
+	});
+	return result;
+};
+
+export const TicketByNationalId = (
+	options: Omit<WatchQueryOptions<TicketByNationalIdQueryVariables>, 'query'>
+): Readable<
+	ApolloQueryResult<TicketByNationalIdQuery> & {
+		query: ObservableQuery<TicketByNationalIdQuery, TicketByNationalIdQueryVariables>;
+	}
+> => {
+	const q = client.watchQuery({
+		query: TicketByNationalIdDoc,
+		...options
+	});
+	const result = readable<
+		ApolloQueryResult<TicketByNationalIdQuery> & {
+			query: ObservableQuery<TicketByNationalIdQuery, TicketByNationalIdQueryVariables>;
 		}
 	>({ data: null, loading: true, error: null, networkStatus: 1, query: null }, (set) => {
 		q.subscribe((v) => {

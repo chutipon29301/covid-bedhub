@@ -1,5 +1,3 @@
-import type { Vaccine } from '$lib/models';
-
 export const Headers = [
 	{
 		field: 'createdAt',

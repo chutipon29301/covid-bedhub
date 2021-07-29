@@ -26,7 +26,7 @@
 
 	function loadMyTickets() {
 		const response = MyTickets({});
-		const sub = response.subscribe(({ data, loading }) => {
+		const unsub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			tickets =
 				data?.me.tickets.map((t) => ({
@@ -37,7 +37,7 @@
 					appointmentDate: t.appointedDate,
 					hospitalName: t.hospital?.name
 				})) || [];
-			if (!loading) sub();
+			if (!loading) unsub();
 		});
 	}
 
@@ -62,6 +62,14 @@
 			return;
 		}
 		goto(ROUTES.TICKET);
+	}
+
+	function handleButtonClick(id: string, status: string) {
+		if (status === TICKET_STATUS.REQUEST) {
+			cancelTicket(id);
+			return;
+		}
+		alert('In progress...');
 	}
 
 	async function cancelTicket(id: string) {
@@ -125,7 +133,7 @@
 					status={ticket.status}
 					appointmentDate={ticket?.appointmentDate}
 					hospitalName={ticket?.hospitalName}
-					on:clickButton={() => cancelTicket(ticket.ticketId)}
+					on:clickButton={(v) => handleButtonClick(ticket.ticketId, v.detail)}
 					on:clickEdit={() => onClickEdit(ticket.ticketId)}
 				/>
 			</div>

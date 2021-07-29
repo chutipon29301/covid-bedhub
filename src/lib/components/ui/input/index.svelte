@@ -1,19 +1,28 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import { createEventDispatcher } from 'svelte';
 
 	let clazz = '';
 	export { clazz as class };
 	export let classInput = '';
-	export let value: string | number;
+	export let value: string | number = undefined;
 	export let errorMessage = '';
 	export let label = 'label';
 	export let disabled = false;
 	export let type = 'text';
+	export let required = false;
 	const dispatch = createEventDispatcher();
 	let inputDOM: HTMLElement;
 
 	function typeAction(node: HTMLInputElement) {
 		node.type = type;
+	}
+
+	function onInput(e: Event) {
+		dispatch('input', e);
+		if (!required) return;
+		if (!value) errorMessage = $_('required_field_error');
+		else if (errorMessage === $_('required_field_error')) errorMessage = '';
 	}
 </script>
 
@@ -29,7 +38,7 @@
 			bind:value
 			readonly={disabled}
 			use:typeAction
-			on:keyup={(e) => dispatch('keyup', e)}
+			on:input={onInput}
 			class="{classInput} block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent"
 		/>
 		<label
@@ -38,7 +47,7 @@
 			class="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 duration-300 origin-top-left"
 			class:text-red-500={errorMessage}
 		>
-			{label}
+			{label}{required ? '*' : ''}
 		</label>
 	</div>
 
