@@ -38,6 +38,22 @@
 	);
 
 	function onClickProceed() {
+		const hasIllnesses = Object.values($illnesses$).some((v) => v);
+		const hasSymptoms =
+			FEVER ||
+			COUGH ||
+			SMELLESS_RASH ||
+			DIARRHEA ||
+			TIRED_HEADACHE ||
+			DIFFICULT_BREATHING ||
+			ANGINA ||
+			EXHAUSTED ||
+			CHEST_PAIN ||
+			UNCONCIOUS;
+		if (!hasIllnesses && !hasSymptoms) {
+			goto(ROUTES.HOME_ISOLATION);
+			return;
+		}
 		goto(ROUTES.TICKET_ADD);
 	}
 </script>

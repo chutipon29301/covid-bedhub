@@ -4,8 +4,7 @@ import {
 	REPORTER_ROUTES,
 	HEALTHCARE_STAFF_ROUTES,
 	PROTECTED_ROUTES,
-	ROUTES,
-	TICKET_FLOW
+	ROUTES
 } from '$lib/constants/routes';
 import { accessToken$, isLogin$ } from '$lib/store';
 import { AccountType } from '$lib/models';
