@@ -35,14 +35,14 @@
 		{#if screenSize > 1024}
 			<img
 				class="pb-1 cursor-pointer"
-				src="/static/banner/patient_image.png"
+				src="/banner/patient_image.png"
 				alt="PatientBanner"
 				on:click={() => goto(ROUTES.LOGIN)}
 			/>
 		{:else}
 			<img
 				class="pb-1 cursor-pointer"
-				src="/static/banner/patient_image_small.png"
+				src="/banner/patient_image_small.png"
 				alt="PatientBanner"
 				on:click={() => goto(ROUTES.LOGIN)}
 			/>
@@ -59,14 +59,14 @@
 		{#if screenSize > 1024}
 			<img
 				class="pb-1 cursor-pointer"
-				src="/static/banner/admin_image.png"
+				src="/banner/admin_image.png"
 				alt="PatientBanner"
 				on:click={() => goto(ROUTES.HEALTHCARE)}
 			/>
 		{:else}
 			<img
 				class="pb-1 cursor-pointer"
-				src="/static/banner/admin_image_small.png"
+				src="/banner/admin_image_small.png"
 				alt="PatientBanner"
 				on:click={() => goto(ROUTES.HEALTHCARE)}
 			/>

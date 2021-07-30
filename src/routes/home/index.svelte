@@ -102,7 +102,7 @@
 			>
 				<img
 					class="pb-4"
-					src="/static/button/online-reservation.png"
+					src="/button/online-reservation.png"
 					alt={$_('find_bed_button')}
 					width="96px"
 				/>

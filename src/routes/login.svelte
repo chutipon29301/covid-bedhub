@@ -46,7 +46,7 @@
 <div class="login-button flex justify-center">
 	<Button class="line-color" placeholder={$_('login_with_line_button')} on:click={() => redirect()}>
 		<span slot="icon-front">
-			<img src="/static/line_button/btn_base.png" alt="Line Login" width="32px" class="mr-4" />
+			<img src="/line_button/btn_base.png" alt="Line Login" width="32px" class="mr-4" />
 		</span>
 		<span slot="icon"><div class="pr-2" /></span>
 	</Button>

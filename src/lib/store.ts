@@ -1,4 +1,4 @@
-import type { GPSLocation, Patient } from '$lib/models';
+import type { Patient } from '$lib/models';
 import { writable } from 'svelte/store';
 
 export const accessToken$ = writable<string>(null);

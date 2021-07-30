@@ -64,7 +64,7 @@
 			<img
 				on:click={() => goto(ROUTES.LANDING)}
 				class="cursor-pointer"
-				src="/static/main_logo/Logo.png"
+				src="/main_logo/Logo.png"
 				width="200px"
 				alt="Logo"
 			/>
@@ -72,7 +72,7 @@
 			<img
 				on:click={() => goto(ROUTES.LANDING)}
 				class="cursor-pointer"
-				src="/static/main_logo/Logo_small.png"
+				src="/main_logo/Logo_small.png"
 				width="200px"
 				alt="Logo"
 			/>

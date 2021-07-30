@@ -40,11 +40,6 @@ export enum AccountType {
 	CODE = 'code_generator'
 }
 
-export interface GPSLocation {
-	lat: number;
-	lng: number;
-}
-
 export interface Vaccine {
 	name: string;
 	dateReceived: Date;
