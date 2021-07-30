@@ -84,7 +84,12 @@
 	<span on:keypress={onkeypress} slot="content">
 		<Input class="pb-2" bind:value={username} label="Username" />
 		<Input class="pb-4" type="password" bind:value={password} label="Password" />
-		<Button class="w-full" placeholder={$_('login_title')} on:click={login} />
+		<Button
+			disabled={!username || !password}
+			class="w-full"
+			placeholder={$_('login_title')}
+			on:click={login}
+		/>
 	</span>
 	<span slot="footer">
 		<div

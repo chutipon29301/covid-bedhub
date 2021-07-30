@@ -23,7 +23,9 @@
 
 	setContext('translate', new Translate());
 
+	let screenSize: number;
 	let logoutButtonDisplay = [
+		ROUTES.LANDING,
 		ROUTES.HOME,
 		ROUTES.HEALTHCARE_CODE,
 		ROUTES.HEALTHCARE_STAFF,
@@ -37,6 +39,7 @@
 			setIsLogin(true);
 			setAccessToken(access_token);
 		}
+		screenSize = window.innerWidth;
 	});
 
 	function logout() {
@@ -50,14 +53,31 @@
 <ErrorHandler />
 <Loading />
 <div class="flex flex-col min-h-screen">
-	<section class="flex items-center justify-center p-4">
+	<section class="flex p-4 shadow-md" class:justify-center={TICKET_FLOW.includes($page.path)}>
 		{#if TICKET_FLOW.includes($page.path)}
 			<div class="absolute left-6 cursor-pointer p-1" on:click={() => window.history.back()}>
 				<Fa class="text-gray-700" size="lg" icon={faChevronLeft} />
 			</div>
 		{/if}
-		<div class="text-lg">COVID-BEDHUB</div>
-		{#if $isLogin$ && $page.path !== ROUTES.LANDING && logoutButtonDisplay.includes($page.path)}
+
+		{#if screenSize > 1024}
+			<img
+				on:click={() => goto(ROUTES.LANDING)}
+				class="cursor-pointer"
+				src="/static/main_logo/Logo.png"
+				width="200px"
+				alt="Logo"
+			/>
+		{:else}
+			<img
+				on:click={() => goto(ROUTES.LANDING)}
+				class="cursor-pointer"
+				src="/static/main_logo/Logo_small.png"
+				width="200px"
+				alt="Logo"
+			/>
+		{/if}
+		{#if $isLogin$ && logoutButtonDisplay.includes($page.path)}
 			<div
 				class="border rounded-full bg-red-100 absolute right-6 cursor-pointer p-1"
 				on:click={() => logout()}
@@ -65,13 +85,13 @@
 				<Fa class="text-red-500" size="lg" icon={faSignOutAlt} />
 			</div>
 		{:else if $isLogin$ && $page.path !== ROUTES.LANDING}
-			<div class="absolute right-6 cursor-pointer p-1" on:click={() => goto(ROUTES.HOME)}>
+			<div class="absolute right-6 cursor-pointer" on:click={() => goto(ROUTES.HOME)}>
 				<Fa class="text-gray-700" size="2rem" icon={faTimes} />
 			</div>
 		{/if}
 	</section>
 	<section class="flex-auto flex-grow">
-		<main class="p-6">
+		<main class="p-4">
 			<slot />
 		</main>
 	</section>

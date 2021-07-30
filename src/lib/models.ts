@@ -5,6 +5,7 @@ export interface Patient {
 	lastName: string;
 	sex: string;
 	mobile: string;
+	existed?: boolean;
 }
 
 export interface IllnessChecklist {

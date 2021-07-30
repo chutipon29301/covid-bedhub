@@ -47,7 +47,8 @@
 					firstName: data?.patient.firstName,
 					lastName: data?.patient.lastName,
 					sex: data?.patient.sex,
-					mobile: data?.patient.tel
+					mobile: data?.patient.tel,
+					existed: true
 				});
 				goto(ROUTES.TICKET_ILLNESSES);
 			}

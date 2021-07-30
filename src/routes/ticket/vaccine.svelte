@@ -1,34 +1,19 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { faPlusCircle, faTimes, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+	import { faPlusCircle, faTimes } from '@fortawesome/free-solid-svg-icons';
 	import { ROUTES } from '$lib/constants/routes';
 	import { onDestroy, onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { patientId$, setVaccine, vaccine$, form$, symptoms$, illnesses$ } from './store/store';
-	import { CreatePatient, CreateTicket, UpdatePatient } from '$lib/generated/graphql';
-	import {
-		checklistToEnum,
-		dateToStringFormat,
-		noFutureValidation,
-		vaccinePopulate
-	} from '$lib/util';
-	import { location$ } from '$lib/store';
-	import { EModalColorTone } from '$lib/components/ui/modal/model';
-	import type { Illness, Symptom } from '$lib/generated/graphql';
+	import { setVaccine, vaccine$, form$ } from './store/store';
+	import { dependantFieldsValidation, noFutureValidation } from '$lib/util';
 	import type { Vaccine } from '$lib/models';
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import Input from '$lib/components/ui/input/index.svelte';
 	import DatePicker from '$lib/components/ui/datepicker';
 	import Template from '$lib/components/ticketLayout/index.svelte';
-	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
 	import Dropdown from '$lib/components/ui/dropdown/index.svelte';
 
 	$: disabledContinueBtn =
-		!$form$?.firstName ||
-		!$form$?.lastName ||
-		!$form$?.dob ||
-		!$form$?.sex ||
-		!$form$?.mobile ||
 		!examReceiveDate ||
 		!examLocation ||
 		!examDate ||
@@ -36,13 +21,11 @@
 		!noFutureValidation(examDate) ||
 		vaccines.every((v) => !(!v.name === !v.dateReceived));
 
-	let successPopupShown = false;
 	let vaccineList = ['Astrazeneca', 'Moderna', 'Pfizer', 'Sinopharm', 'Sinovac'];
-	let ticketId: string;
 	let examReceiveDate: Date = $vaccine$?.examReceiveDate,
 		examLocation: string = $vaccine$?.examLocation,
 		examDate: Date = $vaccine$?.examDate,
-		vaccines: Vaccine[] = $vaccine$?.vaccines || [{ name: null, dateReceived: null }];
+		vaccines: Vaccine[] = $vaccine$?.vaccines || [{ name: undefined, dateReceived: undefined }];
 
 	onMount(() => {
 		if (!$form$) goto(ROUTES.TICKET);
@@ -57,71 +40,11 @@
 		});
 	});
 
-	async function newPatient(): Promise<string> {
-		const { data } = await CreatePatient({
-			variables: {
-				data: {
-					identification: $form$.id,
-					firstName: $form$.firstName,
-					lastName: $form$.lastName,
-					birthDate: dateToStringFormat($form$.dob),
-					sex: $form$.sex,
-					tel: $form$.mobile,
-					illnesses: checklistToEnum<Illness>($illnesses$)
-				}
-			}
-		});
-		return data.createPatient.id;
-	}
-
-	async function existedPatient(id: string): Promise<string> {
-		await UpdatePatient({
-			variables: {
-				data: {
-					firstName: $form$.firstName,
-					lastName: $form$.lastName,
-					birthDate: dateToStringFormat($form$.dob),
-					sex: $form$.sex,
-					tel: $form$.mobile,
-					illnesses: checklistToEnum<Illness>($illnesses$)
-				},
-				id: id
-			}
-		});
-		return id;
-	}
-
-	async function createTix(id: string): Promise<void> {
-		const response = await CreateTicket({
-			variables: {
-				data: {
-					patientId: +id,
-					examReceiveDate: dateToStringFormat(examReceiveDate),
-					examDate: dateToStringFormat(examDate),
-					examLocation,
-					symptoms: checklistToEnum<Symptom>($symptoms$),
-					vaccines: vaccinePopulate(vaccines),
-					lat: $location$.lat,
-					lng: $location$.lng
-				}
-			}
-		});
-
-		if (response?.data) {
-			ticketId = response?.data.createTicket.id;
-			successPopupShown = true;
-		}
-	}
-
-	async function onClickProceed() {
+	function onClickProceed() {
 		if (disabledContinueBtn) return;
-		const id = $patientId$ ? await existedPatient($patientId$) : await newPatient();
-		await createTix(id);
-	}
-
-	function onClickOkPopup() {
-		successPopupShown = false;
-		goto(ROUTES.HOME);
+		goto(ROUTES.TICKET_REQUEST_LOCATION);
+		// const id = $patientId$ ? await existedPatient($patientId$) : await newPatient();
+		// await createTix(id);
 	}
 </script>
 
@@ -129,17 +52,6 @@
 	<title>{$_('home_ticket_title')}</title>
 </svelte:head>
 
-{#if successPopupShown}
-	<Modal
-		icon={faCheckCircle}
-		heading={$_('request_popup_heading')}
-		confirmBtn={'OK'}
-		colorTone={EModalColorTone.GREEN}
-		on:confirm={onClickOkPopup}
-	>
-		{$_('request_popup_message', { values: { ticketId } })}
-	</Modal>
-{/if}
 <Template
 	title={$_('patient_add_title')}
 	btnPlaceholer={$_('continue_button')}
@@ -147,6 +59,7 @@
 	on:click={() => onClickProceed()}
 >
 	<DatePicker
+		required={true}
 		classes="mb-4"
 		placeholder={$_('exam_received_date_label')}
 		bind:value={examReceiveDate}
@@ -154,8 +67,14 @@
 			? ''
 			: $_('validation_inline_error', { values: { field: $_('exam_received_date_label') } })}
 	/>
-	<Input class="pb-2" label={$_('exam_localtion_lable')} bind:value={examLocation} />
+	<Input
+		required={true}
+		class="pb-2"
+		label={$_('exam_localtion_lable')}
+		bind:value={examLocation}
+	/>
 	<DatePicker
+		required={true}
 		classes="mb-4"
 		placeholder={$_('exam_date_label')}
 		bind:value={examDate}
@@ -186,13 +105,17 @@
 				label={$_('vaccine_dose_label', { values: { order: i + 1 } })}
 				list={vaccineList}
 				bind:value={vaccine.name}
-				errorMessage={vaccine.dateReceived || !vaccine.name ? '' : $_('required_field_error')}
+				errorMessage={dependantFieldsValidation(vaccine.name, vaccine.dateReceived)
+					? ''
+					: $_('required_field_error')}
 			/>
 			<DatePicker
 				classes="mb-2"
 				placeholder={$_('vaccine_date_label', { values: { order: i + 1 } })}
 				bind:value={vaccine.dateReceived}
-				errorMessage={vaccine.name || !vaccine.dateReceived ? '' : $_('required_field_error')}
+				errorMessage={dependantFieldsValidation(vaccine.dateReceived, vaccine.name)
+					? ''
+					: $_('required_field_error')}
 			/>
 		</div>
 	{/each}
@@ -200,7 +123,9 @@
 		<div
 			on:click={() =>
 				(vaccines =
-					vaccines.length < 3 ? [...vaccines, { name: null, dateReceived: null }] : vaccines)}
+					vaccines.length < 3
+						? [...vaccines, { name: undefined, dateReceived: undefined }]
+						: vaccines)}
 			class="border border-dashed mt-4 px-4 py-8 w-full border-indigo-700 rounded-md flex justify-center cursor-pointer bg-transparent text-indigo-400"
 		>
 			<Fa class="mt-1 pr-2" icon={faPlusCircle} />

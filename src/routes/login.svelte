@@ -42,5 +42,17 @@
 	<title>{$_('login_title')}</title>
 </svelte:head>
 
-<div class="text-3xl pb-2">{$_('login_title')}</div>
-<Button class="w-full" placeholder={$_('login_with_line_button')} on:click={() => redirect()} />
+<div class="login-button flex justify-center">
+	<Button class="line-color" placeholder={$_('login_with_line_button')} on:click={() => redirect()}>
+		<span slot="icon-front">
+			<img src="/static/line_button/btn_base.png" alt="Line Login" width="32px" class="mr-4" />
+		</span>
+		<span slot="icon"><div class="pr-2" /></span>
+	</Button>
+</div>
+
+<style>
+	.login-button :global(.line-color) {
+		background-color: #00c300;
+	}
+</style>

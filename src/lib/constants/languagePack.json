@@ -16,8 +16,8 @@
 		"button_placeholder": "Button Placeholer",
 		"default_input_placeholder": "Enter Information",
 		"default_input_label": "Input",
-		"login_as_patient": "I'm ผู้ป่วย",
-		"login_as_officer": "I'm เจ้าหน้าที่",
+		"login_as_patient": "ฉันคือผู้ป่วย",
+		"login_as_officer": "ฉันคือเจ้าหน้าที่",
 		"continue_button": "ดำเนินการต่อ",
 		"patient_id_information": "บัตรประชาชน/Passport",
 		"patient_dob_information": "วันเดือนปีเกิด",
@@ -73,7 +73,8 @@
 		"edit_symptoms_name_label": "ชื่อ-นามสกุล",
 		"edit_symptoms_status_label": "สถานะ",
 		"save_button": "บันทึก",
-		"ok_button": "OK",
+		"ok_button": "ตกลง",
+		"reset_button": "ลบข้อมูล",
 		"edit_symptoms_popup_heading": "แก้ไขข้อมูลเรียบร้อย",
 		"edit_symptoms_popup_message": "ข้อมูลอาการของ #{ticketId} ถูกแก้ไขเรียบร้อย",
 		"regiter_button": "สมัครสมาชิก",
@@ -120,6 +121,13 @@
 		"required_field_error": "จำเป็นต้องกรอกข้อมูล",
 		"home_isolation_text": "หากได้รับการตรวจและยืนยันว่าเป็นผู้ป่วยติดเชื้อ COVID-19 แล้ว แต่มีอาการน้อย หรือไม่มีอาการ และอาศัยอยู่ในกรุงเทพมหานคร อาจสามารถขอรับการรักษาแบบ Home Isolation หรือรักษาตัวอยู่ที่บ้านได้ค่ะ โดยต้องได้รับการติดตามอาการจากโรงพยาบาลหรือชุมชนนะคะ ให้ประเมินสุขภาพและข้อจำกัดต่างๆ ได้ที่ 1330 ต่อ 14 หรือ LINE @comcovid-19 ค่ะ",
 		"low_risk_label": "ความเสี่ยงต่ำ",
-		"contact_1330_label": "ติดต่อเบอร์ 1330"
+		"contact_1330_label": "ติดต่อเบอร์ 1330",
+		"register_success_popup_heading": "สมัครสมาชิกสำเร็จ",
+		"register_success_message": "บัญชีของ {name} ได้ถูกลงทะเบียนเรียบร้อย",
+		"disclaimer_label_1": "เมื่อกดปุ่ม {button} คุณได้ยอมรับ",
+		"tnc_label": "เงื่อนไขการใช้งาน",
+		"and_label": "และ",
+		"policy_label": "นโยบายความเป็นส่วนตัว",
+		"disclaimer_label_2": "ของ ThaiBedHub.com"
 	}
 }

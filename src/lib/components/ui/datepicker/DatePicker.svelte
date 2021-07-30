@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import { createEventDispatcher } from 'svelte';
+
 	import Switcher from './Switcher.svelte';
 	export let placeholder = 'Select Date';
 	export let value: Date = undefined;
@@ -8,6 +10,9 @@
 	export let classes = '';
 	export let disabled = false;
 	export let errorMessage = '';
+	export let required = false;
+
+	let requiredError: string;
 	let date = new Date();
 	let years_count = years_map[1] - years_map[0] + 1;
 	const MONTHS = [
@@ -35,6 +40,7 @@
 	let cancel = () => {
 		value = null;
 		visible = false;
+		if (required) requiredError = $_('required_field_error');
 	};
 	let dateChanged = (event: CustomEvent) => {
 		let { type, changedData } = event.detail;
@@ -58,6 +64,7 @@
 		dispatch('dateChange', { date });
 	};
 	function confirmDate(event: MouseEvent) {
+		requiredError = '';
 		value = date;
 		visible = !visible;
 		dispatch('confirmDate', { MouseEvent: event, date });
@@ -67,7 +74,8 @@
 <div class="mt-2 items-center z-10 {classes}">
 	<div
 		class="f-outline px-2 relative w-full border rounded-lg focus-within:border-indigo-500"
-		class:border-red-500={errorMessage}
+		class:border-red-500={errorMessage || requiredError}
+		class:bg-gray-200={disabled}
 	>
 		<input
 			type="text"
@@ -81,14 +89,16 @@
 			on:click={() => (visible = !disabled && !visible)}
 			for="password"
 			class="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 duration-300 origin-top-left"
-			class:text-red-500={errorMessage}
+			class:text-red-500={(errorMessage || requiredError) && !disabled}
+			class:bg-transparent={disabled}
+			class:bg-white={!disabled}
 		>
-			{placeholder}
+			{placeholder}{required ? '*' : ''}
 		</label>
 	</div>
-	{#if errorMessage}
+	{#if errorMessage || requiredError}
 		<span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
-			{errorMessage}
+			{errorMessage || requiredError}
 		</span>
 	{/if}
 </div>
@@ -114,8 +124,8 @@
 					/>
 				</div>
 				<div class="touch-date-reset">
-					<button on:click|stopPropagation={cancel}>Cancel</button>
-					<button on:click|stopPropagation={confirmDate}>OK</button>
+					<button on:click|stopPropagation={cancel}>{$_('reset_button')}</button>
+					<button on:click|stopPropagation={confirmDate}>{$_('ok_button')}</button>
 				</div>
 			</div>
 		</div>

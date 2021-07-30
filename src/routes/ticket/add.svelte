@@ -22,16 +22,17 @@
 		!mobile ||
 		!nameValidation(firstName) ||
 		!nameValidation(firstName) ||
-		!identificationValidation(id) ||
+		(!identificationValidation(id) && !existed) ||
 		!mobileNumberValidation(mobile) ||
-		!noFutureValidation(dob);
+		(!noFutureValidation(dob) && !existed);
 
 	let id: string = $form$?.id,
 		firstName: string = $form$?.firstName,
 		lastName: string = $form$?.lastName,
 		dob: Date = $form$?.dob,
 		sex: string = $form$?.sex,
-		mobile: string = $form$?.mobile;
+		mobile: string = $form$?.mobile,
+		existed: boolean = $form$?.existed;
 
 	onMount(() => {
 		if (!$illnesses$) goto(ROUTES.TICKET);
@@ -44,7 +45,8 @@
 			firstName,
 			lastName,
 			sex,
-			mobile
+			mobile,
+			existed
 		});
 	});
 
@@ -62,5 +64,13 @@
 	btnPlaceholer={$_('continue_button')}
 	on:click={() => onClickProceed()}
 >
-	<PatientForm bind:id bind:firstName bind:lastName bind:dob bind:sex bind:mobile disabled={{}} />
+	<PatientForm
+		bind:id
+		bind:firstName
+		bind:lastName
+		bind:dob
+		bind:sex
+		bind:mobile
+		disabled={{ id: existed, dob: existed }}
+	/>
 </Template>

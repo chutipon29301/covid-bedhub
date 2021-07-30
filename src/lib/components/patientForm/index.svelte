@@ -56,6 +56,7 @@
 		: $_('validation_inline_error', { values: { field: $_('patient_last_name_information') } })}
 />
 <DatePicker
+	required={true}
 	placeholder={$_('patient_dob_information')}
 	disabled={disabled?.dob}
 	bind:value={dob}
@@ -72,6 +73,7 @@
 />
 <Input
 	required={true}
+	type="number"
 	class="pb-2"
 	label={$_('patient_mobile_information')}
 	disabled={disabled?.mobile}

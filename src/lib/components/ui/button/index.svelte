@@ -31,5 +31,9 @@
 	class:hover:opacity-75={!disabled}
 	{disabled}
 >
-	{placeholder}
+	<div class="flex justify-center items-center">
+		<slot name="icon-front" />
+		{placeholder}
+		<slot name="icon" />
+	</div>
 </button>

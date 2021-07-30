@@ -30,7 +30,7 @@
 	<div
 		class="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500"
 		class:bg-gray-200={disabled}
-		class:border-red-500={errorMessage}
+		class:border-red-500={errorMessage && !disabled}
 	>
 		<input
 			placeholder=" "
@@ -41,17 +41,20 @@
 			on:input={onInput}
 			class="{classInput} block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent"
 		/>
+		<div class="absolute right-6 top-2"><slot name="end-icon" /></div>
 		<label
 			for="password"
 			on:click={() => inputDOM.focus()}
-			class="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 duration-300 origin-top-left"
-			class:text-red-500={errorMessage}
+			class="absolute ml-5 top-2 text-lg text-gray-700 duration-300 origin-top-left"
+			class:text-red-500={errorMessage && !disabled}
+			class:bg-transparent={disabled}
+			class:bg-white={!disabled}
 		>
 			{label}{required ? '*' : ''}
 		</label>
 	</div>
 
-	{#if errorMessage}
+	{#if errorMessage && !disabled}
 		<span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
 			{errorMessage}
 		</span>

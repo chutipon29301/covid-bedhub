@@ -6,15 +6,24 @@
 	import { _ } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 	import { ROUTES } from '$lib/constants/routes';
+	import { onMount } from 'svelte';
+	import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+	import type { DecodedJwt } from '$lib/models';
 	import Button from '$lib/components/ui/button/index.svelte';
-	import { Test } from '$lib/generated/graphql';
+	import Fa from '$lib/components/ui/fa/index.svelte';
+	import cookie from 'cookie';
+	import jwtDecode from 'jwt-decode';
+	import { variables } from '$lib/constants/environment';
 
-	function test() {
-		const response = Test({});
-		response.subscribe(({ data, loading }) => {
-			console.log(data?.pingAllowUnauthenticated.msg, loading);
-		});
-	}
+	let screenSize: number, accountType: string;
+
+	onMount(() => {
+		screenSize = window.innerWidth;
+		const { access_token } = cookie.parse(document.cookie);
+		accountType = import.meta.env.VITE_DEVELOP
+			? access_token?.split('-')[0]
+			: jwtDecode<DecodedJwt>(access_token).accountType;
+	});
 </script>
 
 <svelte:head>
@@ -22,14 +31,60 @@
 </svelte:head>
 
 <div class="flex flex-col items-center">
-	BANNER
-	<Button class="w-full" placeholder={$_('login_as_patient')} on:click={() => goto(ROUTES.LOGIN)} />
-	BANNER
-	<Button
-		class="w-full"
-		placeholder={$_('login_as_officer')}
-		on:click={() => goto(ROUTES.HEALTHCARE)}
-	/>
-	BANNER
-	<button on:click={test}>test</button>
+	{#if !accountType || accountType === 'reporter'}
+		{#if screenSize > 1024}
+			<img
+				class="pb-1 cursor-pointer"
+				src="/static/banner/patient_image.png"
+				alt="PatientBanner"
+				on:click={() => goto(ROUTES.LOGIN)}
+			/>
+		{:else}
+			<img
+				class="pb-1 cursor-pointer"
+				src="/static/banner/patient_image_small.png"
+				alt="PatientBanner"
+				on:click={() => goto(ROUTES.LOGIN)}
+			/>
+		{/if}
+		<Button
+			class="w-full mb-4"
+			placeholder={$_('login_as_patient')}
+			on:click={() => goto(ROUTES.LOGIN)}
+		>
+			<span slot="icon"> <Fa class="pl-4" icon={faArrowRight} /></span>
+		</Button>
+	{/if}
+	{#if !accountType || accountType !== 'reporter'}
+		{#if screenSize > 1024}
+			<img
+				class="pb-1 cursor-pointer"
+				src="/static/banner/admin_image.png"
+				alt="PatientBanner"
+				on:click={() => goto(ROUTES.HEALTHCARE)}
+			/>
+		{:else}
+			<img
+				class="pb-1 cursor-pointer"
+				src="/static/banner/admin_image_small.png"
+				alt="PatientBanner"
+				on:click={() => goto(ROUTES.HEALTHCARE)}
+			/>
+		{/if}
+		<div class="landing w-full">
+			<Button
+				class="w-full officer-color"
+				placeholder={$_('login_as_officer')}
+				on:click={() => goto(ROUTES.HEALTHCARE)}
+			>
+				<span slot="icon"> <Fa class="pl-4" icon={faArrowRight} /></span>
+			</Button>
+		</div>
+	{/if}
 </div>
+
+<style>
+	.landing :global(.officer-color) {
+		background-color: #313ae0 !important;
+	}
+</style>

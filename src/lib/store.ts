@@ -20,8 +20,3 @@ export const userProfile$ = writable<Patient>(null);
 export function setUserProfile(userProfile: Patient): void {
 	userProfile$.set(userProfile);
 }
-
-export const location$ = writable<GPSLocation>(null);
-export function setLocation(location: GPSLocation): void {
-	location$.set(location);
-}
