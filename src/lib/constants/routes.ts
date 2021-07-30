@@ -2,6 +2,7 @@ export const ROUTES = {
 	LANDING: '/',
 	LOGIN: '/login',
 	HOME: '/home',
+	HOME_ISOLATION: '/home-isolation',
 	TICKET: '/ticket',
 	TICKET_ILLNESSES: '/ticket/illnesses',
 	TICKET_SYMPTOM: '/ticket/symptom',
