@@ -5,7 +5,10 @@
 		faIdCard,
 		faHospitalAlt,
 		faCalendarAlt,
-		faPen
+		faPen,
+		faCheckCircle,
+		faHourglassHalf,
+		faBan
 	} from '@fortawesome/free-solid-svg-icons';
 	import { createEventDispatcher } from 'svelte';
 	import Fa from '$lib/components/ui/fa/index.svelte';
@@ -47,7 +50,7 @@
 				<div class="flex justify-center items-center">
 					<Fa class="pr-4" icon={faCalendarAlt} />
 				</div>
-				<span class="col-span-11">{appointmentDate}</span>
+				<span class="col-span-11">{new Date(appointmentDate).toDateString()}</span>
 			</div>
 			<div class="grid grid-cols-12 text-gray-500 my-1">
 				<div class="flex justify-center items-center">
@@ -61,12 +64,12 @@
 				<Button
 					class="w-full"
 					color="red"
-					on:click={() => dispatch('clickButton')}
+					on:click={() => dispatch('clickButton', status)}
 					placeholder={$_('cancel_request_button')}
 				/>
 			{:else if status === TICKET_STATUS.MATCH}
 				<Button
-					on:click={() => dispatch('clickButton')}
+					on:click={() => dispatch('clickButton', status)}
 					class="w-full"
 					placeholder={$_('see_hospital_button')}
 				/>
@@ -80,11 +83,13 @@
 
 	<div class="p-2 bg-gray-200 text-blue-900 rounded-b">
 		<div class="flex text-gray-500 my-1">
-			<div
-				class="{status === TICKET_STATUS.MATCH
-					? 'bg-red-400'
-					: 'bg-green-400'} h-5 w-5 rounded-full"
-			/>
+			{#if status === TICKET_STATUS.MATCH}
+				<Fa class="text-green-500" icon={faCheckCircle} size="lg" />
+			{:else if status === TICKET_STATUS.REQUEST}
+				<Fa class="text-yellow-500" icon={faHourglassHalf} size="lg" />
+			{:else}
+				<Fa class="text-gray-500" icon={faBan} size="lg" />
+			{/if}
 			<div class="pl-4 text-gray-600">
 				{TICKET_STATUS_LABEL[status]}
 			</div>

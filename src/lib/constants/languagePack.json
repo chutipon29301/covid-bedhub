@@ -61,7 +61,7 @@
 		"illness5_label": "โรคอ้วน",
 		"illness6_label": "โรคมะเร็ง",
 		"illness7_label": "โรคเบาหวาน",
-		"add_new_vaccine": "เพิ่มข้อมูลวัคซีน",
+		"add_new_vaccine": "เพิ่มข้อมูลวัคซีนเข็มที่ {order}",
 		"request_popup_heading": "คำร้องของคุณได้ถูกส่งไปแล้ว",
 		"request_popup_message": "หมายเลขคำร้อง #{ticketId} ได้ถูกส่งไปแล้ว",
 		"no_information_label": "ไม่มีข้อมูล",
@@ -104,6 +104,19 @@
 		"high_label": "สูง({amount})",
 		"normal_label": "ปานกลาง({amount})",
 		"low_label": "ต่ำ({amount})",
-		"rish_level_label": "ความเสี่ยง"
+		"rish_level_label": "ความเสี่ยง",
+		"cancel_appointment_label": "ยกเลิกนัดหมาย",
+		"change_appointment_label": "เปลี่ยนวันนัดหมาย",
+		"requested_date": "วันที่ส่งคำขอ",
+		"age_label": "อายุ",
+		"sex_label": "เพศ",
+		"illness_label": "โรคประจำตัว",
+		"covid_exam_label": "ข้อมูลการตรวจผลโควิด",
+		"select_appointment_date_label": "เลือกวันที่เข้ารับการรักษา",
+		"message_label": "ข้อความ",
+		"validation_inline_error": "กรุณากรอก {field} ให้ถูกต้อง",
+		"general_error_headline": "พบข้อผิดพลาด",
+		"access_code_invalid_error": "รหัสเชิญชวนไม่ถูกต้อง",
+		"required_field_error": "จำเป็นต้องกรอกข้อมูล"
 	}
 }

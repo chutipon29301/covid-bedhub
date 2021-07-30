@@ -1,22 +1,32 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import { createEventDispatcher } from 'svelte';
 
 	let clazz = '';
 	export { clazz as class };
-	export let value: string | number;
+	export let classInput = '';
+	export let value: string | number = undefined;
 	export let errorMessage = '';
 	export let label = 'label';
 	export let disabled = false;
 	export let type = 'text';
+	export let required = false;
 	const dispatch = createEventDispatcher();
 	let inputDOM: HTMLElement;
 
 	function typeAction(node: HTMLInputElement) {
 		node.type = type;
 	}
+
+	function onInput(e: Event) {
+		dispatch('input', e);
+		if (!required) return;
+		if (!value) errorMessage = $_('required_field_error');
+		else if (errorMessage === $_('required_field_error')) errorMessage = '';
+	}
 </script>
 
-<div class="mt-2 items-center z-10 {clazz}">
+<div class="mt-2 items-center {clazz}">
 	<div
 		class="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500"
 		class:bg-gray-200={disabled}
@@ -28,15 +38,16 @@
 			bind:value
 			readonly={disabled}
 			use:typeAction
-			on:keyup={(e) => dispatch('keyup', e)}
-			class="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent"
+			on:input={onInput}
+			class="{classInput} block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent"
 		/>
 		<label
 			for="password"
 			on:click={() => inputDOM.focus()}
 			class="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 duration-300 origin-top-left"
+			class:text-red-500={errorMessage}
 		>
-			{label}
+			{label}{required ? '*' : ''}
 		</label>
 	</div>
 

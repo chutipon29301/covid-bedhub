@@ -1,0 +1,6 @@
+query GetTicketsCount {
+	requestedAndAcceptedTicketsCount {
+		requestedCount
+		acceptedCount
+	}
+}

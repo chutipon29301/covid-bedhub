@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { setSymptoms, symptoms$ } from '../store/store';
-	import { onDestroy } from 'svelte';
+	import { illnesses$, setSymptoms, symptoms$ } from '../store/store';
+	import { onDestroy, onMount } from 'svelte';
 	import Checkbox from '$lib/components/ui/checkbox/index.svelte';
 	import Template from '$lib/components/ticketLayout/index.svelte';
 	import { goto } from '$app/navigation';
@@ -17,6 +17,10 @@
 		EXHAUSTED = $symptoms$?.EXHAUSTED,
 		CHEST_PAIN = $symptoms$?.CHEST_PAIN,
 		UNCONCIOUS = $symptoms$?.UNCONCIOUS;
+
+	onMount(() => {
+		if (!$illnesses$) goto(ROUTES.TICKET);
+	});
 
 	onDestroy(() =>
 		setSymptoms({

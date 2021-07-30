@@ -4,46 +4,62 @@ import {
 	REPORTER_ROUTES,
 	HEALTHCARE_STAFF_ROUTES,
 	PROTECTED_ROUTES,
-	ROUTES
+	ROUTES,
+	TICKET_FLOW
 } from '$lib/constants/routes';
-import { isLogin$ } from '$lib/store';
-import type { LoadInput, LoadOutput } from '@sveltejs/kit';
+import { accessToken$, isLogin$ } from '$lib/store';
 import { AccountType } from '$lib/models';
+import type { LoadInput, LoadOutput } from '@sveltejs/kit';
 import type { DecodedJwt } from '$lib/models';
 import jwt_decoder from 'jwt-decode';
 import cookie from 'cookie';
 
 let isLogin = false;
+let accessToken = '';
 const protectedPath = PROTECTED_ROUTES;
-isLogin$.subscribe((authState) => (isLogin = authState));
+const loginUnsub = isLogin$.subscribe((authState) => {
+	isLogin = authState;
+	if (authState) loginUnsub();
+});
+const tokenUnsub = accessToken$.subscribe((token) => {
+	accessToken = token;
+	if (token) tokenUnsub();
+});
 
-export async function authGuard({ session, page }: LoadInput): Promise<LoadOutput> {
-	const { access_token } = session;
+export function authGuard({ session, page }: LoadInput): LoadOutput {
+	const access_token = session.access_token || accessToken;
 	const loggedIn = access_token || isLogin;
 
-	if (!loggedIn && protectedPath.includes(page.path)) {
+	if (!loggedIn) return guardUnauthentication(page.path);
+
+	const accountType = import.meta.env.VITE_DEVELOP
+		? access_token.split('-')[0]
+		: jwt_decoder<DecodedJwt>(access_token || cookie.parse(document.cookie).access_token)
+				.accountType;
+
+	return guardAuthentication(accountType, page.path);
+}
+
+function guardUnauthentication(path: string) {
+	if (protectedPath.includes(path)) {
 		return { status: 302, redirect: ROUTES.LANDING };
 	}
-
-	if (!loggedIn) return {};
-
-	const { accountType } = jwt_decoder<DecodedJwt>(
-		access_token || cookie.parse(document.cookie).access_token
-	);
-
-	if (accountType === AccountType.CODE && routeCheck(page.path, HEALTHCARE_CODE_ROUTES))
-		return { status: 302, redirect: ROUTES.HEALTHCARE_CODE };
-	else if (accountType === AccountType.QUEUE && routeCheck(page.path, HEALTHCARE_QUEUE_ROUTES))
-		return { status: 302, redirect: ROUTES.HEALTHCARE_QUEUE };
-	else if (accountType === AccountType.STAFF && routeCheck(page.path, HEALTHCARE_STAFF_ROUTES))
-		return { status: 302, redirect: ROUTES.HEALTHCARE_STAFF };
-	else if (accountType === AccountType.REPORTER && routeCheck(page.path, REPORTER_ROUTES))
-		return { status: 302, redirect: ROUTES.HOME };
-
 	return {};
 }
 
-function routeCheck(path: string, routes: string[]) {
+function guardAuthentication(accountType: string, path: string) {
+	if (accountType === AccountType.CODE && allowedRoutes(path, HEALTHCARE_CODE_ROUTES))
+		return { status: 302, redirect: ROUTES.HEALTHCARE_CODE };
+	if (accountType === AccountType.QUEUE && allowedRoutes(path, HEALTHCARE_QUEUE_ROUTES))
+		return { status: 302, redirect: ROUTES.HEALTHCARE_QUEUE };
+	if (accountType === AccountType.STAFF && allowedRoutes(path, HEALTHCARE_STAFF_ROUTES))
+		return { status: 302, redirect: ROUTES.HEALTHCARE_STAFF };
+	if (accountType === AccountType.REPORTER && allowedRoutes(path, REPORTER_ROUTES))
+		return { status: 302, redirect: ROUTES.HOME };
+	return {};
+}
+
+function allowedRoutes(path: string, routes: string[]): boolean {
 	if (path === '/') return false;
 	return !routes.some((r) => path.includes(r));
 }

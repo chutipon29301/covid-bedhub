@@ -2,11 +2,12 @@
 	import { createEventDispatcher } from 'svelte';
 	import Switcher from './Switcher.svelte';
 	export let placeholder = 'Select Date';
-	export let value: Date;
+	export let value: Date = undefined;
 	export let visible = false;
 	export let years_map = [1900, new Date().getFullYear()];
 	export let classes = '';
 	export let disabled = false;
+	export let errorMessage = '';
 	let date = new Date();
 	let years_count = years_map[1] - years_map[0] + 1;
 	const MONTHS = [
@@ -32,6 +33,7 @@
 		.map((v, i) => v + i);
 	$: _date = value?.toLocaleDateString('en-US');
 	let cancel = () => {
+		value = null;
 		visible = false;
 	};
 	let dateChanged = (event: CustomEvent) => {
@@ -50,7 +52,7 @@
 				0
 			).getDate();
 			let day = Math.min(date.getDate(), maxDayInSelectedMonth);
-			newDate = new Date(1900 + changedData, date.getMonth(), day);
+			newDate = new Date(years_map[0] + changedData, date.getMonth(), day);
 		}
 		date = newDate;
 		dispatch('dateChange', { date });
@@ -63,7 +65,10 @@
 </script>
 
 <div class="mt-2 items-center z-10 {classes}">
-	<div class="f-outline px-2 relative w-full border rounded-lg focus-within:border-indigo-500">
+	<div
+		class="f-outline px-2 relative w-full border rounded-lg focus-within:border-indigo-500"
+		class:border-red-500={errorMessage}
+	>
 		<input
 			type="text"
 			class="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent"
@@ -76,10 +81,16 @@
 			on:click={() => (visible = !disabled && !visible)}
 			for="password"
 			class="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 duration-300 origin-top-left"
+			class:text-red-500={errorMessage}
 		>
 			{placeholder}
 		</label>
 	</div>
+	{#if errorMessage}
+		<span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+			{errorMessage}
+		</span>
+	{/if}
 </div>
 {#if visible}
 	<div class="touch-date-popup" bind:this={popup}>
@@ -98,7 +109,7 @@
 					<Switcher
 						type="year"
 						data={YEARS.map((v) => v.toString())}
-						selected={date.getFullYear() - 1899}
+						selected={date.getFullYear() - years_map[0] + 1}
 						on:dateChange={dateChanged}
 					/>
 				</div>

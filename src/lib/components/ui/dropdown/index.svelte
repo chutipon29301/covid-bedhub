@@ -7,13 +7,19 @@
 	export let label = 'label';
 	export let list: string[];
 	export let value: string;
+	export let errorMessage = '';
 </script>
 
 <div class="{clazz} text-lg text-gray-700 relative group inline-block w-full">
 	<button
 		class="text-lg focus:outline-none border rounded-md p-2 bg-white flex justify-between w-full"
+		class:border-red-500={errorMessage}
 	>
-		<span class="px-2 text-lg bg-white duration-300 origin-top-left" class:px-5={!value}>
+		<span
+			class="px-2 text-lg bg-white duration-300 origin-top-left"
+			class:px-5={!value}
+			class:text-red-500={errorMessage}
+		>
 			{value || label}
 		</span>
 		<span />
@@ -22,6 +28,11 @@
 			icon={faChevronDown}
 		/>
 	</button>
+	{#if errorMessage}
+		<span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+			{errorMessage}
+		</span>
+	{/if}
 	<ul
 		class="bg-white border rounded-sm transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top w-full z-10"
 	>

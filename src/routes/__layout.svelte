@@ -2,15 +2,15 @@
 	import { authGuard } from '$lib/guards';
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit';
 
-	export async function load({ page, fetch, session, context }: LoadInput): Promise<LoadOutput> {
-		return await authGuard({ page, fetch, session, context });
+	export function load({ page, fetch, session, context }: LoadInput): LoadOutput {
+		return authGuard({ page, fetch, session, context });
 	}
 </script>
 
 <script lang="ts">
 	import '../app.postcss';
 	import { Translate } from '$lib/services/translateService';
-	import { isLogin$, setIsLogin } from '$lib/store';
+	import { isLogin$, setAccessToken, setIsLogin } from '$lib/store';
 	import { onMount, setContext } from 'svelte';
 	import { faSignOutAlt, faTimes, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 	import cookie from 'cookie';
@@ -33,7 +33,10 @@
 
 	onMount(() => {
 		const { access_token } = cookie.parse(document.cookie);
-		if (access_token) setIsLogin(true);
+		if (access_token) {
+			setIsLogin(true);
+			setAccessToken(access_token);
+		}
 	});
 
 	function logout() {

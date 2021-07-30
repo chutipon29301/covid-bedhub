@@ -1,0 +1,5 @@
+mutation UpdateAccessCode($data: UpdateAccessCodeDto!) {
+	updateAccessCode(data: $data) {
+		accessCode
+	}
+}

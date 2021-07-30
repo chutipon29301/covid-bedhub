@@ -52,3 +52,20 @@ export interface Vaccine {
 export interface DecodedJwt {
 	accountType: string;
 }
+
+export interface PatientDetail {
+	id: number;
+	name: string;
+	sex: string;
+	age: number;
+	identification: string;
+	mobile: string;
+	createdAt: Date;
+	examDate: string;
+	examLocation: string;
+	examReceiveDate: string;
+	vaccines: Vaccine[];
+	riskLevel: number;
+	symptops: SymptomChecklist;
+	illnesses: IllnessChecklist;
+}

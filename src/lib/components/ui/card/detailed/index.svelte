@@ -36,7 +36,7 @@
 			</div>
 			<div class="bg-gray-100 rounded-lg mb-2">
 				<div class="py-4 px-4">
-					<slot name="content-2" />
+					<slot name="content-3" />
 				</div>
 			</div>
 			<div class="py-4">

@@ -1,0 +1,5 @@
+mutation CreateOfficer($data: CreateOfficerDto!) {
+	createOfficer(data: $data) {
+		id
+	}
+}

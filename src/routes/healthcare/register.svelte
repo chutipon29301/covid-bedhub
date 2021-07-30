@@ -1,21 +1,62 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { ROUTES } from '$lib/constants/routes';
+	import { goto } from '$app/navigation';
+	import { accessCode$, hospitalName$, userType$ } from './store/store';
+	import { CreateOfficer } from '$lib/generated/graphql';
+	import { setIsLoading } from '$lib/store';
+	import { onMount } from 'svelte';
+	import { nameValidation, passwordValidation, usernameValidation } from '$lib/util';
 	import Input from '$lib/components/ui/input/index.svelte';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import Layout from '$lib/components/ui/fullscreenLayout/index.svelte';
-	import { ROUTES } from '$lib/constants/routes';
-	import { goto } from '$app/navigation';
+
+	$: disabledRegisterBtn =
+		!username ||
+		!password ||
+		!confirmPassword ||
+		!firstName ||
+		!lastName ||
+		!hospitalName ||
+		!accessCode ||
+		!userType ||
+		!usernameValidation(username) ||
+		!passwordValidation(password) ||
+		password !== confirmPassword ||
+		!nameValidation(firstName) ||
+		!nameValidation(lastName);
 
 	let username: string,
 		password: string,
-		passwordCheck: string,
+		confirmPassword: string,
 		firstName: string,
 		lastName: string,
-		officerId: string;
+		employeeId: string,
+		hospitalName = $hospitalName$,
+		accessCode = $accessCode$,
+		userType = $userType$;
 
-	function register() {
-		console.log('register');
-		goto(ROUTES.HEALTHCARE);
+	onMount(() => {
+		if (!$hospitalName$) goto(ROUTES.HEALTHCARE_INVITE);
+	});
+
+	async function register() {
+		if (disabledRegisterBtn) return;
+		setIsLoading(true);
+		const { data } = await CreateOfficer({
+			variables: {
+				data: {
+					accessCode,
+					username,
+					password,
+					firstName,
+					lastName,
+					employeeId
+				}
+			}
+		});
+		setIsLoading(false);
+		if (data) goto(ROUTES.HEALTHCARE);
 	}
 </script>
 
@@ -26,18 +67,67 @@
 <Layout title={$_('healthcare_register_title')}>
 	<span slot="content">
 		<div class="pb-4 font-bold">
-			<p>โรงพยาบาล:</p>
-			<p>Invite Code:</p>
-			<p>ประเภทเจ้าหน้าที่:</p>
+			<p>โรงพยาบาล: {hospitalName}</p>
+			<p>Invite Code: {accessCode}</p>
+			<p>ประเภทเจ้าหน้าที่: {userType}</p>
 		</div>
-		<Input class="pb-2" bind:value={username} label={$_('username_label')} />
-		<Input class="pb-4" type="password" bind:value={password} label={$_('password_label')} />
-		<Input class="pb-4" bind:value={passwordCheck} label={$_('confirm_password_label')} />
-		<Input class="pb-4" bind:value={firstName} label={$_('patient_first_name_information')} />
-		<Input class="pb-4" bind:value={lastName} label={$_('patient_last_name_information')} />
-		<Input class="pb-4" bind:value={officerId} label={$_('officer_id_label')} />
+		<Input
+			required={true}
+			class="pb-2"
+			bind:value={username}
+			label={$_('username_label')}
+			errorMessage={usernameValidation(username)
+				? ''
+				: $_('validation_inline_error', { values: { field: $_('username_label') } })}
+		/>
+		<Input
+			required={true}
+			class="pb-4"
+			type="password"
+			bind:value={password}
+			errorMessage={passwordValidation(password)
+				? ''
+				: $_('validation_inline_error', { values: { field: $_('password_label') } })}
+			label={$_('password_label')}
+		/>
+		<Input
+			required={true}
+			class="pb-4"
+			type="password"
+			bind:value={confirmPassword}
+			errorMessage={password === confirmPassword
+				? ''
+				: $_('validation_inline_error', { values: { field: $_('confirm_password_label') } })}
+			label={$_('confirm_password_label')}
+		/>
+		<Input
+			required={true}
+			class="pb-4"
+			bind:value={firstName}
+			errorMessage={nameValidation(firstName)
+				? ''
+				: $_('validation_inline_error', {
+						values: { field: $_('patient_first_name_information') }
+				  })}
+			label={$_('patient_first_name_information')}
+		/>
+		<Input
+			required={true}
+			class="pb-4"
+			bind:value={lastName}
+			errorMessage={nameValidation(lastName)
+				? ''
+				: $_('validation_inline_error', { values: { field: $_('patient_last_name_information') } })}
+			label={$_('patient_last_name_information')}
+		/>
+		<Input class="pb-4" bind:value={employeeId} label={$_('officer_id_label')} />
 	</span>
 	<span slot="footer">
-		<Button class="w-full" placeholder={$_('regiter_button')} on:click={register} />
+		<Button
+			disabled={disabledRegisterBtn}
+			class="w-full"
+			placeholder={$_('regiter_button')}
+			on:click={register}
+		/>
 	</span>
 </Layout>

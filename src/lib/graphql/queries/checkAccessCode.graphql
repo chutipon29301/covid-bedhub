@@ -1,0 +1,9 @@
+query CheckAccessCode($access_code: String!) {
+	checkAccessCode(access_code: $access_code) {
+		accessCode
+		userType
+		hospital {
+			name
+		}
+	}
+}

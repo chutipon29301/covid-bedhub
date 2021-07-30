@@ -1,0 +1,5 @@
+mutation EditAppointment($data: EditAppointmentDto!) {
+	editAppointment(data: $data) {
+		id
+	}
+}

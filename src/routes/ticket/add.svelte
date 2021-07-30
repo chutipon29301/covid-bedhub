@@ -1,13 +1,30 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { form$, setForm } from './store/store';
-	import { onDestroy } from 'svelte';
+	import { form$, illnesses$, setForm } from './store/store';
+	import { onDestroy, onMount } from 'svelte';
 	import PatientForm from '$lib/components/patientForm/index.svelte';
 	import Template from '$lib/components/ticketLayout/index.svelte';
 	import { ROUTES } from '$lib/constants/routes';
 	import { goto } from '$app/navigation';
+	import {
+		noFutureValidation,
+		identificationValidation,
+		mobileNumberValidation,
+		nameValidation
+	} from '$lib/util';
 
-	$: disabledContinueBtn = !id || !firstName || !lastName || !dob || !sex || !mobile;
+	$: disabledContinueBtn =
+		!id ||
+		!firstName ||
+		!lastName ||
+		!dob ||
+		!sex ||
+		!mobile ||
+		!nameValidation(firstName) ||
+		!nameValidation(firstName) ||
+		!identificationValidation(id) ||
+		!mobileNumberValidation(mobile) ||
+		!noFutureValidation(dob);
 
 	let id: string = $form$?.id,
 		firstName: string = $form$?.firstName,
@@ -15,6 +32,10 @@
 		dob: Date = $form$?.dob,
 		sex: string = $form$?.sex,
 		mobile: string = $form$?.mobile;
+
+	onMount(() => {
+		if (!$illnesses$) goto(ROUTES.TICKET);
+	});
 
 	onDestroy(() => {
 		setForm({

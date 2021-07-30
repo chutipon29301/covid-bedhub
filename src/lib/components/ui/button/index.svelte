@@ -6,7 +6,7 @@
 	export { clazz as class };
 	export let placeholder = 'button_placeholder';
 	export let disabled = false;
-	export let color: 'red' | 'blue' | 'white' = 'blue';
+	export let color: 'red' | 'blue' | 'white' | 'white-red' = 'blue';
 	const dispatch = createEventDispatcher();
 
 	$: _colorCss = getColorCss(color);
@@ -18,14 +18,17 @@
 			case 'blue':
 				return COLOR.BLUE;
 			case 'white':
-				return COLOR.WHITE;
+				return COLOR.WHITE_BLUE;
+			case 'white-red':
+				return COLOR.WHITE_RED;
 		}
 	}
 </script>
 
 <button
 	on:click={() => dispatch('click')}
-	class="{clazz} {_colorCss} hover:opacity-75 px-4 py-3 rounded font-semibold disabled:bg-gray-200 disabled:cursor-default disabled:text-gray-400"
+	class="{clazz} {_colorCss} px-4 py-3 rounded font-semibold disabled:bg-gray-200 disabled:cursor-default disabled:text-gray-400"
+	class:hover:opacity-75={!disabled}
 	{disabled}
 >
 	{placeholder}

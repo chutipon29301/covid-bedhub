@@ -1,0 +1,18 @@
+query AcceptedTickets($data: RequestTicketQueryDto) {
+	acceptedTickets(data: $data) {
+		tickets {
+			id
+			patient {
+				firstName
+				lastName
+				sex
+				age
+			}
+			createdAt
+			riskLevel
+			status
+			appointedDate
+		}
+		count
+	}
+}

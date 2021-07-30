@@ -1,0 +1,14 @@
+query TicketByNationalId($nid: String!) {
+	ticketByNationalId(nid: $nid) {
+		ticket {
+			patient {
+				firstName
+				lastName
+			}
+			appointedDate
+		}
+		hospital {
+			name
+		}
+	}
+}

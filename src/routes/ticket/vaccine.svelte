@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { faPlusCircle, faTimes, faHandsHelping } from '@fortawesome/free-solid-svg-icons';
+	import { faPlusCircle, faTimes, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 	import { ROUTES } from '$lib/constants/routes';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { patientId$, setVaccine, vaccine$, form$, symptoms$, illnesses$ } from './store/store';
 	import { CreatePatient, CreateTicket, UpdatePatient } from '$lib/generated/graphql';
-	import { checklistToEnum, dateToStringFormat, vaccinePopulate } from '$lib/util';
+	import {
+		checklistToEnum,
+		dateToStringFormat,
+		noFutureValidation,
+		vaccinePopulate
+	} from '$lib/util';
 	import { location$ } from '$lib/store';
 	import { EModalColorTone } from '$lib/components/ui/modal/model';
 	import type { Illness, Symptom } from '$lib/generated/graphql';
@@ -18,6 +23,19 @@
 	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
 	import Dropdown from '$lib/components/ui/dropdown/index.svelte';
 
+	$: disabledContinueBtn =
+		!$form$?.firstName ||
+		!$form$?.lastName ||
+		!$form$?.dob ||
+		!$form$?.sex ||
+		!$form$?.mobile ||
+		!examReceiveDate ||
+		!examLocation ||
+		!examDate ||
+		!noFutureValidation(examReceiveDate) ||
+		!noFutureValidation(examDate) ||
+		vaccines.every((v) => !(!v.name === !v.dateReceived));
+
 	let successPopupShown = false;
 	let vaccineList = ['Astrazeneca', 'Moderna', 'Pfizer', 'Sinopharm', 'Sinovac'];
 	let ticketId: string;
@@ -25,6 +43,10 @@
 		examLocation: string = $vaccine$?.examLocation,
 		examDate: Date = $vaccine$?.examDate,
 		vaccines: Vaccine[] = $vaccine$?.vaccines || [{ name: null, dateReceived: null }];
+
+	onMount(() => {
+		if (!$form$) goto(ROUTES.TICKET);
+	});
 
 	onDestroy(() => {
 		setVaccine({
@@ -92,6 +114,7 @@
 	}
 
 	async function onClickProceed() {
+		if (disabledContinueBtn) return;
 		const id = $patientId$ ? await existedPatient($patientId$) : await newPatient();
 		await createTix(id);
 	}
@@ -108,7 +131,7 @@
 
 {#if successPopupShown}
 	<Modal
-		icon={faHandsHelping}
+		icon={faCheckCircle}
 		heading={$_('request_popup_heading')}
 		confirmBtn={'OK'}
 		colorTone={EModalColorTone.GREEN}
@@ -120,15 +143,26 @@
 <Template
 	title={$_('patient_add_title')}
 	btnPlaceholer={$_('continue_button')}
+	{disabledContinueBtn}
 	on:click={() => onClickProceed()}
 >
 	<DatePicker
 		classes="mb-4"
 		placeholder={$_('exam_received_date_label')}
 		bind:value={examReceiveDate}
+		errorMessage={noFutureValidation(examReceiveDate)
+			? ''
+			: $_('validation_inline_error', { values: { field: $_('exam_received_date_label') } })}
 	/>
 	<Input class="pb-2" label={$_('exam_localtion_lable')} bind:value={examLocation} />
-	<DatePicker classes="mb-4" placeholder={$_('exam_date_label')} bind:value={examDate} />
+	<DatePicker
+		classes="mb-4"
+		placeholder={$_('exam_date_label')}
+		bind:value={examDate}
+		errorMessage={noFutureValidation(examDate)
+			? ''
+			: $_('validation_inline_error', { values: { field: $_('exam_date_label') } })}
+	/>
 	{#each vaccines as vaccine, i}
 		<div
 			class={i === 0 ? '' : 'border border-dashed pt-2 relative hover:border-red-400 rounded-md'}
@@ -152,11 +186,13 @@
 				label={$_('vaccine_dose_label', { values: { order: i + 1 } })}
 				list={vaccineList}
 				bind:value={vaccine.name}
+				errorMessage={vaccine.dateReceived || !vaccine.name ? '' : $_('required_field_error')}
 			/>
 			<DatePicker
 				classes="mb-2"
 				placeholder={$_('vaccine_date_label', { values: { order: i + 1 } })}
 				bind:value={vaccine.dateReceived}
+				errorMessage={vaccine.name || !vaccine.dateReceived ? '' : $_('required_field_error')}
 			/>
 		</div>
 	{/each}
@@ -168,7 +204,7 @@
 			class="border border-dashed mt-4 px-4 py-8 w-full border-indigo-700 rounded-md flex justify-center cursor-pointer bg-transparent text-indigo-400"
 		>
 			<Fa class="mt-1 pr-2" icon={faPlusCircle} />
-			{$_('add_new_vaccine')}
+			{$_('add_new_vaccine', { values: { order: vaccines.length + 1 } })}
 		</div>
 	{/if}
 </Template>

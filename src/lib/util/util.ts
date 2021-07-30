@@ -1,8 +1,10 @@
 import cookie from 'cookie';
-import { CreateVaccine, Illness, Symptom, VaccineName } from './generated/graphql';
-import type { IllnessChecklist, SymptomChecklist, Vaccine } from './models';
+import { CreateVaccine, Illness, Symptom, VaccineName } from '../generated/graphql';
+import { setAccessToken } from '../store';
+import type { IllnessChecklist, SymptomChecklist, Vaccine } from '../models';
 
 export function storeToken(token: string, expires: Date): void {
+	setAccessToken(token);
 	document.cookie = cookie.serialize('access_token', token, {
 		path: '/',
 		expires: new Date(expires)
@@ -10,8 +12,9 @@ export function storeToken(token: string, expires: Date): void {
 }
 
 export function dateToStringFormat(date: Date): string {
+	if (!date) return null;
 	const d = new Date(date);
-	return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+	return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
 export function illnessToChecklist(illnesses: Illness[]): IllnessChecklist {
@@ -60,4 +63,14 @@ export function vaccinePopulate(vaccines: Vaccine[]): CreateVaccine[] {
 				: null
 		)
 		.filter((v) => v);
+}
+
+export function convertRiskLevelToLabel(riskLevel: number): string {
+	const mapping = {
+		1: 'Low',
+		2: 'Medium',
+		3: 'High',
+		4: 'Very High'
+	};
+	return mapping[riskLevel];
 }

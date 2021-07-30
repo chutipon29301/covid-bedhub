@@ -2,8 +2,8 @@
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit';
 
 	export async function load({ page }: LoadInput): Promise<LoadOutput> {
-		let slug = page.params.slug;
-		return { props: { slug } };
+		let ticketId = page.params.ticketId;
+		return { props: { ticketId } };
 	}
 </script>
 
@@ -16,7 +16,7 @@
 	import { onMount } from 'svelte';
 	import { checklistToEnum, symptomToChecklist } from '$lib/util';
 	import { setIsLoading } from '$lib/store';
-	import { TICKET_STATUS } from '$lib/constants/constant';
+	import { TICKET_STATUS, TICKET_STATUS_LABEL } from '$lib/constants/constant';
 	import Checkbox from '$lib/components/ui/checkbox/index.svelte';
 	import Template from '$lib/components/ticketLayout/index.svelte';
 	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
@@ -24,7 +24,7 @@
 	import { EModalColorTone } from '$lib/components/ui/modal/model';
 
 	$: response = MyTicketSymptoms({
-		variables: { id: $page.params.slug }
+		variables: { id: $page.params.ticketId }
 	});
 
 	let symptoms = symptomToChecklist([]);
@@ -33,7 +33,7 @@
 	let successPopupShown = false;
 
 	onMount(() => {
-		const sub = response.subscribe(({ data, loading }) => {
+		const unsub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			found =
 				data?.myTicket &&
@@ -46,14 +46,17 @@
 				mobile: data?.myTicket?.patient.tel,
 				status: data?.myTicket?.status
 			};
-			if (!loading) sub();
+			if (!loading) unsub();
 		});
 	});
 
 	async function onClickProceed() {
 		setIsLoading(true);
 		const { data } = await EditSymptom({
-			variables: { id: $page.params.slug, data: { symptoms: checklistToEnum<Symptom>(symptoms) } }
+			variables: {
+				id: $page.params.ticketId,
+				data: { symptoms: checklistToEnum<Symptom>(symptoms) }
+			}
 		});
 		if (data) {
 			setIsLoading(false);
@@ -79,12 +82,12 @@
 		colorTone={EModalColorTone.GREEN}
 		on:confirm={onClickOkPopup}
 	>
-		{$_('edit_symptoms_popup_message', { values: { ticketId: $page.params.slug } })}
+		{$_('edit_symptoms_popup_message', { values: { ticketId: $page.params.ticketId } })}
 	</Modal>
 {/if}
 <Template
 	title={$_('edit_symptoms_title')}
-	btnPlaceholer={'save_button'}
+	btnPlaceholer={$_('save_button')}
 	on:click={() => onClickProceed()}
 >
 	{#if found}
@@ -99,7 +102,7 @@
 				{`${$_('patient_mobile_information')}: ${ticketInformation.mobile}`}
 			</p>
 			<p class="font-bold">
-				{`${$_('edit_symptoms_status_label')}: ${ticketInformation.status}`}
+				{`${$_('edit_symptoms_status_label')}: ${TICKET_STATUS_LABEL[ticketInformation.status]}`}
 			</p>
 		</div>
 		<Checkbox class="pb-5" bind:checked={symptoms.FEVER} placeholder="symptom1_label" />

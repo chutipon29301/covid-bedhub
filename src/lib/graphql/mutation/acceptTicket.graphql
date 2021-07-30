@@ -1,0 +1,5 @@
+mutation AcceptTicket($data: AcceptTicketDto!) {
+	acceptTicket(data: $data) {
+		id
+	}
+}

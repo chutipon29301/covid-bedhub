@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { faBed, faUnlink, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+	import { faBed, faMinusCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 	import { goto } from '$app/navigation';
 	import { ROUTES } from '$lib/constants/routes';
 	import { onMount } from 'svelte';
@@ -8,11 +8,11 @@
 	import { setIsLoading, setLocation } from '$lib/store';
 	import { variables } from '$lib/constants/environment';
 	import { TICKET_STATUS } from '$lib/constants/constant';
+	import { EModalColorTone } from '$lib/components/ui/modal/model';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import Ticket from '$lib/components/ui/ticket/index.svelte';
 	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
-	import { EModalColorTone } from '$lib/components/ui/modal/model';
 
 	let disableFindBed = false;
 	let tickets = [];
@@ -26,7 +26,7 @@
 
 	function loadMyTickets() {
 		const response = MyTickets({});
-		const sub = response.subscribe(({ data, loading }) => {
+		const unsub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			tickets =
 				data?.me.tickets.map((t) => ({
@@ -37,13 +37,13 @@
 					appointmentDate: t.appointedDate,
 					hospitalName: t.hospital?.name
 				})) || [];
-			if (!loading) sub();
+			if (!loading) unsub();
 		});
 	}
 
 	function setGPS() {
 		if (variables.dev) {
-			setLocation({ lat: 0, lng: 0 });
+			setLocation({ lat: 13.966461495650773, lng: 100.54753924040311 });
 			return;
 		}
 
@@ -62,6 +62,14 @@
 			return;
 		}
 		goto(ROUTES.TICKET);
+	}
+
+	function handleButtonClick(id: string, status: string) {
+		if (status === TICKET_STATUS.REQUEST) {
+			cancelTicket(id);
+			return;
+		}
+		alert('In progress...');
 	}
 
 	async function cancelTicket(id: string) {
@@ -90,7 +98,7 @@
 
 {#if successPopupShown}
 	<Modal
-		icon={faUnlink}
+		icon={faMinusCircle}
 		heading={$_('request_popup_heading')}
 		confirmBtn={'OK'}
 		colorTone={EModalColorTone.RED}
@@ -111,7 +119,7 @@
 	{#if tickets.length === 0}
 		<div class="flex flex-grow flex-col items-center justify-center up-10">
 			<Fa class="pb-2" icon={faBed} size="2rem" />
-			<Button on:click={() => navigate()} placeholder="find_bed_button" />
+			<Button on:click={() => navigate()} placeholder={$_('find_bed_button')} />
 		</div>
 	{:else}
 		{#if tickets.filter((t) => t.status === TICKET_STATUS.REQUEST || t.status === TICKET_STATUS.MATCH).length === 0}
@@ -125,7 +133,7 @@
 					status={ticket.status}
 					appointmentDate={ticket?.appointmentDate}
 					hospitalName={ticket?.hospitalName}
-					on:clickButton={() => cancelTicket(ticket.ticketId)}
+					on:clickButton={(v) => handleButtonClick(ticket.ticketId, v.detail)}
 					on:clickEdit={() => onClickEdit(ticket.ticketId)}
 				/>
 			</div>
