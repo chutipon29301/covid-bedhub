@@ -8,6 +8,7 @@
 	import { GetJwtFromLineCode } from '$lib/generated/graphql';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import { storeToken } from '$lib/util';
+	import { variables } from '$lib/constants/environment';
 
 	const code = $page.query.get('code');
 
@@ -28,13 +29,13 @@
 	}
 
 	function redirect() {
-		if (import.meta.env.VITE_DEVELOP) {
+		if (variables.dev) {
 			setIsLogin(true);
 			storeToken('reporter-1', new Date(8640000000000000));
 			goto(ROUTES.HOME);
 			return;
 		}
-		window.location.replace(import.meta.env.VITE_API_URL + '/auth/login');
+		window.location.replace(variables.url + '/auth/login');
 	}
 </script>
 

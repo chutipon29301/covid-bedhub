@@ -8,19 +8,19 @@
 	import { ROUTES } from '$lib/constants/routes';
 	import { onMount } from 'svelte';
 	import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+	import { variables } from '$lib/constants/environment';
 	import type { DecodedJwt } from '$lib/models';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import cookie from 'cookie';
 	import jwtDecode from 'jwt-decode';
-	import { variables } from '$lib/constants/environment';
 
 	let screenSize: number, accountType: string;
 
 	onMount(() => {
 		screenSize = window.innerWidth;
 		const { access_token } = cookie.parse(document.cookie);
-		accountType = import.meta.env.VITE_DEVELOP
+		accountType = variables.dev
 			? access_token?.split('-')[0]
 			: jwtDecode<DecodedJwt>(access_token).accountType;
 	});

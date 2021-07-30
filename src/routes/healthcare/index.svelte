@@ -6,6 +6,7 @@
 	import { setIsLoading, setIsLogin } from '$lib/store';
 	import { AccountType } from '$lib/models';
 	import { storeToken } from '$lib/util';
+	import { variables } from '$lib/constants/environment';
 	import type { DecodedJwt } from '$lib/models';
 	import Input from '$lib/components/ui/input/index.svelte';
 	import Button from '$lib/components/ui/button/index.svelte';
@@ -16,7 +17,7 @@
 	let password: string;
 
 	async function login() {
-		if (import.meta.env.VITE_DEVELOP) {
+		if (variables.dev) {
 			handleDevMode();
 			return;
 		}

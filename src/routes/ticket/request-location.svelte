@@ -18,10 +18,11 @@
 	import { form$, illnesses$, patientId$, symptoms$, vaccine$ } from './store/store';
 	import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 	import { EModalColorTone } from '$lib/components/ui/modal/model';
-	import Button from '$lib/components/ui/button/index.svelte';
-	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
+	import { variables } from '$lib/constants/environment';
 	import { onMount } from 'svelte';
 	import { setIsLoading } from '$lib/store';
+	import Button from '$lib/components/ui/button/index.svelte';
+	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
 
 	let canSubmitForm = false,
 		successPopupShown = false,
@@ -49,7 +50,7 @@
 	});
 
 	function setGPS() {
-		if (import.meta.env.VITE_DEVELOP) {
+		if (variables.dev) {
 			lat = 13.966461495650773;
 			lng = 100.54753924040311;
 			canSubmitForm = true;
