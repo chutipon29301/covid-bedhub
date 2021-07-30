@@ -11,7 +11,7 @@
 </script>
 
 <div class="flex flex-col min-h-content">
-	<div class="flex-grow pb-4">
+	<div class="pb-4">
 		<div class="text-3xl pb-4">{title}</div>
 		{#if description}
 			<div class="text-md pb-4">{description}</div>

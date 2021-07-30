@@ -10,11 +10,13 @@
 	import { onMount } from 'svelte';
 	import { Headers } from './models';
 	import { dateToStringFormat, illnessToChecklist, symptomToChecklist } from '$lib/util';
+	import { setRefresh } from './store/store';
 	import type { PatientDetail } from '$lib/models';
 	import QueueTable from '$lib/components/queueTable/index.svelte';
 	import PatientCard from '$lib/components/patientCard/index.svelte';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import AppointmentModal from '$lib/components/appointmentModal/index.svelte';
+	import { TICKET_STATUS_LABEL } from '$lib/constants/constant';
 
 	let headers = Headers.map((v) => ({ ...v, label: $_(v.label) })),
 		content = [],
@@ -47,7 +49,7 @@
 					sex: t.patient.sex,
 					age: t.patient.age,
 					riskLevel: t.riskLevel,
-					status: t.status,
+					status: TICKET_STATUS_LABEL[t.status],
 					id: t.id
 				})) || [];
 			totalItems = data?.requestedTickets.count;
@@ -84,8 +86,8 @@
 		});
 	}
 
-	function getRiskCount() {
-		const response = requestedRiskCount({ fetchPolicy: 'cache-first' });
+	function getRiskCount(fetchPolicy: 'cache-first' | 'network-only' = 'cache-first') {
+		const response = requestedRiskCount({ fetchPolicy });
 		const unsub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			if (data) {
@@ -120,8 +122,10 @@
 	async function handleButtonClick(action: 'accept' | 'deny') {
 		let success = false;
 		if (action === 'accept') success = await acceptTicket(selectedTicket.id);
-		if (action === 'deny') success = await denyTicket(selectedTicket.id);
+		if (action === 'deny') success = true;
 		if (!success) return;
+		getRiskCount('network-only');
+		setRefresh(true);
 		selectedTicket = null;
 		acceptTicketModalShown = false;
 		loadTickets();
@@ -141,11 +145,6 @@
 			}
 		});
 		setIsLoading(false);
-		return true;
-	}
-
-	async function denyTicket(id: number): Promise<boolean> {
-		console.log(id);
 		return true;
 	}
 </script>

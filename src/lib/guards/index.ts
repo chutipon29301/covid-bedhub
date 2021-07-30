@@ -26,33 +26,28 @@ const tokenUnsub = accessToken$.subscribe((token) => {
 	if (token) tokenUnsub();
 });
 
-export async function authGuard({ session, page }: LoadInput): Promise<LoadOutput> {
+export function authGuard({ session, page }: LoadInput): LoadOutput {
 	const access_token = session.access_token || accessToken;
-	const { init_path } = session;
 	const loggedIn = access_token || isLogin;
-	console.log('*****', access_token);
 
-	if (!loggedIn) return guardUnauthentication(page.path, init_path);
+	if (!loggedIn) return guardUnauthentication(page.path);
 
 	const accountType = import.meta.env.VITE_DEVELOP
 		? access_token.split('-')[0]
 		: jwt_decoder<DecodedJwt>(access_token || cookie.parse(document.cookie).access_token)
 				.accountType;
 
-	return guardAuthentication(accountType, page.path, init_path);
+	return guardAuthentication(accountType, page.path);
 }
 
-function guardUnauthentication(path: string, init_path: string) {
+function guardUnauthentication(path: string) {
 	if (protectedPath.includes(path)) {
 		return { status: 302, redirect: ROUTES.LANDING };
 	}
-	if (init_path === ROUTES.HEALTHCARE_REGISTER)
-		return { status: 302, redirect: ROUTES.HEALTHCARE_INVITE };
-
 	return {};
 }
 
-function guardAuthentication(accountType: string, path: string, init_path: string) {
+function guardAuthentication(accountType: string, path: string) {
 	if (accountType === AccountType.CODE && allowedRoutes(path, HEALTHCARE_CODE_ROUTES))
 		return { status: 302, redirect: ROUTES.HEALTHCARE_CODE };
 	if (accountType === AccountType.QUEUE && allowedRoutes(path, HEALTHCARE_QUEUE_ROUTES))
@@ -61,7 +56,6 @@ function guardAuthentication(accountType: string, path: string, init_path: strin
 		return { status: 302, redirect: ROUTES.HEALTHCARE_STAFF };
 	if (accountType === AccountType.REPORTER && allowedRoutes(path, REPORTER_ROUTES))
 		return { status: 302, redirect: ROUTES.HOME };
-	if (TICKET_FLOW.includes(init_path)) return { status: 302, redirect: ROUTES.TICKET };
 	return {};
 }
 

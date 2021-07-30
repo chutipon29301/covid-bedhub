@@ -7,14 +7,17 @@ const config = {
 	// for more information about preprocessors
 	preprocess: [
 		preprocess({
-			postcss: true
+			postcss: true,
+			typescript: true
 		})
 	],
 
 	kit: {
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte',
-		adapter: adapter()
+		adapter: adapter(),
+		trailingSlash: 'never',
+		ssr: false
 	}
 };
 

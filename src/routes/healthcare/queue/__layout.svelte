@@ -6,6 +6,7 @@
 	import { GetTicketsCount } from '$lib/generated/graphql';
 	import { setIsLoading } from '$lib/store';
 	import { onMount } from 'svelte';
+	import { refreshTabAmount$ } from './store/store';
 	import Tabs from '$lib/components/ui/tabs/index.svelte';
 
 	$: tabs = [
@@ -18,6 +19,9 @@
 
 	onMount(() => {
 		getTicketsAmount();
+		refreshTabAmount$.subscribe((v) => {
+			if (v) getTicketsAmount();
+		});
 	});
 
 	function switchTab(index: number) {

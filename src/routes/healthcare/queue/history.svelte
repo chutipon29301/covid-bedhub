@@ -11,12 +11,14 @@
 	import { onMount } from 'svelte';
 	import { Headers } from './models';
 	import { dateToStringFormat, illnessToChecklist, symptomToChecklist } from '$lib/util';
+	import { setRefresh } from './store/store';
 	import type { PatientDetail } from '$lib/models';
 	import QueueTable from '$lib/components/queueTable/index.svelte';
 	import PatientCard from '$lib/components/patientCard/index.svelte';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import AppointmentModal from '$lib/components/appointmentModal/index.svelte';
 	import Modal from '$lib/components/ui/modal/confirm/index.svelte';
+	import { TICKET_STATUS_LABEL } from '$lib/constants/constant';
 
 	let headers = [
 			...Headers,
@@ -53,7 +55,7 @@
 					sex: t.patient.sex,
 					age: t.patient.age,
 					riskLevel: t.riskLevel,
-					status: t.status,
+					status: TICKET_STATUS_LABEL[t.status],
 					id: t.id,
 					appointmentDate: t.appointedDate
 				})) || [];
@@ -95,8 +97,8 @@
 		});
 	}
 
-	function getRiskCount() {
-		const response = acceptedRiskCount({ fetchPolicy: 'cache-first' });
+	function getRiskCount(fetchPolicy: 'cache-first' | 'network-only' = 'cache-first') {
+		const response = acceptedRiskCount({ fetchPolicy });
 		const unsub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			if (data) {
@@ -133,6 +135,8 @@
 		if (action === 'edit') success = await editTicket(selectedTicket.id);
 		if (action === 'cancel') success = await cancelTicket(selectedTicket.id);
 		if (!success) return;
+		getRiskCount('network-only');
+		setRefresh(true);
 		selectedTicket = null;
 		editTicketModalShown = false;
 		cancelTicketModalShown = false;

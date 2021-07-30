@@ -16,7 +16,7 @@
 	import { onMount } from 'svelte';
 	import { checklistToEnum, symptomToChecklist } from '$lib/util';
 	import { setIsLoading } from '$lib/store';
-	import { TICKET_STATUS } from '$lib/constants/constant';
+	import { TICKET_STATUS, TICKET_STATUS_LABEL } from '$lib/constants/constant';
 	import Checkbox from '$lib/components/ui/checkbox/index.svelte';
 	import Template from '$lib/components/ticketLayout/index.svelte';
 	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
@@ -102,7 +102,7 @@
 				{`${$_('patient_mobile_information')}: ${ticketInformation.mobile}`}
 			</p>
 			<p class="font-bold">
-				{`${$_('edit_symptoms_status_label')}: ${ticketInformation.status}`}
+				{`${$_('edit_symptoms_status_label')}: ${TICKET_STATUS_LABEL[ticketInformation.status]}`}
 			</p>
 		</div>
 		<Checkbox class="pb-5" bind:checked={symptoms.FEVER} placeholder="symptom1_label" />

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { faBed, faUnlink, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+	import { faBed, faMinusCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 	import { goto } from '$app/navigation';
 	import { ROUTES } from '$lib/constants/routes';
 	import { onMount } from 'svelte';
@@ -98,7 +98,7 @@
 
 {#if successPopupShown}
 	<Modal
-		icon={faUnlink}
+		icon={faMinusCircle}
 		heading={$_('request_popup_heading')}
 		confirmBtn={'OK'}
 		colorTone={EModalColorTone.RED}

@@ -5,6 +5,7 @@
 	import { accessCode$, hospitalName$, userType$ } from './store/store';
 	import { CreateOfficer } from '$lib/generated/graphql';
 	import { setIsLoading } from '$lib/store';
+	import { onMount } from 'svelte';
 	import { nameValidation, passwordValidation, usernameValidation } from '$lib/util';
 	import Input from '$lib/components/ui/input/index.svelte';
 	import Button from '$lib/components/ui/button/index.svelte';
@@ -34,6 +35,10 @@
 		hospitalName = $hospitalName$,
 		accessCode = $accessCode$,
 		userType = $userType$;
+
+	onMount(() => {
+		if (!$hospitalName$) goto(ROUTES.HEALTHCARE_INVITE);
+	});
 
 	async function register() {
 		if (disabledRegisterBtn) return;
@@ -71,14 +76,18 @@
 			class="pb-2"
 			bind:value={username}
 			label={$_('username_label')}
-			errorMessage={usernameValidation(username) ? '' : $_('validation_inline_error')}
+			errorMessage={usernameValidation(username)
+				? ''
+				: $_('validation_inline_error', { values: { field: $_('username_label') } })}
 		/>
 		<Input
 			required={true}
 			class="pb-4"
 			type="password"
 			bind:value={password}
-			errorMessage={passwordValidation(password) ? '' : $_('validation_inline_error')}
+			errorMessage={passwordValidation(password)
+				? ''
+				: $_('validation_inline_error', { values: { field: $_('password_label') } })}
 			label={$_('password_label')}
 		/>
 		<Input
@@ -86,21 +95,29 @@
 			class="pb-4"
 			type="password"
 			bind:value={confirmPassword}
-			errorMessage={password === confirmPassword ? '' : $_('validation_inline_error')}
+			errorMessage={password === confirmPassword
+				? ''
+				: $_('validation_inline_error', { values: { field: $_('confirm_password_label') } })}
 			label={$_('confirm_password_label')}
 		/>
 		<Input
 			required={true}
 			class="pb-4"
 			bind:value={firstName}
-			errorMessage={nameValidation(firstName) ? '' : $_('validation_inline_error')}
+			errorMessage={nameValidation(firstName)
+				? ''
+				: $_('validation_inline_error', {
+						values: { field: $_('patient_first_name_information') }
+				  })}
 			label={$_('patient_first_name_information')}
 		/>
 		<Input
 			required={true}
 			class="pb-4"
 			bind:value={lastName}
-			errorMessage={nameValidation(lastName) ? '' : $_('validation_inline_error')}
+			errorMessage={nameValidation(lastName)
+				? ''
+				: $_('validation_inline_error', { values: { field: $_('patient_last_name_information') } })}
 			label={$_('patient_last_name_information')}
 		/>
 		<Input class="pb-4" bind:value={employeeId} label={$_('officer_id_label')} />

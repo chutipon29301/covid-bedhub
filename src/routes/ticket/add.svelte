@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { form$, setForm } from './store/store';
-	import { onDestroy } from 'svelte';
+	import { form$, illnesses$, setForm } from './store/store';
+	import { onDestroy, onMount } from 'svelte';
 	import PatientForm from '$lib/components/patientForm/index.svelte';
 	import Template from '$lib/components/ticketLayout/index.svelte';
 	import { ROUTES } from '$lib/constants/routes';
@@ -32,6 +32,10 @@
 		dob: Date = $form$?.dob,
 		sex: string = $form$?.sex,
 		mobile: string = $form$?.mobile;
+
+	onMount(() => {
+		if (!$illnesses$) goto(ROUTES.TICKET);
+	});
 
 	onDestroy(() => {
 		setForm({
