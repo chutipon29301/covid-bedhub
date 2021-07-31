@@ -128,7 +128,7 @@
 		"tnc_label": "เงื่อนไขการใช้งาน",
 		"and_label": "และ",
 		"policy_label": "นโยบายความเป็นส่วนตัว",
-		"disclaimer_label_2": "ของ ThaiBedHub.com",
+		"disclaimer_label_2": "ของ Thaibedhub.com",
 		"set_appointment_date_label": "กำหนดวันเข้ารับการรักษา",
 		"edit_appointment_date": "แก้ไข้วันเข้ารับการรักษา",
 		"close_label": "ปิด",
@@ -165,6 +165,8 @@
 		"hospital_information_label": "ข้อมูลโรงพยาบาล",
 		"hospital_received_label": "โรงพยาบาลที่ท่านได้",
 		"hospital_address_label": "ที่อยู่โรงพยาบาล",
-		"hospital_tel_label": "เบอร์ติดต่อโรงพยาบาล"
+		"hospital_tel_label": "เบอร์ติดต่อโรงพยาบาล",
+		"saved_draft_label": "ฉบับร่าง",
+		"clear_draft_label": "ลบฉบับร่าง"
 	}
 }

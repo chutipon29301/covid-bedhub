@@ -3,13 +3,14 @@
 	import { convertRiskLevelToLabel } from '$lib/util';
 	import type { IllnessChecklist, PatientDetail, SymptomChecklist } from '$lib/models';
 	import Card from '$lib/components/ui/card/detailed/index.svelte';
+	import { ILLNESSES_LABEL, SYMSPTOMS_LABEL } from '$lib/constants/constant';
 
 	let clazz = '';
 	export { clazz as class };
 	export let selectedTicket: PatientDetail;
 
 	$: illnesses = checkListToLabel(selectedTicket?.illnesses);
-	$: symptoms = checkListToLabel(selectedTicket?.symptops);
+	$: symptoms = checkListToLabel(selectedTicket?.symptoms);
 
 	const tagColor: ('yellow' | 'orange' | 'red')[] = ['yellow', 'orange', 'red', 'red'];
 
@@ -63,7 +64,7 @@
 				{/if}
 				{#each illnesses as illness}
 					<p>
-						{illness}
+						- {$_(ILLNESSES_LABEL[illness])}
 					</p>
 				{/each}
 			</div>
@@ -97,7 +98,7 @@
 				{/if}
 				{#each symptoms as symptom}
 					<p>
-						{symptom}
+						- {$_(SYMSPTOMS_LABEL[symptom])}
 					</p>
 				{/each}
 			</div>

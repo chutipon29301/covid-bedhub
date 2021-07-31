@@ -77,7 +77,7 @@
 						.sort((a, b) => a.doseNumber - b.doseNumber)
 						.map((v) => ({ name: v.vaccineName, dateReceived: new Date(v.vaccineReceiveDate) })),
 					riskLevel: data.requestedTicket.riskLevel,
-					symptops: symptomToChecklist(data.requestedTicket.symptoms),
+					symptoms: symptomToChecklist(data.requestedTicket.symptoms),
 					illnesses: illnessToChecklist(data.requestedTicket.patient.illnesses)
 				};
 			}

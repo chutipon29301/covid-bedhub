@@ -61,7 +61,7 @@ export interface PatientDetail {
 	examReceiveDate: string;
 	vaccines: Vaccine[];
 	riskLevel: number;
-	symptops: SymptomChecklist;
+	symptoms: SymptomChecklist;
 	illnesses: IllnessChecklist;
 	appointmentDate?: Date;
 }

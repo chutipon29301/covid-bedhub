@@ -84,7 +84,7 @@
 						.sort((a, b) => a.doseNumber - b.doseNumber)
 						.map((v) => ({ name: v.vaccineName, dateReceived: new Date(v.vaccineReceiveDate) })),
 					riskLevel: data.acceptedTicket.riskLevel,
-					symptops: symptomToChecklist(data.acceptedTicket.symptoms),
+					symptoms: symptomToChecklist(data.acceptedTicket.symptoms),
 					illnesses: illnessToChecklist(data.acceptedTicket.patient.illnesses),
 					appointmentDate: data.acceptedTicket.appointedDate
 						? new Date(data.acceptedTicket.appointedDate)
