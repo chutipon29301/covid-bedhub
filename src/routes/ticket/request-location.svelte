@@ -149,7 +149,7 @@
 {/if}
 <div class="flex flex-col justify-center items-center">
 	<div class="pt-8 pb-2 px-8 text-center text-xl">
-		เพื่อให้เราสามารถหาเตียงให้คุณได้เร็วที่สุด โปรดอนุญาตการเข้าถึง ตำแหน่งของคุณ
+		{$_('request_location_explain')}
 	</div>
 	<img
 		src="/button/request-for-location.png"
@@ -158,17 +158,21 @@
 	/>
 	{#if !canSubmitForm}
 		<div class="flex flex-col items-center">
-			<Button class="mb-4" on:click={setGPS} placeholder="อนุญาตให้เราช่วยหาเตียง" />
+			<Button class="mb-4" on:click={setGPS} placeholder={$_('allow_location_button')} />
 			<p class="text-sm text-gray-500 text-center">
-				เมื่อคุณกด “อนุญาตให้เราช่วยหาเตียง” คุณได้ยอมรับให้เราสามารถเข้าถึงตำแหน่งของคุณ
+				{$_('request_location_disclaimer')}
 			</p>
 		</div>
 	{:else}
 		<div class="flex flex-col items-center">
-			<Button disabled={disabledSubmitBtn} placeholder="ยืนยันการส่งข้อมูล" on:click={submit} />
+			<Button
+				disabled={disabledSubmitBtn}
+				placeholder={$_('confirm_submission_button')}
+				on:click={submit}
+			/>
 			{#if disabledSubmitBtn}
 				<div class="text-sm text-red-500 text-center mt-4">
-					ข้อมูลบางอย่างยังไม่ครบถ้วน กรุณาตรวจสอบอีกครั้ง
+					{$_('information_incomplete_inline_error')}
 				</div>
 			{/if}
 		</div>

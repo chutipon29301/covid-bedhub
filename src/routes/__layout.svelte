@@ -9,6 +9,7 @@
 
 <script lang="ts">
 	import '../app.postcss';
+	import { _ } from 'svelte-i18n';
 	import { Translate } from '$lib/services/translateService';
 	import { isLogin$, setAccessToken, setIsLogin } from '$lib/store';
 	import { onMount, setContext } from 'svelte';
@@ -99,7 +100,8 @@
 	</section>
 	<section>
 		<div class="bg-indigo-50 text-center p-4 officer-text-color text-xs mt-4">
-			Copyright©2020<br /> Thaibedhub, All Rights Reserved.
+			{$_('copyright_label')}<br />
+			{$_('thaibedhub_all_rights_label')}
 		</div>
 	</section>
 </div>

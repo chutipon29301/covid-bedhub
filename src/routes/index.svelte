@@ -36,14 +36,14 @@
 	{#if !accountType || accountType === 'reporter'}
 		{#if screenSize > 1024}
 			<img
-				class="pb-1 cursor-pointer"
+				class="pb-1 cursor-pointer w-full"
 				src="/banner/patient_image.png"
 				alt="PatientBanner"
 				on:click={() => goto(ROUTES.LOGIN)}
 			/>
 		{:else}
 			<img
-				class="pb-1 cursor-pointer"
+				class="pb-1 cursor-pointer w-full"
 				src="/banner/patient_image_small.png"
 				alt="PatientBanner"
 				on:click={() => goto(ROUTES.LOGIN)}
@@ -57,27 +57,29 @@
 			<span slot="icon"> <Fa class="pl-4" icon={faArrowRight} /></span>
 		</Button>
 		<div class="py-8 text-center">
-			<p class="text-xl font-bold">3 ขั้นตอนง่ายๆ</p>
-			<p class="text-3xl font-bold pt-8 text-indigo-400">1. ลงทะเบียน</p>
-			<p class="text-md py-4 text-gray-500">ลงทะเบียนง่ายๆ ผ่าน LINE</p>
-			<p class="text-3xl font-bold pt-8 text-indigo-400">2. กรอกข้อมูลผู้ป่วย</p>
-			<p class="text-md py-4 text-gray-500">กรอกอาการป่วย + ข้อมูลเพื่อหาเตียง</p>
-			<p class="text-3xl font-bold pt-8 text-indigo-400">3. กดค้นหา</p>
-			<p class="text-md pt-4 text-gray-500">กดค้นหาและรอการตอบรับ<br />จากโรงพยาบาล</p>
+			<p class="text-xl font-bold">{$_('tutorial_1_label')}</p>
+			<p class="text-3xl font-bold pt-8 text-indigo-400">{$_('tutorial_2_label')}</p>
+			<p class="text-md py-4 text-gray-500">{$_('tutorial_3_label')}</p>
+			<p class="text-3xl font-bold pt-8 text-indigo-400">{$_('tutorial_4_label')}</p>
+			<p class="text-md py-4 text-gray-500">{$_('tutorial_5_label')}</p>
+			<p class="text-3xl font-bold pt-8 text-indigo-400">{$_('tutorial_6_label')}</p>
+			<p class="text-md pt-4 text-gray-500">
+				{$_('tutorial_7_label')}<br />{$_('tutorial_8_label')}
+			</p>
 		</div>
 	{/if}
 	{#if !accountType || accountType !== 'reporter'}
 		<div class="pt-4">
 			{#if screenSize > 1024}
 				<img
-					class="pb-1 cursor-pointer"
+					class="pb-1 cursor-pointer w-full"
 					src="/banner/admin_image.png"
 					alt="PatientBanner"
 					on:click={() => goto(ROUTES.HEALTHCARE)}
 				/>
 			{:else}
 				<img
-					class="pb-1 cursor-pointer"
+					class="pb-1 cursor-pointer w-full"
 					src="/banner/admin_image_small.png"
 					alt="PatientBanner"
 					on:click={() => goto(ROUTES.HEALTHCARE)}
@@ -93,34 +95,19 @@
 				</Button>
 			</div>
 			<div class="py-6 text-left text-sm">
-				<p class="font-bold pb-4">โทรติดต่อสายด่วนจากหน่วยงานอื่นๆ</p>
-				<p class="officer-text-color font-bold">กรมการแพทย์ (โทร 1668)</p>
-				<p class="officer-text-color pb-6">โทรได้ตั้งแต่ 08:00 - 22:00 น.</p>
-				<p class="officer-text-color font-bold">สถาบันการแพทย์ฉุกเฉินแห่งชาติ (โทร 1669)</p>
-				<p class="officer-text-color pb-6">
-					โทรหาเตียงได้ตลอด 24 ชั่วโมง หรือ แอดไลน์ไอดี @sabaideebot และสามารถดาวน์โหลดแอปพลิเคชัน
-					EMS 1669 เพื่อใช้เป็นอีกช่องทางสำหรับเรียกรถพยาบาลกรณี ฉุกเฉินได้
-				</p>
-				<p class="officer-text-color font-bold">สปสช. (โทร 1330 กด 0)</p>
-				<p class="officer-text-color pb-6">
-					โทรหาเตียงได้ตลอด 24 ชั่วโมง สอบถามข้อมูลสิทธิประกันสุขภาพแห่งชาติ (สิทธิบัตรทอง)
-				</p>
-				<p class="officer-text-color font-bold">กรมควบคุมโรค (โทร 1422)</p>
-				<p class="officer-text-color pb-6">
-					โทรหาเตียงได้ตลอด 24 ชั่วโมง สอบถามข้อมูล ความรู้ด้านสุขภาพ
-					และข้อสงสัยสำหรับผู้ป่วยติดเชื้อ
-				</p>
-				<p class="officer-text-color font-bold">ประกันสังคม (โทร 1506)</p>
-				<p class="officer-text-color pb-6">
-					โทรสอบถามสิทธิประโยชน์ประกันสังคม การรักษาพยาบาล ได้ตลอด 24 ชั่วโมง
-				</p>
-				<p class="officer-text-color font-bold">
-					Taxi COVID-19 โรงพยาบาลราชวิถี (โทร 096-771-1687)
-				</p>
-				<p class="officer-text-color">
-					บริการแท็กซี่ (Ambulance Taxi) สำหรับรับ-ส่งผู้ป่วยโควิด เฉพาะพื้นที่กรุงเทพฯ และปริมณฑล
-					ตั้งแต่เวลา 09.00-19.00 น. (แจ้งล่วงหน้าอย่างน้อย 1 วัน)
-				</p>
+				<p class="font-bold pb-4">{$_('contact_info_1_label')}</p>
+				<p class="officer-text-color font-bold">{$_('contact_info_2_label')}</p>
+				<p class="officer-text-color pb-6">{$_('contact_info_3_label')}</p>
+				<p class="officer-text-color font-bold">{$_('contact_info_4_label')}</p>
+				<p class="officer-text-color pb-6">{$_('contact_info_4_label')}</p>
+				<p class="officer-text-color font-bold">{$_('contact_info_5_label')}</p>
+				<p class="officer-text-color pb-6">{$_('contact_info_6_label')}</p>
+				<p class="officer-text-color font-bold">{$_('contact_info_7_label')}</p>
+				<p class="officer-text-color pb-6">{$_('contact_info_8_label')}</p>
+				<p class="officer-text-color font-bold">{$_('contact_info_9_label')}</p>
+				<p class="officer-text-color pb-6">{$_('contact_info_10_label')}</p>
+				<p class="officer-text-color font-bold">{$_('contact_info_11_label')}</p>
+				<p class="officer-text-color">{$_('contact_info_12_label')}</p>
 			</div>
 		</div>
 	{/if}

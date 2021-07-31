@@ -65,3 +65,8 @@ export interface PatientDetail {
 	illnesses: IllnessChecklist;
 	appointmentDate?: Date;
 }
+
+export interface ErrorDetail {
+	heading: string;
+	message: string;
+}
