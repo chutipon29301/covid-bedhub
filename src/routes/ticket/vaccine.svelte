@@ -43,8 +43,6 @@
 	function onClickProceed() {
 		if (disabledContinueBtn) return;
 		goto(ROUTES.TICKET_REQUEST_LOCATION);
-		// const id = $patientId$ ? await existedPatient($patientId$) : await newPatient();
-		// await createTix(id);
 	}
 </script>
 

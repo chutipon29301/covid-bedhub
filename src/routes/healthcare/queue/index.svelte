@@ -129,6 +129,7 @@
 		selectedTicket = null;
 		acceptTicketModalShown = false;
 		loadTickets();
+		setRefresh(false);
 	}
 
 	async function acceptTicket(id: number): Promise<boolean> {

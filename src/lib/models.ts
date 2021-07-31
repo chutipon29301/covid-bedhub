@@ -5,7 +5,6 @@ export interface Patient {
 	lastName: string;
 	sex: string;
 	mobile: string;
-	existed?: boolean;
 }
 
 export interface IllnessChecklist {
@@ -64,4 +63,5 @@ export interface PatientDetail {
 	riskLevel: number;
 	symptops: SymptomChecklist;
 	illnesses: IllnessChecklist;
+	appointmentDate?: Date;
 }

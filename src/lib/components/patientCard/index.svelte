@@ -44,6 +44,11 @@
 				<p>{`${$_('patient_id_information')}: ${selectedTicket.identification}`}</p>
 				<p>{`${$_('patient_mobile_information')}: ${selectedTicket.mobile}`}</p>
 			</div>
+			{#if selectedTicket.appointmentDate}
+				<p class="py-4">
+					{`${$_('appointment_date_label')}: ${selectedTicket.appointmentDate.toDateString()}`}
+				</p>
+			{/if}
 		</span>
 		<span slot="content-1">
 			<div class="text-md font-bold pb-2">{$_('illness_label')}</div>

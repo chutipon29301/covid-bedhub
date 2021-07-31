@@ -32,7 +32,6 @@
 		riskLevel = null,
 		editTicketModalShown = false,
 		cancelTicketModalShown = false,
-		appointmentDate: Date,
 		notes = '',
 		datepickerError: string;
 
@@ -86,12 +85,12 @@
 						.map((v) => ({ name: v.vaccineName, dateReceived: new Date(v.vaccineReceiveDate) })),
 					riskLevel: data.acceptedTicket.riskLevel,
 					symptops: symptomToChecklist(data.acceptedTicket.symptoms),
-					illnesses: illnessToChecklist(data.acceptedTicket.patient.illnesses)
+					illnesses: illnessToChecklist(data.acceptedTicket.patient.illnesses),
+					appointmentDate: data.acceptedTicket.appointedDate
+						? new Date(data.acceptedTicket.appointedDate)
+						: null
 				};
 				notes = data.acceptedTicket.notes;
-				appointmentDate = data.acceptedTicket.appointedDate
-					? new Date(data.acceptedTicket.appointedDate)
-					: null;
 			}
 			if (!loading) unsub();
 		});
@@ -141,10 +140,11 @@
 		editTicketModalShown = false;
 		cancelTicketModalShown = false;
 		loadTickets();
+		setRefresh(false);
 	}
 
 	async function editTicket(id: number): Promise<boolean> {
-		if (!appointmentDate) {
+		if (!selectedTicket.appointmentDate) {
 			datepickerError = 'Please select appointment date.';
 			alert(datepickerError);
 			return false;
@@ -153,7 +153,11 @@
 		setIsLoading(true);
 		await EditAppointment({
 			variables: {
-				data: { id: id.toString(), appointedDate: dateToStringFormat(appointmentDate), notes }
+				data: {
+					id: id.toString(),
+					appointedDate: dateToStringFormat(selectedTicket.appointmentDate),
+					notes
+				}
 			}
 		});
 		setIsLoading(false);
@@ -193,7 +197,7 @@
 	<AppointmentModal
 		heading={$_('edit_appointment_date')}
 		confirmBtn={$_('confirm_edit_request_label')}
-		bind:appointmentDate
+		bind:appointmentDate={selectedTicket.appointmentDate}
 		name={selectedTicket.name}
 		sex={selectedTicket.sex}
 		age={selectedTicket.age}

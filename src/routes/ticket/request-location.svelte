@@ -45,8 +45,10 @@
 		!noFutureValidation($vaccine$?.examDate) ||
 		$vaccine$?.vaccines.every((v) => !(!v.name === !v.dateReceived));
 
+	$: disabledSaveBtn = !$illnesses$ || !$symptoms$ || !$form$ || !$vaccine$;
+
 	onMount(() => {
-		if (!$form$) goto(ROUTES.TICKET);
+		// if (!$form$) goto(ROUTES.TICKET);
 	});
 
 	function setGPS() {
@@ -133,6 +135,21 @@
 		successPopupShown = false;
 		goto(ROUTES.HOME);
 	}
+
+	function saveRecord() {
+		if (!$illnesses$ || !$symptoms$ || !$form$ || !$vaccine$) return;
+		window.localStorage.setItem(
+			'draftTicket',
+			JSON.stringify({
+				id: $patientId$,
+				illnesses: $illnesses$,
+				symptoms: $symptoms$,
+				form: $form$,
+				vaccine: $vaccine$
+			})
+		);
+		goto(ROUTES.HOME);
+	}
 </script>
 
 {#if successPopupShown}
@@ -155,8 +172,10 @@
 	</div>
 
 	{#if !canSubmitForm}
-		<div class="flex justify-center" on:click={setGPS}>
-			<Button placeholder="กดปุ่มเพื่อ allow location" />
+		<div class="flex flex-col items-center">
+			<Button class="mb-2" on:click={setGPS} placeholder="กดปุ่มเพื่อ allow location" />
+			<p class="pb-1">หากยังไม่ต้องการส่งข้อมูล สามารถกดที่นี่ เพื่อทำการบันทึกข้อมูลที่กรอก</p>
+			<Button disabled={disabledSaveBtn} on:click={saveRecord} placeholder="กดเพื่อบันทึกข้อมูล" />
 		</div>
 	{:else}
 		<div class="flex flex-col items-center">

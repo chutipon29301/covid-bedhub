@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { form$, illnesses$, setForm } from './store/store';
+	import { form$, illnesses$, patientId$, setForm } from './store/store';
 	import { onDestroy, onMount } from 'svelte';
 	import PatientForm from '$lib/components/patientForm/index.svelte';
 	import Template from '$lib/components/ticketLayout/index.svelte';
@@ -32,7 +32,7 @@
 		dob: Date = $form$?.dob,
 		sex: string = $form$?.sex,
 		mobile: string = $form$?.mobile,
-		existed: boolean = $form$?.existed;
+		existed = $patientId$;
 
 	onMount(() => {
 		if (!$illnesses$) goto(ROUTES.TICKET);
@@ -45,8 +45,7 @@
 			firstName,
 			lastName,
 			sex,
-			mobile,
-			existed
+			mobile
 		});
 	});
 
@@ -71,6 +70,6 @@
 		bind:dob
 		bind:sex
 		bind:mobile
-		disabled={{ id: existed, dob: existed }}
+		disabled={{ id: !!existed, dob: !!existed }}
 	/>
 </Template>
