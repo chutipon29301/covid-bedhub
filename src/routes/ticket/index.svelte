@@ -35,7 +35,10 @@
 		const localStorage = window.localStorage.getItem('draftTicket');
 		if (!localStorage) return;
 		const { form } = JSON.parse(localStorage);
-		localProfile = form ? `${form.firstName} ${form.lastName}` : 'Untitled';
+		localProfile =
+			form && (form.firstName || form.lastName)
+				? `${form.firstName || ''} ${form.lastName || ''}`
+				: 'Untitled';
 	}
 
 	function addNewPatient() {

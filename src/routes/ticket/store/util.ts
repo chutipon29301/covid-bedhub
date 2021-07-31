@@ -79,7 +79,7 @@ export function setProfileFromStorage() {
 		form
 			? {
 					...form,
-					dob: new Date(form.dob)
+					dob: form.dob ? new Date(form.dob) : undefined
 			  }
 			: null
 	);

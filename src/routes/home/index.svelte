@@ -95,7 +95,7 @@
 		{/if}
 	</div>
 	{#if tickets.length === 0}
-		<div class="flex flex-grow flex-col items-center justify-center up-10">
+		<div class="flex flex-grow flex-col items-center justify-center">
 			<div
 				class="border border-indigo-300 px-16 sm:px-24 py-12 cursor-pointer rounded-lg shadow-md"
 				on:click={() => navigate()}
@@ -148,7 +148,7 @@
 
 <style>
 	.min-h-content {
-		min-height: calc(100vh - 10rem);
+		min-height: calc(100vh - 22rem);
 	}
 	.up-10 {
 		transform: translateY(-10%);

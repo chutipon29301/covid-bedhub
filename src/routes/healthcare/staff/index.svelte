@@ -97,10 +97,12 @@
 		<div class="py-16 flex justify-center">
 			{$_('hospital_label')}: {hospitalName}
 		</div>
-		<div class="bg-red-400 py-4 px-4 text-white flex justify-center -mx-6">
+		<div class="bg-red-400 py-4 px-4 text-white flex justify-center -mx-6 text-center">
 			{$_('wrong_hospital_inline_error')}
 		</div>
 	</div>
 {:else if foundStatus === 'not-found'}
-	<div class="flex justify-center text-red-500">{$_('not_found_identification_inline_error')}</div>
+	<div class="flex justify-center text-red-500 text-center">
+		{$_('not_found_identification_inline_error')}
+	</div>
 {/if}

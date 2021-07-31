@@ -45,10 +45,8 @@
 		!noFutureValidation($vaccine$?.examDate) ||
 		$vaccine$?.vaccines.every((v) => !(!v.name === !v.dateReceived));
 
-	$: disabledSaveBtn = !$illnesses$ || !$symptoms$ || !$form$ || !$vaccine$;
-
 	onMount(() => {
-		if (!$form$) goto(ROUTES.TICKET);
+		// if (!$form$) goto(ROUTES.TICKET);
 	});
 
 	function setGPS() {
@@ -149,30 +147,30 @@
 		{$_('request_popup_message', { values: { ticketId } })}
 	</Modal>
 {/if}
-<div class="flex flex-col justify-center flex-grow min-h-screen">
-	<div class="pb-2">
-		Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
-		Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus
-		mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa
-		quis enim.
+<div class="flex flex-col justify-center items-center">
+	<div class="pt-8 pb-2 px-8 text-center text-xl">
+		เพื่อให้เราสามารถหาเตียงให้คุณได้เร็วที่สุด โปรดอนุญาตการเข้าถึง ตำแหน่งของคุณ
 	</div>
-
+	<img
+		src="/button/request-for-location.png"
+		alt="request-for-location"
+		class="w-1/2 py-8 max-w-md"
+	/>
 	{#if !canSubmitForm}
 		<div class="flex flex-col items-center">
-			<Button class="mb-2" on:click={setGPS} placeholder="กดปุ่มเพื่อ allow location" />
+			<Button class="mb-4" on:click={setGPS} placeholder="อนุญาตให้เราช่วยหาเตียง" />
+			<p class="text-sm text-gray-500 text-center">
+				เมื่อคุณกด “อนุญาตให้เราช่วยหาเตียง” คุณได้ยอมรับให้เราสามารถเข้าถึงตำแหน่งของคุณ
+			</p>
 		</div>
 	{:else}
 		<div class="flex flex-col items-center">
 			<Button disabled={disabledSubmitBtn} placeholder="ยืนยันการส่งข้อมูล" on:click={submit} />
 			{#if disabledSubmitBtn}
-				<div class="text-sm text-red-500">มีข้อมูลบางอย่างยังไม่ครบถ้วน กรุณาตรวจสอบอีกครั้ง</div>
+				<div class="text-sm text-red-500 text-center mt-4">
+					ข้อมูลบางอย่างยังไม่ครบถ้วน กรุณาตรวจสอบอีกครั้ง
+				</div>
 			{/if}
 		</div>
 	{/if}
 </div>
-
-<style>
-	.min-h-screen {
-		min-height: calc(100vh - 18rem);
-	}
-</style>

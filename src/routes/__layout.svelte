@@ -97,6 +97,11 @@
 			<slot />
 		</main>
 	</section>
+	<section>
+		<div class="bg-indigo-50 text-center p-4 officer-text-color text-xs mt-4">
+			Copyright©2020<br /> Thaibedhub, All Rights Reserved.
+		</div>
+	</section>
 </div>
 
 <style>
@@ -104,5 +109,9 @@
 
 	:global(body) {
 		font-family: 'Prompt', sans-serif;
+	}
+
+	.officer-text-color {
+		color: #313ae0 !important;
 	}
 </style>
