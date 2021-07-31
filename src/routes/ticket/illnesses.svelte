@@ -5,6 +5,7 @@
 	import { goto } from '$app/navigation';
 	import { ROUTES } from '$lib/constants/routes';
 	import { illnesses$, setIllnesses } from './store/store';
+	import { saveProfileToStorage } from './store/util';
 
 	let NCDs = $illnesses$?.NCDs,
 		CARDIOVASCULAR = $illnesses$?.CARDIOVASCULAR,
@@ -24,6 +25,7 @@
 			CANCER,
 			DIABETES
 		});
+		saveProfileToStorage();
 		goto(ROUTES.TICKET_SYMPTOM);
 	}
 </script>

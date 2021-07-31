@@ -13,15 +13,17 @@
 	import { isLogin$, setAccessToken, setIsLogin } from '$lib/store';
 	import { onMount, setContext } from 'svelte';
 	import { faSignOutAlt, faTimes, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-	import cookie from 'cookie';
-	import Loading from '$lib/components/loading/index.svelte';
-	import ErrorHandler from '$lib/components/errorHandler/index.svelte';
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import { goto } from '$app/navigation';
 	import { ROUTES, TICKET_FLOW } from '$lib/constants/routes';
 	import { page } from '$app/stores';
+	import cookie from 'cookie';
+	import Loading from '$lib/components/loading/index.svelte';
+	import ErrorHandler from '$lib/components/errorHandler/index.svelte';
+	import SentryService from '$lib/services/sentryService';
 
 	setContext('translate', new Translate());
+	setContext('sentry', new SentryService());
 
 	let screenSize: number;
 	let logoutButtonDisplay = [

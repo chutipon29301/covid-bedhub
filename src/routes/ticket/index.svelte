@@ -9,7 +9,7 @@
 	import { setForm, setIllnesses, setPatientId, setSymptoms, setVaccine } from './store/store';
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import { illnessToChecklist } from '$lib/util';
-	import type { Vaccine } from '$lib/models';
+	import { setProfileFromStorage } from './store/util';
 
 	$: response = MyPatients({});
 
@@ -35,7 +35,7 @@
 		const localStorage = window.localStorage.getItem('draftTicket');
 		if (!localStorage) return;
 		const { form } = JSON.parse(localStorage);
-		localProfile = `${form.firstName} ${form.lastName}`;
+		localProfile = form ? `${form.firstName} ${form.lastName}` : 'Untitled';
 	}
 
 	function addNewPatient() {
@@ -69,29 +69,7 @@
 	}
 
 	function getPatientFromLocalStorage() {
-		const { id, illnesses, symptoms, form, vaccine } = JSON.parse(
-			window.localStorage.getItem('draftTicket')
-		);
-		setPatientId(id || null);
-		setIllnesses(illnesses || null);
-		setSymptoms(symptoms || null);
-		setVaccine(
-			{
-				...vaccine,
-				examDate: new Date(vaccine.examDate),
-				examReceiveDate: new Date(vaccine.examReceiveDate),
-				vaccines: vaccine.vaccines.map((v: Vaccine) => ({
-					name: v.name,
-					dateReceived: v.dateReceived ? new Date(v.dateReceived) : undefined
-				}))
-			} || null
-		);
-		setForm(
-			{
-				...form,
-				dob: new Date(form.dob)
-			} || null
-		);
+		setProfileFromStorage();
 		goto(ROUTES.TICKET_ILLNESSES);
 	}
 

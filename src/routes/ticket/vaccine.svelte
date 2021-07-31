@@ -12,6 +12,7 @@
 	import DatePicker from '$lib/components/ui/datepicker';
 	import Template from '$lib/components/ticketLayout/index.svelte';
 	import Dropdown from '$lib/components/ui/dropdown/index.svelte';
+	import { saveProfileToStorage } from './store/util';
 
 	$: disabledContinueBtn =
 		!examReceiveDate ||
@@ -38,6 +39,7 @@
 			examDate,
 			vaccines
 		});
+		saveProfileToStorage();
 	});
 
 	function onClickProceed() {

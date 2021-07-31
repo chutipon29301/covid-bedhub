@@ -4,6 +4,7 @@
 	import { EModalColorTone } from '$lib/components/ui/modal/model';
 	import { setIsLoading } from '$lib/store';
 	import ErrorModal from '$lib/components/ui/modal/dialog/index.svelte';
+	import * as Sentry from '@sentry/browser';
 
 	let errors: {
 		heading: string;
@@ -21,6 +22,7 @@
 				}
 			];
 			setIsLoading(false);
+			Sentry.captureException(e);
 		};
 
 		window.onunhandledrejection = async (e: PromiseRejectionEvent) => {
@@ -32,6 +34,7 @@
 				}
 			];
 			setIsLoading(false);
+			Sentry.captureException(e);
 		};
 	});
 

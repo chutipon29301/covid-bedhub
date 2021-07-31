@@ -12,6 +12,7 @@
 		mobileNumberValidation,
 		nameValidation
 	} from '$lib/util';
+	import { saveProfileToStorage } from './store/util';
 
 	$: disabledContinueBtn =
 		!id ||
@@ -47,6 +48,7 @@
 			sex,
 			mobile
 		});
+		saveProfileToStorage();
 	});
 
 	function onClickProceed() {
