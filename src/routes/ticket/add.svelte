@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { form$, illnesses$, setForm } from './store/store';
+	import { form$, illnesses$, patientId$, setForm } from './store/store';
 	import { onDestroy, onMount } from 'svelte';
 	import PatientForm from '$lib/components/patientForm/index.svelte';
 	import Template from '$lib/components/ticketLayout/index.svelte';
@@ -12,6 +12,7 @@
 		mobileNumberValidation,
 		nameValidation
 	} from '$lib/util';
+	import { saveProfileToStorage } from './store/util';
 
 	$: disabledContinueBtn =
 		!id ||
@@ -22,16 +23,17 @@
 		!mobile ||
 		!nameValidation(firstName) ||
 		!nameValidation(firstName) ||
-		!identificationValidation(id) ||
+		(!identificationValidation(id) && !existed) ||
 		!mobileNumberValidation(mobile) ||
-		!noFutureValidation(dob);
+		(!noFutureValidation(dob) && !existed);
 
 	let id: string = $form$?.id,
 		firstName: string = $form$?.firstName,
 		lastName: string = $form$?.lastName,
 		dob: Date = $form$?.dob,
 		sex: string = $form$?.sex,
-		mobile: string = $form$?.mobile;
+		mobile: string = $form$?.mobile,
+		existed = $patientId$;
 
 	onMount(() => {
 		if (!$illnesses$) goto(ROUTES.TICKET);
@@ -46,6 +48,7 @@
 			sex,
 			mobile
 		});
+		saveProfileToStorage();
 	});
 
 	function onClickProceed() {
@@ -62,5 +65,13 @@
 	btnPlaceholer={$_('continue_button')}
 	on:click={() => onClickProceed()}
 >
-	<PatientForm bind:id bind:firstName bind:lastName bind:dob bind:sex bind:mobile disabled={{}} />
+	<PatientForm
+		bind:id
+		bind:firstName
+		bind:lastName
+		bind:dob
+		bind:sex
+		bind:mobile
+		disabled={{ id: !!existed, dob: !!existed }}
+	/>
 </Template>

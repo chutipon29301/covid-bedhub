@@ -6,6 +6,7 @@
 	import Template from '$lib/components/ticketLayout/index.svelte';
 	import { goto } from '$app/navigation';
 	import { ROUTES } from '$lib/constants/routes';
+	import { saveProfileToStorage } from '../store/util';
 
 	let FEVER = $symptoms$?.FEVER,
 		COUGH = $symptoms$?.COUGH,
@@ -22,7 +23,7 @@
 		if (!$illnesses$) goto(ROUTES.TICKET);
 	});
 
-	onDestroy(() =>
+	onDestroy(() => {
 		setSymptoms({
 			FEVER,
 			COUGH,
@@ -34,8 +35,8 @@
 			EXHAUSTED,
 			CHEST_PAIN,
 			UNCONCIOUS
-		})
-	);
+		});
+	});
 
 	function onClickProceed() {
 		const hasIllnesses = Object.values($illnesses$).some((v) => v);
@@ -51,9 +52,11 @@
 			CHEST_PAIN ||
 			UNCONCIOUS;
 		if (!hasIllnesses && !hasSymptoms) {
+			window.localStorage.clear();
 			goto(ROUTES.HOME_ISOLATION);
 			return;
 		}
+		saveProfileToStorage();
 		goto(ROUTES.TICKET_ADD);
 	}
 </script>

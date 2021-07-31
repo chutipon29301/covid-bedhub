@@ -49,3 +49,8 @@ export function passwordValidation(password: string): boolean {
 	if (password === undefined) return true;
 	return password?.length > 5;
 }
+
+export function dependantFieldsValidation(f1: unknown, f2: unknown): boolean {
+	if (f1 === undefined && f2 === undefined) return true;
+	return (!!f1 && !f2) || !f1 === !f2;
+}

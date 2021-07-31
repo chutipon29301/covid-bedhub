@@ -8,8 +8,8 @@
 	export { clazz as class };
 	export let selectedTicket: PatientDetail;
 
-	$: illnesses = checkListToLabel(selectedTicket?.symptops);
-	$: symptoms = checkListToLabel(selectedTicket?.illnesses);
+	$: illnesses = checkListToLabel(selectedTicket?.illnesses);
+	$: symptoms = checkListToLabel(selectedTicket?.symptops);
 
 	function checkListToLabel(list: SymptomChecklist | IllnessChecklist) {
 		if (!list) return [];
@@ -41,9 +41,14 @@
 				<p>{selectedTicket.name}</p>
 				<p>{`${$_('sex_label')}: ${selectedTicket.sex}`}</p>
 				<p>{`${$_('age_label')}: ${selectedTicket.age}`}</p>
-				<p>{`${$_('patient_id_information')}: ${selectedTicket.identification.slice(0, 13)}`}</p>
+				<p>{`${$_('patient_id_information')}: ${selectedTicket.identification}`}</p>
 				<p>{`${$_('patient_mobile_information')}: ${selectedTicket.mobile}`}</p>
 			</div>
+			{#if selectedTicket.appointmentDate}
+				<p class="py-4">
+					{`${$_('appointment_date_label')}: ${selectedTicket.appointmentDate.toDateString()}`}
+				</p>
+			{/if}
 		</span>
 		<span slot="content-1">
 			<div class="text-md font-bold pb-2">{$_('illness_label')}</div>
@@ -63,9 +68,13 @@
 		<span slot="content-2">
 			<div class="text-md font-bold pb-2">{$_('covid_exam_label')}</div>
 			<div class="text-sm px-4">
-				<p>{`${$_('exam_received_date_label')}: ${selectedTicket.examReceiveDate}`}</p>
+				<p>
+					{`${$_('exam_received_date_label')}: ${new Date(
+						selectedTicket.examReceiveDate
+					).toDateString()}`}
+				</p>
 				<p>{`${$_('exam_localtion_lable')}: ${selectedTicket.examLocation}`}</p>
-				<p>{`${$_('exam_date_label')}: ${selectedTicket.examDate}`}</p>
+				<p>{`${$_('exam_date_label')}: ${new Date(selectedTicket.examDate).toDateString()}`}</p>
 				{#each selectedTicket.vaccines as vaccine, i}
 					<p>
 						{`${$_('vaccine_dose_label', { values: { amount: i } })}: ${vaccine.name} (${

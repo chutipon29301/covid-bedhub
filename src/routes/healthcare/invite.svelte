@@ -16,7 +16,8 @@
 	let alertShown = false;
 
 	function validateInviteCode() {
-		const response = CheckAccessCode({ variables: { access_code } });
+		if (!access_code) return;
+		const response = CheckAccessCode({ variables: { access_code: access_code.toUpperCase() } });
 		const unsub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			if (!data) return;
@@ -40,6 +41,11 @@
 		setAccessCode(accessCode);
 		setUserType(userType);
 	}
+
+	function onkeypress(e: KeyboardEvent) {
+		if (e.key !== 'Enter') return;
+		validateInviteCode();
+	}
 </script>
 
 <svelte:head>
@@ -57,16 +63,22 @@
 		{$_('access_code_invalid_error')}
 	</Alert>
 {/if}
-
 <Layout title={$_('healthcare_invite_title')}>
 	<span slot="content">
-		<Input class="pb-4" bind:value={access_code} label={$_('invitation_code')} />
-		<Button
-			disabled={!access_code}
-			class="w-full"
-			placeholder={$_('continue_button')}
-			on:click={validateInviteCode}
-		/>
+		<span on:keypress={onkeypress}>
+			<Input
+				class="pb-4"
+				classInput="uppercase"
+				bind:value={access_code}
+				label={$_('invitation_code')}
+			/>
+			<Button
+				disabled={!access_code}
+				class="w-full"
+				placeholder={$_('continue_button')}
+				on:click={validateInviteCode}
+			/>
+		</span>
 	</span>
 	<span slot="footer">
 		<div

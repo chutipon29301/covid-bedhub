@@ -8,6 +8,7 @@
 	import { GetJwtFromLineCode } from '$lib/generated/graphql';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import { storeToken } from '$lib/util';
+	import { variables } from '$lib/constants/environment';
 
 	const code = $page.query.get('code');
 
@@ -28,13 +29,13 @@
 	}
 
 	function redirect() {
-		if (import.meta.env.VITE_DEVELOP) {
+		if (variables.dev) {
 			setIsLogin(true);
 			storeToken('reporter-1', new Date(8640000000000000));
 			goto(ROUTES.HOME);
 			return;
 		}
-		window.location.replace(import.meta.env.VITE_API_URL + '/auth/login');
+		window.location.replace(variables.url + '/auth/login');
 	}
 </script>
 
@@ -42,5 +43,17 @@
 	<title>{$_('login_title')}</title>
 </svelte:head>
 
-<div class="text-3xl pb-2">{$_('login_title')}</div>
-<Button class="w-full" placeholder={$_('login_with_line_button')} on:click={() => redirect()} />
+<div class="login-button flex justify-center">
+	<Button class="line-color" placeholder={$_('login_with_line_button')} on:click={() => redirect()}>
+		<span slot="icon-front">
+			<img src="/line_button/btn_base.png" alt="Line Login" width="32px" class="mr-4" />
+		</span>
+		<span slot="icon"><div class="pr-2" /></span>
+	</Button>
+</div>
+
+<style>
+	.login-button :global(.line-color) {
+		background-color: #00c300;
+	}
+</style>

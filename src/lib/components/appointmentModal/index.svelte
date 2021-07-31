@@ -11,18 +11,21 @@
 	export let identification: string;
 	export let mobile: string;
 	export let notes: string;
+	export let heading: string;
+	export let confirmBtn: string;
 
 	const dispatch = createEventDispatcher();
 </script>
 
 <Modal
-	heading="กำหนดวันเข้ารับการรักษา"
-	confirmBtn="ยืนยันการรับ"
-	cancelBtn="ปิด"
+	{heading}
+	{confirmBtn}
+	cancelBtn={$_('close_label')}
 	on:confirm={() => dispatch('confirm')}
 	on:cancel={() => dispatch('close')}
 >
 	<DatePicker
+		required={true}
 		placeholder={$_('select_appointment_date_label')}
 		bind:value={appointmentDate}
 		years_map={[new Date().getFullYear(), new Date().getFullYear() + 1]}

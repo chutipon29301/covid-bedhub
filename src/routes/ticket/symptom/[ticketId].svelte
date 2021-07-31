@@ -20,7 +20,7 @@
 	import Checkbox from '$lib/components/ui/checkbox/index.svelte';
 	import Template from '$lib/components/ticketLayout/index.svelte';
 	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
-	import { faHandsHelping } from '@fortawesome/free-solid-svg-icons';
+	import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 	import { EModalColorTone } from '$lib/components/ui/modal/model';
 
 	$: response = MyTicketSymptoms({
@@ -76,7 +76,7 @@
 
 {#if successPopupShown}
 	<Modal
-		icon={faHandsHelping}
+		icon={faCheckCircle}
 		heading={$_('edit_symptoms_popup_heading')}
 		confirmBtn={$_('ok_button')}
 		colorTone={EModalColorTone.GREEN}

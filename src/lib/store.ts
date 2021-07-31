@@ -1,4 +1,4 @@
-import type { GPSLocation, Patient } from '$lib/models';
+import type { ErrorDetail, Patient } from '$lib/models';
 import { writable } from 'svelte/store';
 
 export const accessToken$ = writable<string>(null);
@@ -21,7 +21,7 @@ export function setUserProfile(userProfile: Patient): void {
 	userProfile$.set(userProfile);
 }
 
-export const location$ = writable<GPSLocation>(null);
-export function setLocation(location: GPSLocation): void {
-	location$.set(location);
+export const error$ = writable<ErrorDetail>(null);
+export function setError(err: ErrorDetail): void {
+	error$.set(err);
 }

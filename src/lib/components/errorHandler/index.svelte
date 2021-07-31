@@ -2,17 +2,30 @@
 	import { onMount } from 'svelte';
 	import { faExclamation } from '@fortawesome/free-solid-svg-icons';
 	import { EModalColorTone } from '$lib/components/ui/modal/model';
-	import { setIsLoading } from '$lib/store';
+	import { error$, setIsLoading } from '$lib/store';
 	import ErrorModal from '$lib/components/ui/modal/dialog/index.svelte';
+	import * as Sentry from '@sentry/browser';
 
 	let errors: {
 		heading: string;
 		message: string;
 	}[] = [];
 
+	error$.subscribe((err) => {
+		setIsLoading(false);
+		if (!err) return;
+		errors = [...errors, err];
+	});
+
 	onMount(() => {
 		window.onerror = (e: string) => {
-			const error = JSON.parse(e.replace('Uncaught Error: ', ''));
+			setIsLoading(false);
+			const error = JSON.parse(
+				e
+					.replace('Uncaught Error: ', '')
+					.replace('uncaught exception: ', '')
+					.replace('Uncaught ', '')
+			);
 			errors = [
 				...errors,
 				{
@@ -20,10 +33,11 @@
 					message: error?.message || 'An unexpected error happened'
 				}
 			];
-			setIsLoading(false);
+			Sentry.captureException(e);
 		};
 
 		window.onunhandledrejection = async (e: PromiseRejectionEvent) => {
+			setIsLoading(false);
 			errors = [
 				...errors,
 				{
@@ -31,7 +45,7 @@
 					message: e.reason?.response?.data?.msg || e.reason
 				}
 			];
-			setIsLoading(false);
+			Sentry.captureException(e);
 		};
 	});
 
@@ -45,10 +59,10 @@
 	<ErrorModal
 		icon={faExclamation}
 		colorTone={EModalColorTone.RED}
-		heading={error.heading}
+		heading={error?.heading}
 		confirmBtn="OK"
 		on:confirm={() => removeErrors(i)}
 	>
-		<p>{error.message}</p>
+		<p>{error?.message}</p>
 	</ErrorModal>
 {/each}

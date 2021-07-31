@@ -10,6 +10,9 @@
 	import Input from '$lib/components/ui/input/index.svelte';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import Layout from '$lib/components/ui/fullscreenLayout/index.svelte';
+	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
+	import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+	import { EModalColorTone } from '$lib/components/ui/modal/model';
 
 	$: disabledRegisterBtn =
 		!username ||
@@ -34,7 +37,8 @@
 		employeeId: string,
 		hospitalName = $hospitalName$,
 		accessCode = $accessCode$,
-		userType = $userType$;
+		userType = $userType$,
+		successPopupShown = false;
 
 	onMount(() => {
 		if (!$hospitalName$) goto(ROUTES.HEALTHCARE_INVITE);
@@ -56,7 +60,12 @@
 			}
 		});
 		setIsLoading(false);
-		if (data) goto(ROUTES.HEALTHCARE);
+		if (data) successPopupShown = true;
+	}
+
+	function onClickOkPopup() {
+		successPopupShown = false;
+		goto(ROUTES.HEALTHCARE);
 	}
 </script>
 
@@ -64,6 +73,17 @@
 	<title>{$_('healthcare_register_title')}</title>
 </svelte:head>
 
+{#if successPopupShown}
+	<Modal
+		icon={faCheckCircle}
+		heading={$_('register_success_popup_heading')}
+		confirmBtn={'OK'}
+		colorTone={EModalColorTone.GREEN}
+		on:confirm={onClickOkPopup}
+	>
+		{$_('register_success_message', { values: { name: `${firstName} ${lastName}` } })}
+	</Modal>
+{/if}
 <Layout title={$_('healthcare_register_title')}>
 	<span slot="content">
 		<div class="pb-4 font-bold">
@@ -123,6 +143,20 @@
 		<Input class="pb-4" bind:value={employeeId} label={$_('officer_id_label')} />
 	</span>
 	<span slot="footer">
+		<div class="text-center text-sm pb-2">
+			{$_('disclaimer_label_1', { values: { button: $_('regiter_button') } })}
+			<br />
+			<span
+				class="font-bold underline cursor-pointer"
+				on:click={() => goto(ROUTES.TERMS_AND_CONDITION)}>{$_('tnc_label')}</span
+			>
+			{$_('and_label')}
+			<span class="font-bold underline cursor-pointer" on:click={() => goto(ROUTES.PRIVACY_POLICY)}>
+				{$_('policy_label')}
+			</span>
+			<br />
+			{$_('disclaimer_label_2')}
+		</div>
 		<Button
 			disabled={disabledRegisterBtn}
 			class="w-full"

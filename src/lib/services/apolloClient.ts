@@ -2,6 +2,7 @@ import { ApolloClient, createHttpLink, from } from '@apollo/client/core/core.cjs
 import { InMemoryCache, NormalizedCacheObject } from '@apollo/client/cache/cache.cjs.js';
 import { setContext } from '@apollo/client/link/context/context.cjs.js';
 import { onError } from '@apollo/client/link/error/error.cjs.js';
+import { setError } from '$lib/store';
 import cookie from 'cookie';
 
 class Client {
@@ -39,16 +40,16 @@ class Client {
 		const errorLink = onError(({ graphQLErrors, networkError }) => {
 			if (graphQLErrors) {
 				const error = graphQLErrors[0].extensions.exception.response || {
+					heading: 'Unhandled Error',
 					message: graphQLErrors[0].message
 				};
-				throw new Error(JSON.stringify({ title: error.error, message: error.message }));
+				setError(error);
 			}
-			if (networkError)
-				throw new Error(JSON.stringify({ title: 'Network Error', message: networkError.message }));
+			if (networkError) setError({ heading: 'Network Error', message: networkError.message });
 		});
 
 		const client = new ApolloClient({
-			link: from([errorLink, authLink, httpLink]),
+			link: from([authLink, errorLink, httpLink]),
 			cache: new InMemoryCache(),
 			defaultOptions: {
 				watchQuery: {

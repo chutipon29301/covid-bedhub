@@ -129,6 +129,7 @@
 		selectedTicket = null;
 		acceptTicketModalShown = false;
 		loadTickets();
+		setRefresh(false);
 	}
 
 	async function acceptTicket(id: number): Promise<boolean> {
@@ -155,6 +156,8 @@
 
 {#if acceptTicketModalShown}
 	<AppointmentModal
+		heading={$_('set_appointment_date_label')}
+		confirmBtn={$_('confirm_accept_request_label')}
 		bind:appointmentDate
 		bind:notes
 		name={selectedTicket.name}

@@ -32,7 +32,6 @@
 		riskLevel = null,
 		editTicketModalShown = false,
 		cancelTicketModalShown = false,
-		appointmentDate: Date,
 		notes = '',
 		datepickerError: string;
 
@@ -57,7 +56,7 @@
 					riskLevel: t.riskLevel,
 					status: TICKET_STATUS_LABEL[t.status],
 					id: t.id,
-					appointmentDate: t.appointedDate
+					appointmentDate: new Date(t.appointedDate).toDateString()
 				})) || [];
 			totalItems = data?.acceptedTickets.count;
 			if (!loading) unsub();
@@ -86,12 +85,12 @@
 						.map((v) => ({ name: v.vaccineName, dateReceived: new Date(v.vaccineReceiveDate) })),
 					riskLevel: data.acceptedTicket.riskLevel,
 					symptops: symptomToChecklist(data.acceptedTicket.symptoms),
-					illnesses: illnessToChecklist(data.acceptedTicket.patient.illnesses)
+					illnesses: illnessToChecklist(data.acceptedTicket.patient.illnesses),
+					appointmentDate: data.acceptedTicket.appointedDate
+						? new Date(data.acceptedTicket.appointedDate)
+						: null
 				};
 				notes = data.acceptedTicket.notes;
-				appointmentDate = data.acceptedTicket.appointedDate
-					? new Date(data.acceptedTicket.appointedDate)
-					: null;
 			}
 			if (!loading) unsub();
 		});
@@ -141,10 +140,11 @@
 		editTicketModalShown = false;
 		cancelTicketModalShown = false;
 		loadTickets();
+		setRefresh(false);
 	}
 
 	async function editTicket(id: number): Promise<boolean> {
-		if (!appointmentDate) {
+		if (!selectedTicket.appointmentDate) {
 			datepickerError = 'Please select appointment date.';
 			alert(datepickerError);
 			return false;
@@ -153,7 +153,11 @@
 		setIsLoading(true);
 		await EditAppointment({
 			variables: {
-				data: { id: id.toString(), appointedDate: dateToStringFormat(appointmentDate), notes }
+				data: {
+					id: id.toString(),
+					appointedDate: dateToStringFormat(selectedTicket.appointmentDate),
+					notes
+				}
 			}
 		});
 		setIsLoading(false);
@@ -184,14 +188,16 @@
 			<p>{selectedTicket.name}</p>
 			<p>{`${$_('sex_label')}: ${selectedTicket.sex}`}</p>
 			<p>{`${$_('age_label')}: ${selectedTicket.age}`}</p>
-			<p>{`${$_('patient_id_information')}: ${selectedTicket.identification.slice(0, 13)}`}</p>
+			<p>{`${$_('patient_id_information')}: ${selectedTicket.identification}`}</p>
 			<p>{`${$_('patient_mobile_information')}: ${selectedTicket.mobile}`}</p>
 		</div>
 	</Modal>
 {/if}
 {#if editTicketModalShown}
 	<AppointmentModal
-		bind:appointmentDate
+		heading={$_('edit_appointment_date')}
+		confirmBtn={$_('confirm_edit_request_label')}
+		bind:appointmentDate={selectedTicket.appointmentDate}
 		name={selectedTicket.name}
 		sex={selectedTicket.sex}
 		age={selectedTicket.age}

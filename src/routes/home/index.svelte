@@ -1,26 +1,22 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import { faBed, faMinusCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+	import { faMinusCircle, faPlusCircle, faSearch } from '@fortawesome/free-solid-svg-icons';
 	import { goto } from '$app/navigation';
 	import { ROUTES } from '$lib/constants/routes';
 	import { onMount } from 'svelte';
 	import { CancelTicket, MyTickets } from '$lib/generated/graphql';
-	import { setIsLoading, setLocation } from '$lib/store';
-	import { variables } from '$lib/constants/environment';
+	import { setIsLoading } from '$lib/store';
 	import { TICKET_STATUS } from '$lib/constants/constant';
 	import { EModalColorTone } from '$lib/components/ui/modal/model';
-	import Button from '$lib/components/ui/button/index.svelte';
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import Ticket from '$lib/components/ui/ticket/index.svelte';
 	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
 
-	let disableFindBed = false;
 	let tickets = [];
 	let successPopupShown = false;
 	let ticketId: string;
 
 	onMount(() => {
-		setGPS();
 		loadMyTickets();
 	});
 
@@ -41,26 +37,7 @@
 		});
 	}
 
-	function setGPS() {
-		if (variables.dev) {
-			setLocation({ lat: 13.966461495650773, lng: 100.54753924040311 });
-			return;
-		}
-
-		if (navigator.geolocation)
-			navigator.geolocation.getCurrentPosition(
-				(position) =>
-					setLocation({ lat: position.coords.latitude, lng: position.coords.longitude }),
-				() => (disableFindBed = true)
-			);
-		else alert("This website doesn't support this browser");
-	}
-
 	function navigate() {
-		if (disableFindBed) {
-			alert('Please allow the gps');
-			return;
-		}
 		goto(ROUTES.TICKET);
 	}
 
@@ -73,6 +50,7 @@
 	}
 
 	async function cancelTicket(id: string) {
+		if (!confirm('Are you sure?')) return;
 		setIsLoading(true);
 		const { data } = await CancelTicket({ variables: { id } });
 		setIsLoading(false);
@@ -117,9 +95,21 @@
 		{/if}
 	</div>
 	{#if tickets.length === 0}
-		<div class="flex flex-grow flex-col items-center justify-center up-10">
-			<Fa class="pb-2" icon={faBed} size="2rem" />
-			<Button on:click={() => navigate()} placeholder={$_('find_bed_button')} />
+		<div class="flex flex-grow flex-col items-center justify-center">
+			<div
+				class="border border-indigo-300 px-16 sm:px-24 py-12 cursor-pointer rounded-lg shadow-md"
+				on:click={() => navigate()}
+			>
+				<img
+					class="pb-4"
+					src="/button/online-reservation.png"
+					alt={$_('find_bed_button')}
+					width="96px"
+				/>
+				<div class="flex items-center text-lg">
+					<Fa class="pr-2" icon={faSearch} />{$_('find_bed_button')}
+				</div>
+			</div>
 		</div>
 	{:else}
 		{#if tickets.filter((t) => t.status === TICKET_STATUS.REQUEST || t.status === TICKET_STATUS.MATCH).length === 0}
@@ -158,9 +148,6 @@
 
 <style>
 	.min-h-content {
-		min-height: calc(100vh - 10rem);
-	}
-	.up-10 {
-		transform: translateY(-10%);
+		min-height: calc(100vh - 22rem);
 	}
 </style>

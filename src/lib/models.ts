@@ -39,11 +39,6 @@ export enum AccountType {
 	CODE = 'code_generator'
 }
 
-export interface GPSLocation {
-	lat: number;
-	lng: number;
-}
-
 export interface Vaccine {
 	name: string;
 	dateReceived: Date;
@@ -68,4 +63,10 @@ export interface PatientDetail {
 	riskLevel: number;
 	symptops: SymptomChecklist;
 	illnesses: IllnessChecklist;
+	appointmentDate?: Date;
+}
+
+export interface ErrorDetail {
+	heading: string;
+	message: string;
 }

@@ -9,12 +9,19 @@
 	import { setForm, setIllnesses, setPatientId, setSymptoms, setVaccine } from './store/store';
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import { illnessToChecklist } from '$lib/util';
+	import { setProfileFromStorage } from './store/util';
 
 	$: response = MyPatients({});
 
-	let patients = [];
+	let patients = [],
+		localProfile: string;
 
 	onMount(() => {
+		loadProfiles();
+		loadLocalStorage();
+	});
+
+	function loadProfiles() {
 		const unsub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
 			patients =
@@ -22,7 +29,17 @@
 
 			if (!loading) unsub();
 		});
-	});
+	}
+
+	function loadLocalStorage() {
+		const localStorage = window.localStorage.getItem('draftTicket');
+		if (!localStorage) return;
+		const { form } = JSON.parse(localStorage);
+		localProfile =
+			form && (form.firstName || form.lastName)
+				? `${form.firstName || ''} ${form.lastName || ''}`
+				: 'Untitled';
+	}
 
 	function addNewPatient() {
 		setPatientId(null);
@@ -53,6 +70,16 @@
 			}
 		});
 	}
+
+	function getPatientFromLocalStorage() {
+		setProfileFromStorage();
+		goto(ROUTES.TICKET_ILLNESSES);
+	}
+
+	function clearDraft() {
+		window.localStorage.clear();
+		localProfile = null;
+	}
 </script>
 
 <svelte:head>
@@ -67,6 +94,24 @@
 	<Fa class="mt-1 pr-2" icon={faPlusCircle} />
 	{$_('add_new_patient')}
 </div>
+{#if localProfile}
+	<p on:click={clearDraft} class="uppercase text-xs underline text-right pb-1 cursor-pointer">
+		clear draft
+	</p>
+	<div
+		on:click={() => getPatientFromLocalStorage()}
+		class="border px-4 py-2 w-full rounded-md flex justify-between cursor-pointer mb-4 bg-gray-100 drop-shadow-md"
+	>
+		<div class="flex items-center">
+			{localProfile}
+			<p class="text-sm pl-2 text-gray-500">(Saved Draft)</p>
+		</div>
+		<div class="flex">
+			<span class="pr-4 text-gray-700">|</span>
+			<Fa class="mt-1 text-gray-600" icon={faChevronRight} />
+		</div>
+	</div>
+{/if}
 {#each patients as patient}
 	<div
 		on:click={() => getPatient(patient.id)}
