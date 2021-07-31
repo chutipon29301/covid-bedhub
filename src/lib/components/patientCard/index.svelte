@@ -11,6 +11,8 @@
 	$: illnesses = checkListToLabel(selectedTicket?.illnesses);
 	$: symptoms = checkListToLabel(selectedTicket?.symptops);
 
+	const tagColor: ('yellow' | 'orange' | 'red')[] = ['yellow', 'orange', 'red', 'red'];
+
 	function checkListToLabel(list: SymptomChecklist | IllnessChecklist) {
 		if (!list) return [];
 		return Object.entries(list)
@@ -27,6 +29,7 @@
 		class={clazz}
 		title={$_('patient_information_label')}
 		tag={convertRiskLevelToLabel(selectedTicket.riskLevel)}
+		tagColor={tagColor[selectedTicket.riskLevel - 1]}
 	>
 		<span slot="title-detail">
 			<div class="flex flex-col">

@@ -27,7 +27,6 @@
 		riskLevel = null,
 		acceptTicketModalShown = false,
 		notes = '',
-		appointmentDate: Date,
 		datepickerError: string;
 
 	onMount(() => {
@@ -133,7 +132,7 @@
 	}
 
 	async function acceptTicket(id: number): Promise<boolean> {
-		if (!appointmentDate) {
+		if (!selectedTicket.appointmentDate) {
 			datepickerError = 'Please select appointment date.';
 			alert(datepickerError);
 			return false;
@@ -142,7 +141,11 @@
 		setIsLoading(true);
 		await AcceptTicket({
 			variables: {
-				data: { id: id.toString(), appointedDate: dateToStringFormat(appointmentDate), notes }
+				data: {
+					id: id.toString(),
+					appointedDate: dateToStringFormat(selectedTicket.appointmentDate),
+					notes
+				}
 			}
 		});
 		setIsLoading(false);
@@ -158,7 +161,7 @@
 	<AppointmentModal
 		heading={$_('set_appointment_date_label')}
 		confirmBtn={$_('confirm_accept_request_label')}
-		bind:appointmentDate
+		bind:appointmentDate={selectedTicket.appointmentDate}
 		bind:notes
 		name={selectedTicket.name}
 		sex={selectedTicket.sex}
