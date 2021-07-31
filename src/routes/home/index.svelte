@@ -46,7 +46,7 @@
 			cancelTicket(id);
 			return;
 		}
-		alert('In progress...');
+		goto(`${ROUTES.TICKET_HOSPITAL}/${id}`);
 	}
 
 	async function cancelTicket(id: string) {

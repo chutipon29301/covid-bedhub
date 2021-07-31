@@ -46,7 +46,7 @@
 		$vaccine$?.vaccines.every((v) => !(!v.name === !v.dateReceived));
 
 	onMount(() => {
-		// if (!$form$) goto(ROUTES.TICKET);
+		if (!$form$) goto(ROUTES.TICKET);
 	});
 
 	function setGPS() {
@@ -148,7 +148,7 @@
 	</Modal>
 {/if}
 <div class="flex flex-col justify-center items-center">
-	<div class="pt-8 pb-2 px-8 text-center text-xl">
+	<div class="pt-8 lg:pt-0 pb-2 px-8 text-center text-xl">
 		{$_('request_location_explain')}
 	</div>
 	<img

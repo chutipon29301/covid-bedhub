@@ -60,7 +60,7 @@ function guardAuthentication(accountType: string, path: string) {
 
 function allowedRoutes(path: string, routes: string[]): boolean {
 	if (path === '/') return false;
-	return !routes.some((r) => path.includes(r));
+	return !routes.some((r) => `${path}/`.includes(`${r}/`));
 }
 
 export default {

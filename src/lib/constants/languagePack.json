@@ -161,6 +161,10 @@
 		"request_location_disclaimer": "เมื่อคุณกด “อนุญาตให้เราช่วยหาเตียง” คุณได้ยอมรับให้เราสามารถเข้าถึงตำแหน่งของคุณ",
 		"information_incomplete_inline_error": "ข้อมูลบางอย่างยังไม่ครบถ้วน กรุณาตรวจสอบอีกครั้ง",
 		"allow_location_button": "อนุญาตให้เราช่วยหาเตียง",
-		"confirm_submission_button": "ยืนยันการส่งข้อมูล"
+		"confirm_submission_button": "ยืนยันการส่งข้อมูล",
+		"hospital_information_label": "ข้อมูลโรงพยาบาล",
+		"hospital_received_label": "โรงพยาบาลที่ท่านได้",
+		"hospital_address_label": "ที่อยู่โรงพยาบาล",
+		"hospital_tel_label": "เบอร์ติดต่อโรงพยาบาล"
 	}
 }
