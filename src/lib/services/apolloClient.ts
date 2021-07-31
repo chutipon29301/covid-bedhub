@@ -1,4 +1,4 @@
-import { ApolloClient, createHttpLink, from } from '@apollo/client/core';
+import { ApolloClient, createHttpLink, from } from '@apollo/client/core/core.cjs.js';
 import { InMemoryCache, NormalizedCacheObject } from '@apollo/client/cache/cache.cjs.js';
 import { setContext } from '@apollo/client/link/context/context.cjs.js';
 import { onError } from '@apollo/client/link/error/error.cjs.js';

@@ -150,7 +150,4 @@
 	.min-h-content {
 		min-height: calc(100vh - 22rem);
 	}
-	.up-10 {
-		transform: translateY(-10%);
-	}
 </style>

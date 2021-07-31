@@ -13,7 +13,7 @@ import {
 	vaccine$
 } from './store';
 
-export function saveProfileToStorage() {
+export function saveProfileToStorage(): void {
 	let id: string,
 		illnesses: IllnessChecklist,
 		symptoms: SymptomChecklist,
@@ -53,7 +53,7 @@ export function saveProfileToStorage() {
 	);
 }
 
-export function setProfileFromStorage() {
+export function setProfileFromStorage(): void {
 	const { id, illnesses, symptoms, form, vaccine } = JSON.parse(
 		window.localStorage.getItem('draftTicket')
 	);
