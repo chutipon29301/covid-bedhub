@@ -48,7 +48,7 @@
 					sex: t.patient.sex,
 					age: t.patient.age,
 					riskLevel: t.riskLevel,
-					status: TICKET_STATUS_LABEL[t.status],
+					status: $_(TICKET_STATUS_LABEL[t.status]),
 					id: t.id
 				})) || [];
 			totalItems = data?.requestedTickets.count;

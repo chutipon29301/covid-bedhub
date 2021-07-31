@@ -6,10 +6,10 @@ export const TICKET_STATUS = {
 };
 
 export const TICKET_STATUS_LABEL = {
-	REQUEST: 'Requested',
-	MATCH: 'Matched',
-	HOSPITAL_CANCEL: 'Cancelled',
-	PATIENT_CANCEL: 'Cancelled'
+	REQUEST: 'requeted_status',
+	MATCH: 'matched_status',
+	HOSPITAL_CANCEL: 'cancelled_status',
+	PATIENT_CANCEL: 'cancelled_status'
 };
 
 export const ILLNESSES_LABEL = {

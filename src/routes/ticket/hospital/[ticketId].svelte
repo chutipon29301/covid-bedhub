@@ -52,7 +52,7 @@
 				<p class="pb-2">{$_('edit_symptoms_name_label')}: {name}</p>
 				<p class="pb-2">{$_('patient_id_information')}: {id}</p>
 				<p class="pb-2">{$_('patient_mobile_information')}: {mobile}</p>
-				<p class="pb-2">{$_('edit_symptoms_status_label')}: {TICKET_STATUS_LABEL[status]}</p>
+				<p class="pb-2">{$_('edit_symptoms_status_label')}: {$_(TICKET_STATUS_LABEL[status])}</p>
 				<p class="pb-2">{$_('hospital_received_label')}: {hospitalName}</p>
 				<p class="pb-2">{$_('hospital_address_label')}: {hospitalAddress}</p>
 				<p class="pb-2">{$_('hospital_tel_label')}: {hospitalTel}</p>

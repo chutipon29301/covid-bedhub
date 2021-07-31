@@ -167,6 +167,9 @@
 		"hospital_address_label": "ที่อยู่โรงพยาบาล",
 		"hospital_tel_label": "เบอร์ติดต่อโรงพยาบาล",
 		"saved_draft_label": "ฉบับร่าง",
-		"clear_draft_label": "ลบฉบับร่าง"
+		"clear_draft_label": "ลบฉบับร่าง",
+		"requeted_status": "รอการตอบรับจาก รพ.",
+		"matched_status": "ได้รับเตียงแล้ว",
+		"cancelled_status": "ถูกยกเลิกแล้ว"
 	}
 }

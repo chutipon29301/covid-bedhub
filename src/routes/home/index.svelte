@@ -50,7 +50,7 @@
 	}
 
 	async function cancelTicket(id: string) {
-		if (!confirm('Are you sure?')) return;
+		if (!confirm('ยืนยันการขอยกเลิกคำขอ')) return;
 		setIsLoading(true);
 		const { data } = await CancelTicket({ variables: { id } });
 		setIsLoading(false);
