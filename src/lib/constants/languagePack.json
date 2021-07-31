@@ -128,6 +128,11 @@
 		"tnc_label": "เงื่อนไขการใช้งาน",
 		"and_label": "และ",
 		"policy_label": "นโยบายความเป็นส่วนตัว",
-		"disclaimer_label_2": "ของ ThaiBedHub.com"
+		"disclaimer_label_2": "ของ ThaiBedHub.com",
+		"set_appointment_date_label": "กำหนดวันเข้ารับการรักษา",
+		"edit_appointment_date": "แก้ไข้วันเข้ารับการรักษา",
+		"close_label": "ปิด",
+		"confirm_accept_request_label": "ยืนยันการรับ",
+		"confirm_edit_request_label": "ยืนยันการแก้ไข"
 	}
 }

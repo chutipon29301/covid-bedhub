@@ -36,7 +36,7 @@
 	$: DAYS = new Array(new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate())
 		.fill(1)
 		.map((v, i) => v + i);
-	$: _date = value?.toLocaleDateString('en-US');
+	$: _date = value?.toDateString();
 	let cancel = () => {
 		value = null;
 		visible = false;
@@ -109,17 +109,22 @@
 				<div class="date-line">{date.getDate()} {MONTHS[date.getMonth()]} {date.getFullYear()}</div>
 				<p class="day-line">{WEEKDAY[date.getDay()]}</p>
 				<div class="touch-date-picker">
-					<Switcher type="day" data={DAYS} selected={date.getDate()} on:dateChange={dateChanged} />
+					<Switcher
+						type="day"
+						data={DAYS}
+						selected={value?.getDate() || date.getDate()}
+						on:dateChange={dateChanged}
+					/>
 					<Switcher
 						type="month"
 						data={MONTHS}
-						selected={date.getMonth() + 1}
+						selected={(value?.getMonth() || date.getMonth()) + 1}
 						on:dateChange={dateChanged}
 					/>
 					<Switcher
 						type="year"
 						data={YEARS.map((v) => v.toString())}
-						selected={date.getFullYear() - years_map[0] + 1}
+						selected={(value?.getFullYear() || date.getFullYear()) - years_map[0] + 1}
 						on:dateChange={dateChanged}
 					/>
 				</div>

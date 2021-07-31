@@ -57,7 +57,7 @@
 					riskLevel: t.riskLevel,
 					status: TICKET_STATUS_LABEL[t.status],
 					id: t.id,
-					appointmentDate: t.appointedDate
+					appointmentDate: new Date(t.appointedDate).toDateString()
 				})) || [];
 			totalItems = data?.acceptedTickets.count;
 			if (!loading) unsub();
@@ -184,13 +184,15 @@
 			<p>{selectedTicket.name}</p>
 			<p>{`${$_('sex_label')}: ${selectedTicket.sex}`}</p>
 			<p>{`${$_('age_label')}: ${selectedTicket.age}`}</p>
-			<p>{`${$_('patient_id_information')}: ${selectedTicket.identification.slice(0, 13)}`}</p>
+			<p>{`${$_('patient_id_information')}: ${selectedTicket.identification}`}</p>
 			<p>{`${$_('patient_mobile_information')}: ${selectedTicket.mobile}`}</p>
 		</div>
 	</Modal>
 {/if}
 {#if editTicketModalShown}
 	<AppointmentModal
+		heading={$_('edit_appointment_date')}
+		confirmBtn={$_('confirm_edit_request_label')}
 		bind:appointmentDate
 		name={selectedTicket.name}
 		sex={selectedTicket.sex}
