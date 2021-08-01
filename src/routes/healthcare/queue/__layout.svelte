@@ -6,8 +6,8 @@
 	import { GetTicketsCount } from '$lib/generated/graphql';
 	import { setIsLoading } from '$lib/store';
 	import { onMount } from 'svelte';
-	import { refreshTabAmount$ } from './store/store';
 	import Tabs from '$lib/components/ui/tabs/index.svelte';
+	import { refreshAmount$ } from './store';
 
 	$: tabs = [
 		$_('requests_label', { values: { amount: requestedAmount } }),
@@ -19,12 +19,13 @@
 
 	onMount(() => {
 		getTicketsAmount();
-		refreshTabAmount$.subscribe((v) => {
+		refreshAmount$.subscribe((v) => {
 			if (v) getTicketsAmount();
 		});
 	});
 
 	function switchTab(index: number) {
+		getTicketsAmount();
 		goto(index ? ROUTES.HEALTHCARE_QUEUE_HISTORY : ROUTES.HEALTHCARE_QUEUE);
 	}
 

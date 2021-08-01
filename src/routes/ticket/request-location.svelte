@@ -23,6 +23,7 @@
 	import { setIsLoading } from '$lib/store';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
+	import ProgressiveImg from '$lib/components/ui/progressiveImg/index.svelte';
 
 	let canSubmitForm = false,
 		successPopupShown = false,
@@ -46,7 +47,7 @@
 		$vaccine$?.vaccines.every((v) => !(!v.name === !v.dateReceived));
 
 	onMount(() => {
-		// if (!$form$) goto(ROUTES.TICKET);
+		if (!$form$) goto(ROUTES.TICKET);
 	});
 
 	function setGPS() {
@@ -69,6 +70,7 @@
 		if (disabledSubmitBtn) return;
 		setIsLoading(true);
 		const id = $patientId$ ? await existedPatient($patientId$) : await newPatient();
+		if (!id) return;
 		await createTix(id);
 		setIsLoading(false);
 		window.localStorage.clear();
@@ -88,7 +90,7 @@
 				}
 			}
 		});
-		return data.createPatient.id;
+		return data?.createPatient.id;
 	}
 
 	async function existedPatient(id: string): Promise<string> {
@@ -148,13 +150,14 @@
 	</Modal>
 {/if}
 <div class="flex flex-col justify-center items-center">
-	<div class="pt-8 pb-2 px-8 text-center text-xl">
+	<div class="pt-8 lg:pt-0 pb-2 px-8 text-center text-xl">
 		{$_('request_location_explain')}
 	</div>
-	<img
-		src="/button/request-for-location.png"
-		alt="request-for-location"
+	<ProgressiveImg
 		class="w-1/2 py-8 max-w-md"
+		src="/button/request-for-location_progressive.png"
+		dataSrc="/button/request-for-location.png"
+		alt="RequestLoc"
 	/>
 	{#if !canSubmitForm}
 		<div class="flex flex-col items-center">

@@ -15,6 +15,7 @@
 		setIsLoading(false);
 		if (!err) return;
 		errors = [...errors, err];
+		Sentry.captureException('Apollo Error');
 	});
 
 	onMount(() => {

@@ -38,7 +38,7 @@
 		localProfile =
 			form && (form.firstName || form.lastName)
 				? `${form.firstName || ''} ${form.lastName || ''}`
-				: 'Untitled';
+				: $_('untitled_label');
 	}
 
 	function addNewPatient() {
@@ -95,8 +95,8 @@
 	{$_('add_new_patient')}
 </div>
 {#if localProfile}
-	<p on:click={clearDraft} class="uppercase text-xs underline text-right pb-1 cursor-pointer">
-		clear draft
+	<p on:click={clearDraft} class="text-xs underline text-right pb-1 cursor-pointer">
+		{$_('clear_draft_label')}
 	</p>
 	<div
 		on:click={() => getPatientFromLocalStorage()}
@@ -104,7 +104,7 @@
 	>
 		<div class="flex items-center">
 			{localProfile}
-			<p class="text-sm pl-2 text-gray-500">(Saved Draft)</p>
+			<p class="text-sm pl-2 text-gray-500">({$_('saved_draft_label')})</p>
 		</div>
 		<div class="flex">
 			<span class="pr-4 text-gray-700">|</span>

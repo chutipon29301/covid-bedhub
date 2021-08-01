@@ -77,7 +77,7 @@ export type CreatePatientDto = {
 	birthDate?: Maybe<Scalars['String']>;
 	identification?: Maybe<Scalars['String']>;
 	tel?: Maybe<Scalars['String']>;
-	sex?: Maybe<Scalars['String']>;
+	sex?: Maybe<Gender>;
 	illnesses?: Maybe<Array<Illness>>;
 };
 
@@ -86,7 +86,7 @@ export type CreateTicketDto = {
 	examReceiveDate: Scalars['String'];
 	examDate: Scalars['String'];
 	examLocation: Scalars['String'];
-	symptoms: Array<Symptom>;
+	symptoms?: Maybe<Array<Symptom>>;
 	vaccines?: Maybe<Array<CreateVaccine>>;
 	lat: Scalars['Float'];
 	lng: Scalars['Float'];
@@ -115,8 +115,13 @@ export type EditHospitalDto = {
 };
 
 export type EditSymptomDto = {
-	symptoms: Array<Symptom>;
+	symptoms?: Maybe<Array<Symptom>>;
 };
+
+export enum Gender {
+	Male = 'MALE',
+	Female = 'FEMALE'
+}
 
 export type Hospital = {
 	__typename?: 'Hospital';
@@ -266,7 +271,7 @@ export type Patient = {
 	birthDate: Scalars['String'];
 	identification: Scalars['String'];
 	tel: Scalars['String'];
-	sex: Scalars['String'];
+	sex: Gender;
 	illnesses: Array<Illness>;
 	age: Scalars['Int'];
 };
@@ -399,7 +404,7 @@ export type Ticket = {
 	examReceiveDate: Scalars['String'];
 	examDate: Scalars['String'];
 	examLocation: Scalars['String'];
-	symptoms: Array<Symptom>;
+	symptoms?: Maybe<Array<Symptom>>;
 	status: TicketStatus;
 	appointedDate?: Maybe<Scalars['String']>;
 	notes?: Maybe<Scalars['String']>;
@@ -458,7 +463,7 @@ export type UpdatePatientDto = {
 	lastName?: Maybe<Scalars['String']>;
 	birthDate?: Maybe<Scalars['String']>;
 	tel?: Maybe<Scalars['String']>;
-	sex?: Maybe<Scalars['String']>;
+	sex?: Maybe<Gender>;
 	illnesses?: Maybe<Array<Illness>>;
 };
 
@@ -654,6 +659,27 @@ export type CheckAccessCodeQuery = { __typename?: 'Query' } & {
 	checkAccessCode?: Maybe<
 		{ __typename?: 'AccessCode' } & Pick<AccessCode, 'accessCode' | 'userType'> & {
 				hospital: { __typename?: 'AccessCodeHospital' } & Pick<AccessCodeHospital, 'name'>;
+			}
+	>;
+};
+
+export type CheckHospitalQueryVariables = Exact<{
+	id: Scalars['ID'];
+}>;
+
+export type CheckHospitalQuery = { __typename?: 'Query' } & {
+	myTicket?: Maybe<
+		{ __typename?: 'Ticket' } & Pick<Ticket, 'status'> & {
+				patient: { __typename?: 'Patient' } & Pick<
+					Patient,
+					'firstName' | 'lastName' | 'identification' | 'tel'
+				>;
+				hospital?: Maybe<
+					{ __typename?: 'Hospital' } & Pick<
+						Hospital,
+						'name' | 'subDistrict' | 'district' | 'province' | 'zipCode' | 'tel'
+					>
+				>;
 			}
 	>;
 };
@@ -967,6 +993,27 @@ export const CheckAccessCodeDoc = gql`
 			userType
 			hospital {
 				name
+			}
+		}
+	}
+`;
+export const CheckHospitalDoc = gql`
+	query CheckHospital($id: ID!) {
+		myTicket(id: $id) {
+			patient {
+				firstName
+				lastName
+				identification
+				tel
+			}
+			status
+			hospital {
+				name
+				subDistrict
+				district
+				province
+				zipCode
+				tel
 			}
 		}
 	}
@@ -1323,6 +1370,29 @@ export const CheckAccessCode = (
 	const result = readable<
 		ApolloQueryResult<CheckAccessCodeQuery> & {
 			query: ObservableQuery<CheckAccessCodeQuery, CheckAccessCodeQueryVariables>;
+		}
+	>({ data: null, loading: true, error: null, networkStatus: 1, query: null }, (set) => {
+		q.subscribe((v) => {
+			set({ ...v, query: q });
+		});
+	});
+	return result;
+};
+
+export const CheckHospital = (
+	options: Omit<WatchQueryOptions<CheckHospitalQueryVariables>, 'query'>
+): Readable<
+	ApolloQueryResult<CheckHospitalQuery> & {
+		query: ObservableQuery<CheckHospitalQuery, CheckHospitalQueryVariables>;
+	}
+> => {
+	const q = client.watchQuery({
+		query: CheckHospitalDoc,
+		...options
+	});
+	const result = readable<
+		ApolloQueryResult<CheckHospitalQuery> & {
+			query: ObservableQuery<CheckHospitalQuery, CheckHospitalQueryVariables>;
 		}
 	>({ data: null, loading: true, error: null, networkStatus: 1, query: null }, (set) => {
 		q.subscribe((v) => {

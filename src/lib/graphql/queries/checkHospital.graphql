@@ -1,0 +1,19 @@
+query CheckHospital($id: ID!) {
+	myTicket(id: $id) {
+		patient {
+			firstName
+			lastName
+			identification
+			tel
+		}
+		status
+		hospital {
+			name
+			subDistrict
+			district
+			province
+			zipCode
+			tel
+		}
+	}
+}

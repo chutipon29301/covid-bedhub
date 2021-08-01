@@ -21,10 +21,10 @@
 
 	let options = [
 		{ label: 'all_label', value: null },
-		{ label: 'very_high_label', value: 4 },
-		{ label: 'high_label', value: 3 },
-		{ label: 'normal_label', value: 2 },
-		{ label: 'low_label', value: 1 }
+		{ label: 'filter_very_high_label', value: 4 },
+		{ label: 'filter_high_label', value: 3 },
+		{ label: 'filter_normal_label', value: 2 },
+		{ label: 'filter_low_label', value: 1 }
 	];
 
 	function goNext() {

@@ -91,7 +91,7 @@
 				<Fa class="text-gray-500" icon={faBan} size="lg" />
 			{/if}
 			<div class="pl-4 text-gray-600">
-				{TICKET_STATUS_LABEL[status]}
+				{$_(TICKET_STATUS_LABEL[status])}
 			</div>
 		</div>
 	</div>

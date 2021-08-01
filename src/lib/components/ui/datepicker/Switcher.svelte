@@ -44,7 +44,7 @@
 		let clientY = event.touches ? event.touches[0].clientY : event.clientY;
 		offset = clientY - previousY;
 		let maxPosition = -data.length * 50;
-		let _position = position + offset;
+		let _position = position + offset * 1.5;
 		position = Math.max(maxPosition, Math.min(50, _position));
 		previousY = event.touches ? event.touches[0].clientY : event.clientY;
 		setPosition();

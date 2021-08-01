@@ -36,6 +36,7 @@
 			CHEST_PAIN,
 			UNCONCIOUS
 		});
+		saveProfileToStorage();
 	});
 
 	function onClickProceed() {
@@ -52,11 +53,9 @@
 			CHEST_PAIN ||
 			UNCONCIOUS;
 		if (!hasIllnesses && !hasSymptoms) {
-			window.localStorage.clear();
 			goto(ROUTES.HOME_ISOLATION);
 			return;
 		}
-		saveProfileToStorage();
 		goto(ROUTES.TICKET_ADD);
 	}
 </script>

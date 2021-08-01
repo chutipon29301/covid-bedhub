@@ -10,13 +10,13 @@
 	import { onMount } from 'svelte';
 	import { Headers } from './models';
 	import { dateToStringFormat, illnessToChecklist, symptomToChecklist } from '$lib/util';
-	import { setRefresh } from './store/store';
 	import type { PatientDetail } from '$lib/models';
 	import QueueTable from '$lib/components/queueTable/index.svelte';
 	import PatientCard from '$lib/components/patientCard/index.svelte';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import AppointmentModal from '$lib/components/appointmentModal/index.svelte';
-	import { TICKET_STATUS_LABEL } from '$lib/constants/constant';
+	import { GENDER_LABEL, RISK_LEVEL_LABEL, TICKET_STATUS_LABEL } from '$lib/constants/constant';
+	import { refreshAmount } from './store';
 
 	let headers = Headers.map((v) => ({ ...v, label: $_(v.label) })),
 		content = [],
@@ -27,8 +27,8 @@
 		riskLevel = null,
 		acceptTicketModalShown = false,
 		notes = '',
-		appointmentDate: Date,
-		datepickerError: string;
+		datepickerError: string,
+		appointmentDate: string;
 
 	onMount(() => {
 		getRiskCount();
@@ -46,10 +46,10 @@
 						new Date(t.createdAt).toLocaleTimeString()
 					],
 					name: `${t.patient.firstName} ${t.patient.lastName}`,
-					sex: t.patient.sex,
+					sex: $_(GENDER_LABEL[t.patient.sex]),
 					age: t.patient.age,
-					riskLevel: t.riskLevel,
-					status: TICKET_STATUS_LABEL[t.status],
+					riskLevel: $_(RISK_LEVEL_LABEL[t.riskLevel]),
+					status: $_(TICKET_STATUS_LABEL[t.status]),
 					id: t.id
 				})) || [];
 			totalItems = data?.requestedTickets.count;
@@ -66,7 +66,7 @@
 				selectedTicket = {
 					id: +data.requestedTicket.id,
 					name: `${data.requestedTicket.patient.firstName} ${data.requestedTicket.patient.lastName}`,
-					sex: data.requestedTicket.patient.sex,
+					sex: $_(GENDER_LABEL[data.requestedTicket.patient.sex]),
 					age: data.requestedTicket.patient.age,
 					identification: data.requestedTicket.patient.identification,
 					mobile: data.requestedTicket.patient.tel,
@@ -78,7 +78,7 @@
 						.sort((a, b) => a.doseNumber - b.doseNumber)
 						.map((v) => ({ name: v.vaccineName, dateReceived: new Date(v.vaccineReceiveDate) })),
 					riskLevel: data.requestedTicket.riskLevel,
-					symptops: symptomToChecklist(data.requestedTicket.symptoms),
+					symptoms: symptomToChecklist(data.requestedTicket.symptoms),
 					illnesses: illnessToChecklist(data.requestedTicket.patient.illnesses)
 				};
 			}
@@ -124,12 +124,12 @@
 		if (action === 'accept') success = await acceptTicket(selectedTicket.id);
 		if (action === 'deny') success = true;
 		if (!success) return;
+		refreshAmount(true);
 		getRiskCount('network-only');
-		setRefresh(true);
 		selectedTicket = null;
 		acceptTicketModalShown = false;
 		loadTickets();
-		setRefresh(false);
+		refreshAmount(false);
 	}
 
 	async function acceptTicket(id: number): Promise<boolean> {
@@ -142,7 +142,11 @@
 		setIsLoading(true);
 		await AcceptTicket({
 			variables: {
-				data: { id: id.toString(), appointedDate: dateToStringFormat(appointmentDate), notes }
+				data: {
+					id: id.toString(),
+					appointedDate: dateToStringFormat(new Date(appointmentDate)),
+					notes
+				}
 			}
 		});
 		setIsLoading(false);

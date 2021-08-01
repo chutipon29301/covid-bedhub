@@ -2,9 +2,8 @@
 	import { _ } from 'svelte-i18n';
 	import { createEventDispatcher } from 'svelte';
 	import Modal from '$lib/components/ui/modal/confirm/index.svelte';
-	import DatePicker from '$lib/components/ui/datepicker';
 
-	export let appointmentDate: Date;
+	export let appointmentDate: string;
 	export let name: string;
 	export let sex: string;
 	export let age: number;
@@ -24,12 +23,13 @@
 	on:confirm={() => dispatch('confirm')}
 	on:cancel={() => dispatch('close')}
 >
-	<DatePicker
-		required={true}
-		placeholder={$_('select_appointment_date_label')}
-		bind:value={appointmentDate}
-		years_map={[new Date().getFullYear(), new Date().getFullYear() + 1]}
-	/>
+	<div class="px-2 relative border rounded-lg focus-within:border-indigo-500">
+		<input
+			bind:value={appointmentDate}
+			type="date"
+			class="p-2 w-full text-lg appearance-none focus:outline-none bg-transparent"
+		/>
+	</div>
 	<div class="text-sm py-4">
 		<p>{name}</p>
 		<p>{`${$_('sex_label')}: ${sex}`}</p>

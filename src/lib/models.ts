@@ -1,9 +1,11 @@
+import type { Gender } from './generated/graphql';
+
 export interface Patient {
 	id: string;
 	dob: Date;
 	firstName: string;
 	lastName: string;
-	sex: string;
+	sex: Gender;
 	mobile: string;
 }
 
@@ -61,9 +63,9 @@ export interface PatientDetail {
 	examReceiveDate: string;
 	vaccines: Vaccine[];
 	riskLevel: number;
-	symptops: SymptomChecklist;
+	symptoms: SymptomChecklist;
 	illnesses: IllnessChecklist;
-	appointmentDate?: Date;
+	appointmentDate?: string;
 }
 
 export interface ErrorDetail {

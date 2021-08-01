@@ -3,6 +3,12 @@
 	export { clazz as class };
 	export let title: string;
 	export let tag = '';
+	export let tagColor: 'red' | 'orange' | 'yellow' = 'red';
+	const _color = {
+		red: 'bg-red-200',
+		orange: 'bg-orange',
+		yellow: 'bg-yellow-100'
+	};
 </script>
 
 <div class="{clazz} w-full h-full flex flex-col justify-center items-center">
@@ -15,7 +21,11 @@
 							{title}
 						</h2>
 						{#if tag}
-							<div class="bg-red-200 rounded-3xl flex items-center px-2 text-xs h-5 mt-1 ml-1">
+							<div
+								class="{_color[
+									tagColor
+								]} bg- rounded-3xl flex items-center px-2 text-xs h-5 mt-1 ml-1"
+							>
 								{tag}
 							</div>
 						{/if}
@@ -45,3 +55,9 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.bg-orange {
+		background-color: #ffddbd;
+	}
+</style>

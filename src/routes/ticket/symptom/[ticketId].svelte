@@ -102,7 +102,9 @@
 				{`${$_('patient_mobile_information')}: ${ticketInformation.mobile}`}
 			</p>
 			<p class="font-bold">
-				{`${$_('edit_symptoms_status_label')}: ${TICKET_STATUS_LABEL[ticketInformation.status]}`}
+				{`${$_('edit_symptoms_status_label')}: ${$_(
+					TICKET_STATUS_LABEL[ticketInformation.status]
+				)}`}
 			</p>
 		</div>
 		<Checkbox class="pb-5" bind:checked={symptoms.FEVER} placeholder="symptom1_label" />

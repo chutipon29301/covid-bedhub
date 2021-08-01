@@ -11,10 +11,12 @@
 	import Fa from '$lib/components/ui/fa/index.svelte';
 	import Ticket from '$lib/components/ui/ticket/index.svelte';
 	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
+	import ProgressiveImg from '$lib/components/ui/progressiveImg/index.svelte';
 
 	let tickets = [];
 	let successPopupShown = false;
 	let ticketId: string;
+	let loaded = false;
 
 	onMount(() => {
 		loadMyTickets();
@@ -33,6 +35,7 @@
 					appointmentDate: t.appointedDate,
 					hospitalName: t.hospital?.name
 				})) || [];
+			loaded = !loading;
 			if (!loading) unsub();
 		});
 	}
@@ -46,11 +49,11 @@
 			cancelTicket(id);
 			return;
 		}
-		alert('In progress...');
+		goto(`${ROUTES.TICKET_HOSPITAL}/${id}`);
 	}
 
 	async function cancelTicket(id: string) {
-		if (!confirm('Are you sure?')) return;
+		if (!confirm('ยืนยันการขอยกเลิกคำขอ')) return;
 		setIsLoading(true);
 		const { data } = await CancelTicket({ variables: { id } });
 		setIsLoading(false);
@@ -85,66 +88,71 @@
 		{$_('cancel_request_popup_message', { values: { ticketId } })}
 	</Modal>
 {/if}
-<div class="flex flex-col min-h-content mx-auto">
-	<div class="flex">
-		<div class="flex flex-grow text-3xl">{$_('home_title')}</div>
-		{#if tickets.length}
-			<div on:click={() => navigate()}>
-				<Fa class="cursor-pointer" icon={faPlusCircle} size="2rem" />
-			</div>
-		{/if}
-	</div>
-	{#if tickets.length === 0}
-		<div class="flex flex-grow flex-col items-center justify-center">
-			<div
-				class="border border-indigo-300 px-16 sm:px-24 py-12 cursor-pointer rounded-lg shadow-md"
-				on:click={() => navigate()}
-			>
-				<img
-					class="pb-4"
-					src="/button/online-reservation.png"
-					alt={$_('find_bed_button')}
-					width="96px"
-				/>
-				<div class="flex items-center text-lg">
-					<Fa class="pr-2" icon={faSearch} />{$_('find_bed_button')}
+{#if loaded}
+	<div class="flex flex-col min-h-content mx-auto">
+		<div class="flex">
+			<div class="flex flex-grow text-3xl">{$_('home_title')}</div>
+			{#if tickets.length}
+				<div on:click={() => navigate()}>
+					<Fa class="cursor-pointer" icon={faPlusCircle} size="2rem" />
+				</div>
+			{/if}
+		</div>
+		{#if tickets.length === 0}
+			<div class="flex flex-grow flex-col items-center justify-center">
+				<div
+					class="border border-indigo-300 px-16 sm:px-24 py-12 cursor-pointer rounded-lg shadow-md"
+					on:click={() => navigate()}
+				>
+					<ProgressiveImg
+						class="pb-4"
+						aspectRatio="1/1"
+						width="96px"
+						height="96px"
+						src="/button/online-reservation_progressive.png"
+						dataSrc="/button/online-reservation.png"
+						alt="BookingBtn"
+					/>
+					<div class="flex items-center text-lg">
+						<Fa class="pr-2" icon={faSearch} />{$_('find_bed_button')}
+					</div>
 				</div>
 			</div>
-		</div>
-	{:else}
-		{#if tickets.filter((t) => t.status === TICKET_STATUS.REQUEST || t.status === TICKET_STATUS.MATCH).length === 0}
-			<div class="flex justify-center pt-8 text-lg">{$_('no_information_label')}</div>
+		{:else}
+			{#if tickets.filter((t) => t.status === TICKET_STATUS.REQUEST || t.status === TICKET_STATUS.MATCH).length === 0}
+				<div class="flex justify-center pt-8 text-lg">{$_('no_information_label')}</div>
+			{/if}
+			{#each tickets.filter((t) => t.status === TICKET_STATUS.REQUEST || t.status === TICKET_STATUS.MATCH) as ticket}
+				<div class="pt-4">
+					<Ticket
+						name={ticket.name}
+						id={ticket.id}
+						status={ticket.status}
+						appointmentDate={ticket?.appointmentDate}
+						hospitalName={ticket?.hospitalName}
+						on:clickButton={(v) => handleButtonClick(ticket.ticketId, v.detail)}
+						on:clickEdit={() => onClickEdit(ticket.ticketId)}
+					/>
+				</div>
+			{/each}
+			<div class="text-3xl pt-8">{$_('home_history_title')}</div>
+			{#if tickets.filter((t) => t.status === TICKET_STATUS.HOSPITAL_CANCEL || t.status === TICKET_STATUS.PATIENT_CANCEL).length === 0}
+				<div class="flex justify-center py-8 text-lg">{$_('no_information_label')}</div>
+			{/if}
+			{#each tickets.filter((t) => t.status === 'HOSPITAL_CANCEL' || t.status === 'PATIENT_CANCEL') as ticket}
+				<div class="pt-4">
+					<Ticket
+						name={ticket.name}
+						id={ticket.id}
+						status={ticket.status}
+						appointmentDate={ticket?.appointmentDate}
+						hospitalName={ticket?.hospitalName}
+					/>
+				</div>
+			{/each}
 		{/if}
-		{#each tickets.filter((t) => t.status === TICKET_STATUS.REQUEST || t.status === TICKET_STATUS.MATCH) as ticket}
-			<div class="pt-4">
-				<Ticket
-					name={ticket.name}
-					id={ticket.id}
-					status={ticket.status}
-					appointmentDate={ticket?.appointmentDate}
-					hospitalName={ticket?.hospitalName}
-					on:clickButton={(v) => handleButtonClick(ticket.ticketId, v.detail)}
-					on:clickEdit={() => onClickEdit(ticket.ticketId)}
-				/>
-			</div>
-		{/each}
-		<div class="text-3xl pt-8">{$_('home_history_title')}</div>
-		{#if tickets.filter((t) => t.status === TICKET_STATUS.HOSPITAL_CANCEL || t.status === TICKET_STATUS.PATIENT_CANCEL).length === 0}
-			<div class="flex justify-center py-8 text-lg">{$_('no_information_label')}</div>
-		{/if}
-		{#each tickets.filter((t) => t.status === 'HOSPITAL_CANCEL' || t.status === 'PATIENT_CANCEL') as ticket}
-			<div class="pt-4">
-				<Ticket
-					name={ticket.name}
-					id={ticket.id}
-					status={ticket.status}
-					appointmentDate={ticket?.appointmentDate}
-					hospitalName={ticket?.hospitalName}
-				/>
-			</div>
-		{/each}
-	{/if}
-</div>
+	</div>
+{/if}
 
 <style>
 	.min-h-content {

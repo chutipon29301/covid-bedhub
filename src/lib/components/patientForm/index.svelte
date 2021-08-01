@@ -1,19 +1,21 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
-	import Input from '$lib/components/ui/input/index.svelte';
-	import DatePicker from '$lib/components/ui/datepicker';
 	import {
 		noFutureValidation,
 		identificationValidation,
 		mobileNumberValidation,
 		nameValidation
 	} from '$lib/util';
+	import type { Gender } from '$lib/generated/graphql';
+	import Input from '$lib/components/ui/input/index.svelte';
+	import DatePicker from '$lib/components/ui/datepicker';
+	import Dropdown from '$lib/components/ui/dropdown/index.svelte';
 
 	export let id: string,
 		firstName: string,
 		lastName: string,
 		dob: Date,
-		sex: string,
+		sex: Gender,
 		mobile: string,
 		disabled: {
 			id?: boolean;
@@ -64,12 +66,15 @@
 		? ''
 		: $_('validation_inline_error', { values: { field: $_('patient_dob_information') } })}
 />
-<Input
+<Dropdown
 	required={true}
-	class="py-2"
+	class="pb-2 pt-4"
 	label={$_('patient_sex_information')}
-	disabled={disabled?.sex}
 	bind:value={sex}
+	list={[
+		{ label: $_('male_label'), value: 'MALE' },
+		{ label: $_('female_label'), value: 'FEMALE' }
+	]}
 />
 <Input
 	required={true}
