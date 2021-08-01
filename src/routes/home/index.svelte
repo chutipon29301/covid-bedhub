@@ -53,7 +53,7 @@
 	}
 
 	async function cancelTicket(id: string) {
-		if (!confirm('ยืนยันการขอยกเลิกคำขอ')) return;
+		if (!confirm('ยืนยันการยกเลิก')) return;
 		setIsLoading(true);
 		const { data } = await CancelTicket({ variables: { id } });
 		setIsLoading(false);
@@ -80,13 +80,11 @@
 {#if successPopupShown}
 	<Modal
 		icon={faMinusCircle}
-		heading={$_('request_popup_heading')}
+		heading={$_('cancel_request_success_label')}
 		confirmBtn={'OK'}
 		colorTone={EModalColorTone.RED}
 		on:confirm={onClickOkPopup}
-	>
-		{$_('cancel_request_popup_message', { values: { ticketId } })}
-	</Modal>
+	/>
 {/if}
 {#if loaded}
 	<div class="flex flex-col min-h-content mx-auto">

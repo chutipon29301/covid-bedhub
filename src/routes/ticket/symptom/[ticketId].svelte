@@ -81,9 +81,7 @@
 		confirmBtn={$_('ok_button')}
 		colorTone={EModalColorTone.GREEN}
 		on:confirm={onClickOkPopup}
-	>
-		{$_('edit_symptoms_popup_message', { values: { ticketId: $page.params.ticketId } })}
-	</Modal>
+	/>
 {/if}
 <Template
 	title={$_('edit_symptoms_title')}
