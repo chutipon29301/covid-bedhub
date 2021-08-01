@@ -58,7 +58,7 @@
 </script>
 
 <svelte:head>
-	<title>{$_('patient_add_title')}</title>
+	<title>{$_('personal_info_web_title')}</title>
 </svelte:head>
 <Template
 	title={$_('patient_add_title')}

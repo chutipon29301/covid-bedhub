@@ -31,7 +31,7 @@
 </script>
 
 <svelte:head>
-	<title>{$_('home_title')}</title>
+	<title>{$_('web_title')}</title>
 </svelte:head>
 
 {#if loaded}
@@ -87,23 +87,38 @@
 						<span slot="icon"> <Fa class="pl-4" icon={faArrowRight} /></span>
 					</Button>
 				</div>
-				<div class="py-6 text-left text-sm">
-					<p class="font-bold pb-4">{$_('contact_info_1_label')}</p>
-					<p class="officer-text-color font-bold">{$_('contact_info_2_label')}</p>
-					<p class="officer-text-color pb-6">{$_('contact_info_3_label')}</p>
-					<p class="officer-text-color font-bold">{$_('contact_info_4_label')}</p>
-					<p class="officer-text-color pb-6">{$_('contact_info_4_label')}</p>
-					<p class="officer-text-color font-bold">{$_('contact_info_5_label')}</p>
-					<p class="officer-text-color pb-6">{$_('contact_info_6_label')}</p>
-					<p class="officer-text-color font-bold">{$_('contact_info_7_label')}</p>
-					<p class="officer-text-color pb-6">{$_('contact_info_8_label')}</p>
-					<p class="officer-text-color font-bold">{$_('contact_info_9_label')}</p>
-					<p class="officer-text-color pb-6">{$_('contact_info_10_label')}</p>
-					<p class="officer-text-color font-bold">{$_('contact_info_11_label')}</p>
-					<p class="officer-text-color">{$_('contact_info_12_label')}</p>
-				</div>
 			</div>
 		{/if}
+		<div class="py-6 text-left text-sm">
+			<p class="font-bold pb-4">{$_('contact_info_1_label')}</p>
+			<p class="officer-text-color font-bold">
+				{$_('contact_info_2_label')} <a class="underline" href="tel:1668">(โทร 1668)</a>
+			</p>
+			<p class="officer-text-color pb-6">{$_('contact_info_3_label')}</p>
+			<p class="officer-text-color font-bold">
+				{$_('contact_info_4_label')} <a class="underline" href="tel:1669">(โทร 1669)</a>
+			</p>
+			<p class="officer-text-color pb-6">{$_('contact_info_5_label')}</p>
+			<p class="officer-text-color font-bold">
+				{$_('contact_info_6_label')} (<a class="underline" href="tel:1330">โทร 1330</a> กด 0)
+			</p>
+			<p class="officer-text-color pb-6">{$_('contact_info_7_label')}</p>
+
+			<p class="officer-text-color font-bold">
+				{$_('contact_info_8_label')} <a class="underline" href="tel:1442">(โทร 1422)</a>
+			</p>
+			<p class="officer-text-color pb-6">{$_('contact_info_9_label')}</p>
+
+			<p class="officer-text-color font-bold">
+				{$_('contact_info_10_label')} <a class="underline" href="tel:1506">(โทร 1506)</a>
+			</p>
+			<p class="officer-text-color pb-6">{$_('contact_info_11_label')}</p>
+			<p class="officer-text-color font-bold">
+				{$_('contact_info_12_label')}
+				<a class="underline" href="tel:0967711687">(โทร 096-771-1687)</a>
+			</p>
+			<p class="officer-text-color">{$_('contact_info_13_label')}</p>
+		</div>
 	</div>
 {/if}
 

@@ -71,7 +71,7 @@
 </script>
 
 <svelte:head>
-	<title>{$_('home_ticket_title')}</title>
+	<title>{$_('edit_symptops_web_title')}</title>
 </svelte:head>
 
 {#if successPopupShown}

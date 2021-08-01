@@ -41,7 +41,7 @@
 </script>
 
 <svelte:head>
-	<title>{$_('login_title')}</title>
+	<title>{$_('login_web_title')}</title>
 </svelte:head>
 
 <div class="login-button flex justify-center">

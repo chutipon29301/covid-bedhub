@@ -39,6 +39,10 @@
 		.fill(1)
 		.map((v, i) => v + i);
 	$: _date = value?.toDateString();
+	let close = () => {
+		document.body.style.overflow = 'initial';
+		visible = false;
+	};
 	let cancel = () => {
 		document.body.style.overflow = 'initial';
 		value = null;
@@ -111,10 +115,10 @@
 	{/if}
 </div>
 {#if visible}
-	<div class="touch-date-popup" bind:this={popup}>
+	<div class="touch-date-popup select-none" bind:this={popup}>
 		<div>
 			<div class="touch-date-wrapper relative">
-				<div class="absolute right-6 top-4" on:click={() => (visible = false)}>
+				<div class="absolute right-6 top-4" on:click={close}>
 					<Fa class="cursor-pointer" icon={faTimes} />
 				</div>
 				<div class="date-line">{date.getDate()} {MONTHS[date.getMonth()]} {date.getFullYear()}</div>

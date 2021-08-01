@@ -87,5 +87,15 @@
 		>
 			{$_('login_title')}
 		</div>
+		<div class="text-center mt-12 text-lg">
+			{$_('query_info_label')}<br />{$_('facebook_page_label')}:
+			<a
+				class="font-bold cursor-pointer underline"
+				href="https://www.facebook.com/thaibedhub"
+				target="_blank"
+			>
+				Thaibedhub
+			</a>
+		</div>
 	</span>
 </Layout>
