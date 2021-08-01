@@ -150,7 +150,7 @@
 		colorTone={EModalColorTone.GREEN}
 		on:confirm={onClickOkPopup}
 	>
-		{$_('request_popup_message', { values: { ticketId } })}
+		{$_('request_popup_message')}
 	</Modal>
 {/if}
 <div class="flex flex-col justify-center items-center">
