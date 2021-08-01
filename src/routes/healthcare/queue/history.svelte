@@ -17,7 +17,8 @@
 	import Button from '$lib/components/ui/button/index.svelte';
 	import AppointmentModal from '$lib/components/appointmentModal/index.svelte';
 	import Modal from '$lib/components/ui/modal/confirm/index.svelte';
-	import { TICKET_STATUS_LABEL } from '$lib/constants/constant';
+	import { GENDER_LABEL, RISK_LEVEL_LABEL, TICKET_STATUS_LABEL } from '$lib/constants/constant';
+	import { refreshAmount } from './store';
 
 	let headers = [
 			...Headers,
@@ -32,7 +33,8 @@
 		editTicketModalShown = false,
 		cancelTicketModalShown = false,
 		notes = '',
-		datepickerError: string;
+		datepickerError: string,
+		appointmentDate: string;
 
 	onMount(() => {
 		getRiskCount();
@@ -50,9 +52,9 @@
 						new Date(t.createdAt).toLocaleTimeString()
 					],
 					name: `${t.patient.firstName} ${t.patient.lastName}`,
-					sex: t.patient.sex,
+					sex: $_(GENDER_LABEL[t.patient.sex]),
 					age: t.patient.age,
-					riskLevel: t.riskLevel,
+					riskLevel: $_(RISK_LEVEL_LABEL[t.riskLevel]),
 					status: $_(TICKET_STATUS_LABEL[t.status]),
 					id: t.id,
 					appointmentDate: new Date(t.appointedDate).toDateString()
@@ -71,7 +73,7 @@
 				selectedTicket = {
 					id: +data.acceptedTicket.id,
 					name: `${data.acceptedTicket.patient.firstName} ${data.acceptedTicket.patient.lastName}`,
-					sex: data.acceptedTicket.patient.sex,
+					sex: $_(GENDER_LABEL[data.acceptedTicket.patient.sex]),
 					age: data.acceptedTicket.patient.age,
 					identification: data.acceptedTicket.patient.identification,
 					mobile: data.acceptedTicket.patient.tel,
@@ -86,8 +88,6 @@
 					symptoms: symptomToChecklist(data.acceptedTicket.symptoms),
 					illnesses: illnessToChecklist(data.acceptedTicket.patient.illnesses),
 					appointmentDate: data.acceptedTicket.appointedDate
-						? new Date(data.acceptedTicket.appointedDate)
-						: null
 				};
 				notes = data.acceptedTicket.notes;
 			}
@@ -133,15 +133,17 @@
 		if (action === 'edit') success = await editTicket(selectedTicket.id);
 		if (action === 'cancel') success = await cancelTicket(selectedTicket.id);
 		if (!success) return;
+		refreshAmount(true);
 		getRiskCount('network-only');
 		selectedTicket = null;
 		editTicketModalShown = false;
 		cancelTicketModalShown = false;
 		loadTickets();
+		refreshAmount(false);
 	}
 
 	async function editTicket(id: number): Promise<boolean> {
-		if (!selectedTicket.appointmentDate) {
+		if (!appointmentDate) {
 			datepickerError = 'Please select appointment date.';
 			alert(datepickerError);
 			return false;
@@ -152,7 +154,7 @@
 			variables: {
 				data: {
 					id: id.toString(),
-					appointedDate: dateToStringFormat(selectedTicket.appointmentDate),
+					appointedDate: dateToStringFormat(new Date(appointmentDate)),
 					notes
 				}
 			}
@@ -194,7 +196,7 @@
 	<AppointmentModal
 		heading={$_('edit_appointment_date')}
 		confirmBtn={$_('confirm_edit_request_label')}
-		bind:appointmentDate={selectedTicket.appointmentDate}
+		bind:appointmentDate
 		name={selectedTicket.name}
 		sex={selectedTicket.sex}
 		age={selectedTicket.age}

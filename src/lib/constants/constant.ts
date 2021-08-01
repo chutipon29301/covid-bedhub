@@ -34,3 +34,15 @@ export const SYMSPTOMS_LABEL = {
 	CHEST_PAIN: 'symptom9_label',
 	UNCONCIOUS: 'symptom10_label'
 };
+
+export const GENDER_LABEL = {
+	MALE: 'male_label',
+	FEMALE: 'female_label'
+};
+
+export const RISK_LEVEL_LABEL = {
+	1: 'low_label',
+	2: 'normal_label',
+	3: 'high_label',
+	4: 'very_high_label'
+};

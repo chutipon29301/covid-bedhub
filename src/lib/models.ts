@@ -65,7 +65,7 @@ export interface PatientDetail {
 	riskLevel: number;
 	symptoms: SymptomChecklist;
 	illnesses: IllnessChecklist;
-	appointmentDate?: Date;
+	appointmentDate?: string;
 }
 
 export interface ErrorDetail {

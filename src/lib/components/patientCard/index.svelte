@@ -50,7 +50,9 @@
 			</div>
 			{#if selectedTicket.appointmentDate}
 				<p class="py-4">
-					{`${$_('appointment_date_label')}: ${selectedTicket.appointmentDate.toDateString()}`}
+					{`${$_('appointment_date_label')}: ${new Date(
+						selectedTicket.appointmentDate
+					).toDateString()}`}
 				</p>
 			{/if}
 		</span>

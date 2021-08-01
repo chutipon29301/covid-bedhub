@@ -101,10 +101,10 @@
 		"accept_request": "รับคำขอ",
 		"deny_request": "ปฎิเสธคำขอ",
 		"all_label": "ทั้งหมด",
-		"very_high_label": "สูงมาก({amount})",
-		"high_label": "สูง({amount})",
-		"normal_label": "ปานกลาง({amount})",
-		"low_label": "ต่ำ({amount})",
+		"filter_very_high_label": "สูงมาก({amount})",
+		"filter_high_label": "สูง({amount})",
+		"filter_normal_label": "ปานกลาง({amount})",
+		"filter_low_label": "ต่ำ({amount})",
 		"rish_level_label": "ความเสี่ยง",
 		"cancel_appointment_label": "ยกเลิกนัดหมาย",
 		"change_appointment_label": "เปลี่ยนวันนัดหมาย",
@@ -173,6 +173,12 @@
 		"cancelled_status": "ถูกยกเลิกแล้ว",
 		"male_label": "เพศชาย",
 		"female_label": "เพศหญิง",
-		"untitled_label": "ไม่มีชื่อ"
+		"untitled_label": "ไม่มีชื่อ",
+		"query_info_label": "สอบถามข้อมูลเพิ่มเติมที่",
+		"facebook_page_label": "Facebook Page",
+		"very_high_label": "สูงมาก",
+		"high_label": "สูง",
+		"normal_label": "ปานกลาง",
+		"low_label": "ต่ำ"
 	}
 }

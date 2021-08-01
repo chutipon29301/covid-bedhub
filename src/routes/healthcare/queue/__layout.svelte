@@ -7,6 +7,7 @@
 	import { setIsLoading } from '$lib/store';
 	import { onMount } from 'svelte';
 	import Tabs from '$lib/components/ui/tabs/index.svelte';
+	import { refreshAmount$ } from './store';
 
 	$: tabs = [
 		$_('requests_label', { values: { amount: requestedAmount } }),
@@ -18,6 +19,9 @@
 
 	onMount(() => {
 		getTicketsAmount();
+		refreshAmount$.subscribe((v) => {
+			if (v) getTicketsAmount();
+		});
 	});
 
 	function switchTab(index: number) {

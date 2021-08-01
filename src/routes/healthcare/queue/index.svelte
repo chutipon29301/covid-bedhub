@@ -15,7 +15,8 @@
 	import PatientCard from '$lib/components/patientCard/index.svelte';
 	import Button from '$lib/components/ui/button/index.svelte';
 	import AppointmentModal from '$lib/components/appointmentModal/index.svelte';
-	import { TICKET_STATUS_LABEL } from '$lib/constants/constant';
+	import { GENDER_LABEL, RISK_LEVEL_LABEL, TICKET_STATUS_LABEL } from '$lib/constants/constant';
+	import { refreshAmount } from './store';
 
 	let headers = Headers.map((v) => ({ ...v, label: $_(v.label) })),
 		content = [],
@@ -26,7 +27,8 @@
 		riskLevel = null,
 		acceptTicketModalShown = false,
 		notes = '',
-		datepickerError: string;
+		datepickerError: string,
+		appointmentDate: string;
 
 	onMount(() => {
 		getRiskCount();
@@ -44,9 +46,9 @@
 						new Date(t.createdAt).toLocaleTimeString()
 					],
 					name: `${t.patient.firstName} ${t.patient.lastName}`,
-					sex: t.patient.sex,
+					sex: $_(GENDER_LABEL[t.patient.sex]),
 					age: t.patient.age,
-					riskLevel: t.riskLevel,
+					riskLevel: $_(RISK_LEVEL_LABEL[t.riskLevel]),
 					status: $_(TICKET_STATUS_LABEL[t.status]),
 					id: t.id
 				})) || [];
@@ -64,7 +66,7 @@
 				selectedTicket = {
 					id: +data.requestedTicket.id,
 					name: `${data.requestedTicket.patient.firstName} ${data.requestedTicket.patient.lastName}`,
-					sex: data.requestedTicket.patient.sex,
+					sex: $_(GENDER_LABEL[data.requestedTicket.patient.sex]),
 					age: data.requestedTicket.patient.age,
 					identification: data.requestedTicket.patient.identification,
 					mobile: data.requestedTicket.patient.tel,
@@ -122,14 +124,16 @@
 		if (action === 'accept') success = await acceptTicket(selectedTicket.id);
 		if (action === 'deny') success = true;
 		if (!success) return;
+		refreshAmount(true);
 		getRiskCount('network-only');
 		selectedTicket = null;
 		acceptTicketModalShown = false;
 		loadTickets();
+		refreshAmount(false);
 	}
 
 	async function acceptTicket(id: number): Promise<boolean> {
-		if (!selectedTicket.appointmentDate) {
+		if (!appointmentDate) {
 			datepickerError = 'Please select appointment date.';
 			alert(datepickerError);
 			return false;
@@ -140,7 +144,7 @@
 			variables: {
 				data: {
 					id: id.toString(),
-					appointedDate: dateToStringFormat(selectedTicket.appointmentDate),
+					appointedDate: dateToStringFormat(new Date(appointmentDate)),
 					notes
 				}
 			}
@@ -158,7 +162,7 @@
 	<AppointmentModal
 		heading={$_('set_appointment_date_label')}
 		confirmBtn={$_('confirm_accept_request_label')}
-		bind:appointmentDate={selectedTicket.appointmentDate}
+		bind:appointmentDate
 		bind:notes
 		name={selectedTicket.name}
 		sex={selectedTicket.sex}
