@@ -41,7 +41,7 @@
 </script>
 
 <svelte:head>
-	<title>{$_('hospital_information_label')}</title>
+	<title>{$_('hospital_info_web_title')}</title>
 </svelte:head>
 
 <div class="flex flex-col">

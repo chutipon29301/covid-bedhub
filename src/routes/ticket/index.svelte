@@ -83,7 +83,7 @@
 </script>
 
 <svelte:head>
-	<title>{$_('patient_title')}</title>
+	<title>{$_('register_web_title')}</title>
 </svelte:head>
 
 <div class="text-3xl pb-4">{$_('patient_title')}</div>

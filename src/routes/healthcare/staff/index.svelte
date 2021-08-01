@@ -45,7 +45,7 @@
 </script>
 
 <svelte:head>
-	<title>{$_('healthcare_staff_title')}</title>
+	<title>{$_('check_id_web_title')}</title>
 </svelte:head>
 
 <div class="pb-8" on:keypress={onkeypress}>

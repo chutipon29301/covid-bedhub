@@ -91,14 +91,6 @@
 	</section>
 	<section>
 		<div class="flex gap-4 bg-indigo-50 p-4 officer-text-color text-xs mt-4 justify-center">
-			<!-- <div class="text-center">
-				{$_('query_info_label')}<br />{$_('facebook_page_label')}:
-				<a
-					class="font-bold cursor-pointer"
-					href="https://www.facebook.com/thaibedhub"
-					target="_blank">Thaibedhub</a
-				>
-			</div> -->
 			<div class="text-center">
 				{$_('copyright_label')}<br />
 				{$_('thaibedhub_all_rights_label')}

@@ -155,7 +155,7 @@
 </script>
 
 <svelte:head>
-	<title>{$_('home_title')}</title>
+	<title>{$_('requested_ticket_web_title')}</title>
 </svelte:head>
 
 {#if acceptTicketModalShown}

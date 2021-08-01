@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	<title>{$_('low_risk_label')}</title>
+	<title>{$_('suggestion_web_title')}</title>
 </svelte:head>
 
 <div class="text-3xl pb-4">{$_('low_risk_label')}</div>

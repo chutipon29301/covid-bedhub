@@ -138,6 +138,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>{$_('find_location_web_title')}</title>
+</svelte:head>
+
 {#if successPopupShown}
 	<Modal
 		icon={faCheckCircle}

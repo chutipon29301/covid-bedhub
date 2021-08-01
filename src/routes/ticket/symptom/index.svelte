@@ -61,7 +61,7 @@
 </script>
 
 <svelte:head>
-	<title>{$_('home_ticket_title')}</title>
+	<title>{$_('symptoms_web_title')}</title>
 </svelte:head>
 
 <Template

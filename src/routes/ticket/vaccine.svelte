@@ -49,7 +49,7 @@
 </script>
 
 <svelte:head>
-	<title>{$_('home_ticket_title')}</title>
+	<title>{$_('vaccine_info_web_title')}</title>
 </svelte:head>
 
 <Template

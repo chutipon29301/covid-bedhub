@@ -172,7 +172,7 @@
 </script>
 
 <svelte:head>
-	<title>{$_('home_title')}</title>
+	<title>{$_('accepted_ticket_web_title')}</title>
 </svelte:head>
 
 {#if cancelTicketModalShown}
