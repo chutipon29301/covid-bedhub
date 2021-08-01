@@ -22,6 +22,7 @@
 	import Loading from '$lib/components/loading/index.svelte';
 	import ErrorHandler from '$lib/components/errorHandler/index.svelte';
 	import SentryService from '$lib/services/sentryService';
+	import ProgressiveImg from '$lib/components/ui/progressiveImg/index.svelte';
 
 	setContext('translate', new Translate());
 	setContext('sentry', new SentryService());
@@ -62,24 +63,14 @@
 				<Fa class="text-gray-700" size="lg" icon={faChevronLeft} />
 			</div>
 		{/if}
-
-		{#if screenSize > 1024}
-			<img
-				on:click={() => goto(ROUTES.LANDING)}
-				class="cursor-pointer"
-				src="/main_logo/Logo.png"
-				width="200px"
-				alt="Logo"
-			/>
-		{:else}
-			<img
-				on:click={() => goto(ROUTES.LANDING)}
-				class="cursor-pointer"
-				src="/main_logo/Logo_small.png"
-				width="200px"
-				alt="Logo"
-			/>
-		{/if}
+		<ProgressiveImg
+			class="cursor-pointer"
+			height="33px"
+			dataSrc={window.innerWidth > 1024 ? '/main_logo/Logo.png' : '/main_logo/Logo_small.png'}
+			src="/main_logo/Logo_progressive.png"
+			alt="Logo"
+			on:click={() => goto(ROUTES.LANDING)}
+		/>
 		{#if $isLogin$ && logoutButtonDisplay.includes($page.path)}
 			<div
 				class="border rounded-full bg-red-100 absolute right-6 cursor-pointer p-1"

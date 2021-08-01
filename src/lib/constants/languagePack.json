@@ -170,6 +170,9 @@
 		"clear_draft_label": "ลบฉบับร่าง",
 		"requeted_status": "รอการตอบรับจาก รพ.",
 		"matched_status": "ได้รับเตียงแล้ว",
-		"cancelled_status": "ถูกยกเลิกแล้ว"
+		"cancelled_status": "ถูกยกเลิกแล้ว",
+		"male_label": "เพศชาย",
+		"female_label": "เพศหญิง",
+		"untitled_label": "ไม่มีชื่อ"
 	}
 }

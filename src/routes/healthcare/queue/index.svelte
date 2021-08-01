@@ -10,7 +10,6 @@
 	import { onMount } from 'svelte';
 	import { Headers } from './models';
 	import { dateToStringFormat, illnessToChecklist, symptomToChecklist } from '$lib/util';
-	import { setRefresh } from './store/store';
 	import type { PatientDetail } from '$lib/models';
 	import QueueTable from '$lib/components/queueTable/index.svelte';
 	import PatientCard from '$lib/components/patientCard/index.svelte';
@@ -124,11 +123,9 @@
 		if (action === 'deny') success = true;
 		if (!success) return;
 		getRiskCount('network-only');
-		setRefresh(true);
 		selectedTicket = null;
 		acceptTicketModalShown = false;
 		loadTickets();
-		setRefresh(false);
 	}
 
 	async function acceptTicket(id: number): Promise<boolean> {

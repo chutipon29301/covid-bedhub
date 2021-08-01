@@ -75,7 +75,6 @@
 	/>
 	<DatePicker
 		required={true}
-		classes="mb-4"
 		placeholder={$_('exam_date_label')}
 		bind:value={examDate}
 		errorMessage={noFutureValidation(examDate)
@@ -101,9 +100,9 @@
 			{/if}
 
 			<Dropdown
-				class="pb-2"
+				class="pb-2 pt-4"
 				label={$_('vaccine_dose_label', { values: { order: i + 1 } })}
-				list={vaccineList}
+				list={vaccineList.map((v) => ({ label: v, value: v }))}
 				bind:value={vaccine.name}
 				errorMessage={dependantFieldsValidation(vaccine.name, vaccine.dateReceived)
 					? ''

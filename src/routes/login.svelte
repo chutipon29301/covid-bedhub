@@ -6,9 +6,10 @@
 	import { ROUTES } from '$lib/constants/routes';
 	import { setIsLoading, setIsLogin } from '$lib/store';
 	import { GetJwtFromLineCode } from '$lib/generated/graphql';
-	import Button from '$lib/components/ui/button/index.svelte';
 	import { storeToken } from '$lib/util';
 	import { variables } from '$lib/constants/environment';
+	import Button from '$lib/components/ui/button/index.svelte';
+	import ProgressiveImg from '$lib/components/ui/progressiveImg/index.svelte';
 
 	const code = $page.query.get('code');
 
@@ -46,7 +47,13 @@
 <div class="login-button flex justify-center">
 	<Button class="line-color" placeholder={$_('login_with_line_button')} on:click={() => redirect()}>
 		<span slot="icon-front">
-			<img src="/line_button/btn_base.png" alt="Line Login" width="32px" class="mr-4" />
+			<ProgressiveImg
+				class="mr-4"
+				width="32px"
+				height="32px"
+				dataSrc="/line_button/btn_base.png"
+				alt="LineLogo"
+			/>
 		</span>
 		<span slot="icon"><div class="pr-2" /></span>
 	</Button>

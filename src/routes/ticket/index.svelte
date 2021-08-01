@@ -38,7 +38,7 @@
 		localProfile =
 			form && (form.firstName || form.lastName)
 				? `${form.firstName || ''} ${form.lastName || ''}`
-				: 'Untitled';
+				: $_('untitled_label');
 	}
 
 	function addNewPatient() {

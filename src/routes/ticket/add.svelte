@@ -2,8 +2,6 @@
 	import { _ } from 'svelte-i18n';
 	import { form$, illnesses$, patientId$, setForm } from './store/store';
 	import { onDestroy, onMount } from 'svelte';
-	import PatientForm from '$lib/components/patientForm/index.svelte';
-	import Template from '$lib/components/ticketLayout/index.svelte';
 	import { ROUTES } from '$lib/constants/routes';
 	import { goto } from '$app/navigation';
 	import {
@@ -13,6 +11,9 @@
 		nameValidation
 	} from '$lib/util';
 	import { saveProfileToStorage } from './store/util';
+	import type { Gender } from '$lib/generated/graphql';
+	import PatientForm from '$lib/components/patientForm/index.svelte';
+	import Template from '$lib/components/ticketLayout/index.svelte';
 
 	$: disabledContinueBtn =
 		!id ||
@@ -31,7 +32,7 @@
 		firstName: string = $form$?.firstName,
 		lastName: string = $form$?.lastName,
 		dob: Date = $form$?.dob,
-		sex: string = $form$?.sex,
+		sex: Gender = $form$?.sex,
 		mobile: string = $form$?.mobile,
 		existed = $patientId$;
 

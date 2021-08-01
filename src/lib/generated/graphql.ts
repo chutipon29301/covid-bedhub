@@ -77,7 +77,7 @@ export type CreatePatientDto = {
 	birthDate?: Maybe<Scalars['String']>;
 	identification?: Maybe<Scalars['String']>;
 	tel?: Maybe<Scalars['String']>;
-	sex?: Maybe<Scalars['String']>;
+	sex?: Maybe<Gender>;
 	illnesses?: Maybe<Array<Illness>>;
 };
 
@@ -117,6 +117,11 @@ export type EditHospitalDto = {
 export type EditSymptomDto = {
 	symptoms?: Maybe<Array<Symptom>>;
 };
+
+export enum Gender {
+	Male = 'MALE',
+	Female = 'FEMALE'
+}
 
 export type Hospital = {
 	__typename?: 'Hospital';
@@ -266,7 +271,7 @@ export type Patient = {
 	birthDate: Scalars['String'];
 	identification: Scalars['String'];
 	tel: Scalars['String'];
-	sex: Scalars['String'];
+	sex: Gender;
 	illnesses: Array<Illness>;
 	age: Scalars['Int'];
 };
@@ -458,7 +463,7 @@ export type UpdatePatientDto = {
 	lastName?: Maybe<Scalars['String']>;
 	birthDate?: Maybe<Scalars['String']>;
 	tel?: Maybe<Scalars['String']>;
-	sex?: Maybe<Scalars['String']>;
+	sex?: Maybe<Gender>;
 	illnesses?: Maybe<Array<Illness>>;
 };
 

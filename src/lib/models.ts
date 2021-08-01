@@ -1,9 +1,11 @@
+import type { Gender } from './generated/graphql';
+
 export interface Patient {
 	id: string;
 	dob: Date;
 	firstName: string;
 	lastName: string;
-	sex: string;
+	sex: Gender;
 	mobile: string;
 }
 
