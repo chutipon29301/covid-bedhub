@@ -19,6 +19,7 @@
 		setIsLoading(true);
 		const response = await getJwt();
 		setIsLogin(true);
+		if (!response) return;
 		storeToken(response.token, response.expireDate);
 		setIsLoading(false);
 		goto(ROUTES.HOME);
@@ -26,7 +27,7 @@
 
 	async function getJwt() {
 		const { data } = await GetJwtFromLineCode({ variables: { code } });
-		return data.getJwtFromLineCode;
+		return data?.getJwtFromLineCode;
 	}
 
 	function redirect() {

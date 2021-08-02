@@ -21,6 +21,7 @@
 	});
 
 	async function saveNewCode(accessCode: string, userType: UserType) {
+		if (!accessCode) return;
 		setIsLoading(true);
 		const { data } = await UpdateAccessCode({
 			variables: { data: { accessCode: accessCode.toUpperCase(), userType } }

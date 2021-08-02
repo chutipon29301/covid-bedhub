@@ -54,3 +54,8 @@ export function dependantFieldsValidation(f1: unknown, f2: unknown): boolean {
 	if (f1 === undefined && f2 === undefined) return true;
 	return (!!f1 && !f2) || !f1 === !f2;
 }
+
+export function isJwt(jwt: string): boolean {
+	if (!jwt) return false;
+	return /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/.test(jwt);
+}

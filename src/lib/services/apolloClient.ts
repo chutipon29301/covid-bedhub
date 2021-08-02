@@ -39,13 +39,23 @@ class Client {
 
 		const errorLink = onError(({ graphQLErrors, networkError }) => {
 			if (graphQLErrors) {
-				const error = graphQLErrors[0].extensions.exception.response || {
-					heading: 'Unhandled Error',
-					message: graphQLErrors[0].message
-				};
+				const error = graphQLErrors[0].extensions.exception.response?.message
+					? {
+							heading: graphQLErrors[0].extensions.exception.response.error,
+							message: graphQLErrors[0].extensions.exception.response.message
+					  }
+					: {
+							heading: 'Unhandled Error',
+							message: graphQLErrors[0].message
+					  };
 				setError(error);
 			}
-			if (networkError) setError({ heading: 'Network Error', message: networkError.message });
+			if (networkError)
+				setError({
+					heading: 'network_error_heading',
+					message: 'network_error_message',
+					code: 'network'
+				});
 		});
 
 		const client = new ApolloClient({

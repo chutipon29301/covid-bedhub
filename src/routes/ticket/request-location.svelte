@@ -27,7 +27,6 @@
 
 	let canSubmitForm = false,
 		successPopupShown = false,
-		ticketId: string,
 		lat: number,
 		lng: number;
 
@@ -71,9 +70,9 @@
 		setIsLoading(true);
 		const id = $patientId$ ? await existedPatient($patientId$) : await newPatient();
 		if (!id) return;
-		await createTix(id);
+		const success = await createTix(id);
 		setIsLoading(false);
-		window.localStorage.clear();
+		if (success) window.localStorage.clear();
 	}
 
 	async function newPatient(): Promise<string> {
@@ -110,7 +109,7 @@
 		return id;
 	}
 
-	async function createTix(id: string): Promise<void> {
+	async function createTix(id: string): Promise<boolean> {
 		const response = await CreateTicket({
 			variables: {
 				data: {
@@ -126,10 +125,8 @@
 			}
 		});
 
-		if (response?.data) {
-			ticketId = response?.data.createTicket.id;
-			successPopupShown = true;
-		}
+		successPopupShown = !!response?.data;
+		return !!response?.data;
 	}
 
 	function onClickOkPopup() {

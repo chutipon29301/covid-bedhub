@@ -11,7 +11,7 @@
 	import '../app.postcss';
 	import { _ } from 'svelte-i18n';
 	import { Translate } from '$lib/services/translateService';
-	import { isLogin$, setAccessToken, setIsLogin } from '$lib/store';
+	import { isLogin$, setIsLogin } from '$lib/store';
 	import { onMount, setContext } from 'svelte';
 	import { faSignOutAlt, faTimes, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 	import Fa from '$lib/components/ui/fa/index.svelte';
@@ -23,6 +23,7 @@
 	import ErrorHandler from '$lib/components/errorHandler/index.svelte';
 	import SentryService from '$lib/services/sentryService';
 	import ProgressiveImg from '$lib/components/ui/progressiveImg/index.svelte';
+	import GoogleAnalytics from '$lib/components/googleAnalytics/index.svelte';
 
 	setContext('translate', new Translate());
 	setContext('sentry', new SentryService());
@@ -41,19 +42,18 @@
 		const { access_token } = cookie.parse(document.cookie);
 		if (access_token) {
 			setIsLogin(true);
-			setAccessToken(access_token);
 		}
 		screenSize = window.innerWidth;
 	});
 
 	function logout() {
 		document.cookie = 'access_token=; max-age=0;';
-		setIsLogin(false);
 		goto(ROUTES.LANDING);
 		location.reload();
 	}
 </script>
 
+<GoogleAnalytics />
 <ErrorHandler />
 <Loading />
 <div class="flex flex-col min-h-screen">
@@ -103,7 +103,7 @@
 	@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400&display=swap');
 
 	:global(body) {
-		font-family: 'Prompt', sans-serif;
+		font-family: 'Prompt', sans-serif !important;
 	}
 
 	.officer-text-color {

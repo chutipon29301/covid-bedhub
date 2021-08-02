@@ -6,35 +6,26 @@ import {
 	PROTECTED_ROUTES,
 	ROUTES
 } from '$lib/constants/routes';
-import { accessToken$, isLogin$ } from '$lib/store';
 import { AccountType } from '$lib/models';
 import type { LoadInput, LoadOutput } from '@sveltejs/kit';
 import type { DecodedJwt } from '$lib/models';
 import jwt_decoder from 'jwt-decode';
 import cookie from 'cookie';
+import { isJwt } from '$lib/util';
 
-let isLogin = false;
-let accessToken = '';
 const protectedPath = PROTECTED_ROUTES;
-const loginUnsub = isLogin$.subscribe((authState) => {
-	isLogin = authState;
-	if (authState) loginUnsub();
-});
-const tokenUnsub = accessToken$.subscribe((token) => {
-	accessToken = token;
-	if (token) tokenUnsub();
-});
 
 export function authGuard({ session, page }: LoadInput): LoadOutput {
-	const access_token = session.access_token || accessToken;
-	const loggedIn = access_token || isLogin;
+	const access_token = session.access_token || cookie.parse(document.cookie).access_token;
+	const loggedIn = access_token;
 
 	if (!loggedIn) return guardUnauthentication(page.path);
 
+	if (!isJwtValid(access_token)) document.cookie = 'access_token=; max-age=0;';
+
 	const accountType = import.meta.env.VITE_DEVELOP
 		? access_token.split('-')[0]
-		: jwt_decoder<DecodedJwt>(access_token || cookie.parse(document.cookie).access_token)
-				.accountType;
+		: jwt_decoder<DecodedJwt>(access_token).accountType;
 
 	return guardAuthentication(accountType, page.path);
 }
@@ -61,6 +52,10 @@ function guardAuthentication(accountType: string, path: string) {
 function allowedRoutes(path: string, routes: string[]): boolean {
 	if (path === '/') return false;
 	return !routes.some((r) => `${path}/`.includes(`${r}/`));
+}
+
+function isJwtValid(access_token: string): boolean {
+	return import.meta.env.VITE_DEVELOP || isJwt(access_token);
 }
 
 export default {

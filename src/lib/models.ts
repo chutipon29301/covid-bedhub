@@ -71,4 +71,5 @@ export interface PatientDetail {
 export interface ErrorDetail {
 	heading: string;
 	message: string;
+	code?: string;
 }
