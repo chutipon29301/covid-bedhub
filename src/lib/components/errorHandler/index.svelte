@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import { onMount } from 'svelte';
 	import { faExclamation } from '@fortawesome/free-solid-svg-icons';
 	import { EModalColorTone } from '$lib/components/ui/modal/model';
@@ -14,8 +15,15 @@
 	error$.subscribe((err) => {
 		setIsLoading(false);
 		if (!err) return;
-		errors = [...errors, err];
-		Sentry.captureException('Apollo Error');
+		let error = err;
+		if (err.code)
+			error = {
+				heading: $_(err.heading),
+				message: $_(err.message),
+				code: err.code
+			};
+		errors = [...errors, error];
+		if (!err.code) Sentry.captureException('Apollo Error');
 	});
 
 	onMount(() => {

@@ -23,6 +23,7 @@
 	import ErrorHandler from '$lib/components/errorHandler/index.svelte';
 	import SentryService from '$lib/services/sentryService';
 	import ProgressiveImg from '$lib/components/ui/progressiveImg/index.svelte';
+	import GoogleAnalytics from '$lib/components/googleAnalytics/index.svelte';
 
 	setContext('translate', new Translate());
 	setContext('sentry', new SentryService());
@@ -54,6 +55,7 @@
 	}
 </script>
 
+<GoogleAnalytics />
 <ErrorHandler />
 <Loading />
 <div class="flex flex-col min-h-screen">
@@ -103,7 +105,7 @@
 	@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400&display=swap');
 
 	:global(body) {
-		font-family: 'Prompt', sans-serif;
+		font-family: 'Prompt', sans-serif !important;
 	}
 
 	.officer-text-color {
