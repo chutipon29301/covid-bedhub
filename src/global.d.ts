@@ -8,6 +8,6 @@ interface ImportMetaEnv {
 }
 
 interface Window {
-	dataLayer: any;
+	dataLayer: unknown[];
 	gtag: (arg1: unknown, arg2: unknown, arg3: unknown) => void;
 }

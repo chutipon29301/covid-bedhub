@@ -11,7 +11,7 @@
 	import '../app.postcss';
 	import { _ } from 'svelte-i18n';
 	import { Translate } from '$lib/services/translateService';
-	import { isLogin$, setAccessToken, setIsLogin } from '$lib/store';
+	import { isLogin$, setIsLogin } from '$lib/store';
 	import { onMount, setContext } from 'svelte';
 	import { faSignOutAlt, faTimes, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 	import Fa from '$lib/components/ui/fa/index.svelte';
@@ -42,14 +42,12 @@
 		const { access_token } = cookie.parse(document.cookie);
 		if (access_token) {
 			setIsLogin(true);
-			setAccessToken(access_token);
 		}
 		screenSize = window.innerWidth;
 	});
 
 	function logout() {
 		document.cookie = 'access_token=; max-age=0;';
-		setIsLogin(false);
 		goto(ROUTES.LANDING);
 		location.reload();
 	}

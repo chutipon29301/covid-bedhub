@@ -39,7 +39,7 @@ class Client {
 
 		const errorLink = onError(({ graphQLErrors, networkError }) => {
 			if (graphQLErrors) {
-				const error = graphQLErrors[0].extensions.exception.response
+				const error = graphQLErrors[0].extensions.exception.response?.message
 					? {
 							heading: graphQLErrors[0].extensions.exception.response.error,
 							message: graphQLErrors[0].extensions.exception.response.message

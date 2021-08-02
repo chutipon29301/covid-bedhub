@@ -4,6 +4,7 @@
 	import { faExclamation } from '@fortawesome/free-solid-svg-icons';
 	import { EModalColorTone } from '$lib/components/ui/modal/model';
 	import { error$, setIsLoading } from '$lib/store';
+	import { Severity } from '@sentry/browser';
 	import ErrorModal from '$lib/components/ui/modal/dialog/index.svelte';
 	import * as Sentry from '@sentry/browser';
 
@@ -23,23 +24,24 @@
 				code: err.code
 			};
 		errors = [...errors, error];
-		if (!err.code) Sentry.captureException('Apollo Error');
+		switch (err.code) {
+			case 'network':
+				Sentry.captureEvent({ message: `GraphQLError: NetworkError`, level: Severity.Critical });
+				break;
+			default:
+				Sentry.captureEvent({ message: `GraphQLError: ${error.message}`, level: Severity.Info });
+				break;
+		}
 	});
 
 	onMount(() => {
 		window.onerror = (e: string) => {
 			setIsLoading(false);
-			const error = JSON.parse(
-				e
-					.replace('Uncaught Error: ', '')
-					.replace('uncaught exception: ', '')
-					.replace('Uncaught ', '')
-			);
 			errors = [
 				...errors,
 				{
-					heading: error?.title || 'Unhandled Error',
-					message: error?.message || 'An unexpected error happened'
+					heading: 'Unhandled Error',
+					message: e || 'An unexpected error happened'
 				}
 			];
 			Sentry.captureException(e);
@@ -50,11 +52,11 @@
 			errors = [
 				...errors,
 				{
-					heading: e.reason?.response?.data?.title || 'Unknown Error',
-					message: e.reason?.response?.data?.msg || e.reason
+					heading: 'Promise Error',
+					message: e.reason
 				}
 			];
-			Sentry.captureException(e);
+			Sentry.captureMessage('PromiseError', { extra: { reason: e.reason }, level: Severity.Error });
 		};
 	});
 

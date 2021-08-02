@@ -15,6 +15,7 @@
 	import cookie from 'cookie';
 	import jwtDecode from 'jwt-decode';
 	import ProgressiveImg from '$lib/components/ui/progressiveImg/index.svelte';
+	import { isJwt } from '$lib/util';
 
 	let accountType: string;
 	let loaded = false;
@@ -23,7 +24,7 @@
 		const { access_token } = cookie.parse(document.cookie);
 		accountType = variables.dev
 			? access_token?.split('-')[0]
-			: access_token
+			: access_token && isJwt(access_token)
 			? jwtDecode<DecodedJwt>(access_token).accountType
 			: null;
 		loaded = true;
