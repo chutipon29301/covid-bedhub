@@ -47,6 +47,7 @@ class Client {
 					: {
 							heading: 'Unhandled Error',
 							message: graphQLErrors[0].message
+							// code: '' // TODO: waiting for the error code design
 					  };
 				setError(error);
 			}
