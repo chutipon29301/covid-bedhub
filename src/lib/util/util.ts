@@ -12,7 +12,6 @@ export function storeToken(token: string, expires: Date): void {
 }
 
 export function dateToStringFormat(date: Date): string {
-	console.log(date);
 	if (!date || !date.getDate()) return null;
 	const d = new Date(date);
 	return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
