@@ -21,7 +21,8 @@
 		status: string,
 		hospitalName: string,
 		hospitalAddress: string,
-		hospitalTel: string;
+		hospitalTel: string,
+		notes: string;
 
 	onMount(() => loadTicketInfo());
 
@@ -36,6 +37,7 @@
 			hospitalName = data?.myTicket?.hospital?.name;
 			hospitalAddress = data?.myTicket?.hospital?.subDistrict;
 			hospitalTel = data?.myTicket?.hospital?.tel;
+			notes = data?.myTicket.notes;
 		});
 	}
 </script>
@@ -56,6 +58,10 @@
 				<p class="pb-2">{$_('hospital_received_label')}: {hospitalName}</p>
 				<p class="pb-2">{$_('hospital_address_label')}: {hospitalAddress}</p>
 				<p class="pb-2">{$_('hospital_tel_label')}: {hospitalTel}</p>
+				<div class="p-4 bg-gray-100 rounded-md">
+					<p class="font-bold pb-2">{$_('notes_label')}:</p>
+					<p>{notes}</p>
+				</div>
 			</div>
 		{:else}
 			<div class="flex justify-center py-8">

@@ -27,7 +27,6 @@
 		riskLevel = null,
 		acceptTicketModalShown = false,
 		notes = '',
-		datepickerError: string,
 		appointmentDate: string;
 
 	onMount(() => {
@@ -133,12 +132,6 @@
 	}
 
 	async function acceptTicket(id: number): Promise<boolean> {
-		if (!appointmentDate) {
-			datepickerError = 'Please select appointment date.';
-			alert(datepickerError);
-			return false;
-		}
-		datepickerError = null;
 		setIsLoading(true);
 		await AcceptTicket({
 			variables: {
