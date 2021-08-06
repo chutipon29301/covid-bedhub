@@ -46,3 +46,8 @@ export const RISK_LEVEL_LABEL = {
 	3: 'high_label',
 	4: 'very_high_label'
 };
+
+export const USER_TYPE = {
+	QUEUE_MANAGER: 'Queue Manager',
+	STAFF: 'Staff'
+};

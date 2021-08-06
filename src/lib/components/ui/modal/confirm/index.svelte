@@ -16,7 +16,7 @@
 </script>
 
 <div
-	class="min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none"
+	class="min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-10 outline-none focus:outline-none"
 	style="background: rgba(0,0,0,.2);"
 	on:click={() => dispatch('clickBg')}
 >

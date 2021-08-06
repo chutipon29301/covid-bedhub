@@ -13,6 +13,7 @@
 	import Modal from '$lib/components/ui/modal/dialog/index.svelte';
 	import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 	import { EModalColorTone } from '$lib/components/ui/modal/model';
+	import { USER_TYPE } from '$lib/constants/constant';
 
 	$: disabledRegisterBtn =
 		!username ||
@@ -89,7 +90,7 @@
 		<div class="pb-4 font-bold">
 			<p>โรงพยาบาล: {hospitalName}</p>
 			<p>Invite Code: {accessCode}</p>
-			<p>ประเภทเจ้าหน้าที่: {userType}</p>
+			<p>ประเภทเจ้าหน้าที่: {USER_TYPE[userType]}</p>
 		</div>
 		<Input
 			required={true}

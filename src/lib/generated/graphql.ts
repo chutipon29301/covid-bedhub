@@ -669,7 +669,7 @@ export type CheckHospitalQueryVariables = Exact<{
 
 export type CheckHospitalQuery = { __typename?: 'Query' } & {
 	myTicket?: Maybe<
-		{ __typename?: 'Ticket' } & Pick<Ticket, 'status'> & {
+		{ __typename?: 'Ticket' } & Pick<Ticket, 'status' | 'notes'> & {
 				patient: { __typename?: 'Patient' } & Pick<
 					Patient,
 					'firstName' | 'lastName' | 'identification' | 'tel'
@@ -1007,6 +1007,7 @@ export const CheckHospitalDoc = gql`
 				tel
 			}
 			status
+			notes
 			hospital {
 				name
 				subDistrict

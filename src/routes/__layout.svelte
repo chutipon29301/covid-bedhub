@@ -53,9 +53,9 @@
 	}
 </script>
 
-<GoogleAnalytics />
 <ErrorHandler />
 <Loading />
+<GoogleAnalytics />
 <div class="flex flex-col min-h-screen">
 	<section class="flex p-4 shadow-md" class:justify-center={TICKET_FLOW.includes($page.path)}>
 		{#if TICKET_FLOW.includes($page.path)}

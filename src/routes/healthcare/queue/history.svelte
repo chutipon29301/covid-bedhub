@@ -57,7 +57,7 @@
 					riskLevel: $_(RISK_LEVEL_LABEL[t.riskLevel]),
 					status: $_(TICKET_STATUS_LABEL[t.status]),
 					id: t.id,
-					appointmentDate: new Date(t.appointedDate).toDateString()
+					appointmentDate: t.appointedDate ? new Date(t.appointedDate).toDateString() : '-'
 				})) || [];
 			totalItems = data?.acceptedTickets.count;
 			if (!loading) unsub();
@@ -68,7 +68,7 @@
 		const response = AcceptedTicket({ variables: { id } });
 		const unsub = response.subscribe(({ data, loading }) => {
 			setIsLoading(loading);
-			if (data) {
+			if (data?.acceptedTicket) {
 				const vaccines = data.acceptedTicket.vaccines;
 				selectedTicket = {
 					id: +data.acceptedTicket.id,
@@ -89,6 +89,7 @@
 					illnesses: illnessToChecklist(data.acceptedTicket.patient.illnesses),
 					appointmentDate: data.acceptedTicket.appointedDate
 				};
+				appointmentDate = data.acceptedTicket.appointedDate;
 				notes = data.acceptedTicket.notes;
 			}
 			if (!loading) unsub();
@@ -202,7 +203,7 @@
 		age={selectedTicket.age}
 		identification={selectedTicket.identification}
 		mobile={selectedTicket.mobile}
-		{notes}
+		bind:notes
 		on:close={() => (editTicketModalShown = false)}
 		on:confirm={() => handleButtonClick('edit')}
 	/>
