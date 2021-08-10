@@ -96,7 +96,7 @@
 				</div>
 			{/if} -->
 		</div>
-		{#if tickets.length !== 0}
+		{#if tickets.length === 0}
 			<div class="flex flex-grow flex-col items-center justify-center">
 				<div class="text-center text-lg">
 					{$_('not_accept_ticket')}
