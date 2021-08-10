@@ -2,14 +2,16 @@ export const TICKET_STATUS = {
 	REQUEST: 'REQUEST',
 	MATCH: 'MATCH',
 	HOSPITAL_CANCEL: 'HOSPITAL_CANCEL',
-	PATIENT_CANCEL: 'PATIENT_CANCEL'
+	PATIENT_CANCEL: 'PATIENT_CANCEL',
+	EXPIRED: 'EXPIRED'
 };
 
 export const TICKET_STATUS_LABEL = {
 	REQUEST: 'requeted_status',
 	MATCH: 'matched_status',
 	HOSPITAL_CANCEL: 'cancelled_status',
-	PATIENT_CANCEL: 'cancelled_status'
+	PATIENT_CANCEL: 'cancelled_status',
+	EXPIRED: 'expired_status'
 };
 
 export const ILLNESSES_LABEL = {

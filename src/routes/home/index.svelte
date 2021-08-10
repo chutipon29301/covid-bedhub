@@ -144,10 +144,10 @@
 				</div>
 			{/each}
 			<div class="text-3xl pt-8">{$_('home_history_title')}</div>
-			{#if tickets.filter((t) => t.status === TICKET_STATUS.HOSPITAL_CANCEL || t.status === TICKET_STATUS.PATIENT_CANCEL).length === 0}
+			{#if tickets.filter((t) => t.status !== TICKET_STATUS.REQUEST && t.status !== TICKET_STATUS.MATCH).length === 0}
 				<div class="flex justify-center py-8 text-lg">{$_('no_information_label')}</div>
 			{/if}
-			{#each tickets.filter((t) => t.status === 'HOSPITAL_CANCEL' || t.status === 'PATIENT_CANCEL') as ticket}
+			{#each tickets.filter((t) => t.status !== TICKET_STATUS.REQUEST && t.status !== TICKET_STATUS.MATCH) as ticket}
 				<div class="pt-4">
 					<Ticket
 						name={ticket.name}
