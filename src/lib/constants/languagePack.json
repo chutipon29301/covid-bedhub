@@ -171,6 +171,7 @@
 		"requeted_status": "รอการตอบรับจาก รพ.",
 		"matched_status": "ได้รับเตียงแล้ว",
 		"cancelled_status": "ถูกยกเลิกแล้ว",
+		"expired_status": "คำขอหมดอายุ",
 		"male_label": "เพศชาย",
 		"female_label": "เพศหญิง",
 		"untitled_label": "ไม่มีชื่อ",

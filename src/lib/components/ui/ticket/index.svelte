@@ -8,7 +8,8 @@
 		faPen,
 		faCheckCircle,
 		faHourglassHalf,
-		faBan
+		faBan,
+		faCalendarTimes
 	} from '@fortawesome/free-solid-svg-icons';
 	import { createEventDispatcher } from 'svelte';
 	import Fa from '$lib/components/ui/fa/index.svelte';
@@ -73,7 +74,7 @@
 					class="w-full"
 					placeholder={$_('see_hospital_button')}
 				/>
-			{:else}
+			{:else if status !== TICKET_STATUS.EXPIRED}
 				<div class="w-full border rounded-sm border-red-400 text-red-400 flex justify-center py-3">
 					{$_('cancel_request_success_label')}
 				</div>
@@ -87,6 +88,8 @@
 				<Fa class="text-green-500" icon={faCheckCircle} size="lg" />
 			{:else if status === TICKET_STATUS.REQUEST}
 				<Fa class="text-yellow-500" icon={faHourglassHalf} size="lg" />
+			{:else if status === TICKET_STATUS.EXPIRED}
+				<Fa class="text-gray-500" icon={faCalendarTimes} size="lg" />
 			{:else}
 				<Fa class="text-gray-500" icon={faBan} size="lg" />
 			{/if}
