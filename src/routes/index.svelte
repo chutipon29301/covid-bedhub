@@ -16,9 +16,13 @@
 	import jwtDecode from 'jwt-decode';
 	import ProgressiveImg from '$lib/components/ui/progressiveImg/index.svelte';
 	import { isJwt } from '$lib/util';
+	import Alert from '$lib/components/ui/modal/dialog/index.svelte';
+	import { faExclamation } from '@fortawesome/free-solid-svg-icons';
+	import { EModalColorTone } from '$lib/components/ui/modal/model';
 
 	let accountType: string;
 	let loaded = false;
+	let showAlert = false;
 
 	onMount(() => {
 		const { access_token } = cookie.parse(document.cookie);
@@ -35,6 +39,17 @@
 	<title>{$_('web_title')}</title>
 </svelte:head>
 
+{#if showAlert}
+	<Alert
+		heading={$_('not_accept_ticket')}
+		icon={faExclamation}
+		confirmBtn="OK"
+		colorTone={EModalColorTone.RED}
+		on:confirm={() => goto(ROUTES.LOGIN)}
+	>
+		{$_('not_accept_ticket_detail')}
+	</Alert>
+{/if}
 {#if loaded}
 	<div>
 		{#if !accountType || accountType === 'reporter'}
@@ -46,12 +61,12 @@
 					: '/banner/patient_image_small.png'}
 				src="/banner/patient_image_progressive.png"
 				alt="PatientBanner"
-				on:click={() => goto(ROUTES.LOGIN)}
+				on:click={() => (showAlert = true)}
 			/>
 			<Button
 				class="w-full mb-4"
 				placeholder={$_('login_as_patient')}
-				on:click={() => goto(ROUTES.LOGIN)}
+				on:click={() => (showAlert = true)}
 			>
 				<span slot="icon"> <Fa class="pl-4" icon={faArrowRight} /></span>
 			</Button>

@@ -90,15 +90,21 @@
 	<div class="flex flex-col min-h-content mx-auto">
 		<div class="flex">
 			<div class="flex flex-grow text-3xl">{$_('home_title')}</div>
-			{#if tickets.length}
+			<!-- {#if tickets.length}
 				<div on:click={() => navigate()}>
 					<Fa class="cursor-pointer" icon={faPlusCircle} size="2rem" />
 				</div>
-			{/if}
+			{/if} -->
 		</div>
-		{#if tickets.length === 0}
+		{#if tickets.length !== 0}
 			<div class="flex flex-grow flex-col items-center justify-center">
-				<div
+				<div class="text-center text-lg">
+					{$_('not_accept_ticket')}
+				</div>
+				<div class="text-center pt-4 text-sm text-gray-600">
+					{$_('not_accept_ticket_detail')}
+				</div>
+				<!-- <div
 					class="border border-indigo-300 px-16 sm:px-24 py-12 cursor-pointer rounded-lg shadow-md"
 					on:click={() => navigate()}
 				>
@@ -114,7 +120,7 @@
 					<div class="flex items-center text-lg">
 						<Fa class="pr-2" icon={faSearch} />{$_('find_bed_button')}
 					</div>
-				</div>
+				</div> -->
 			</div>
 		{:else}
 			{#if tickets.filter((t) => t.status === TICKET_STATUS.REQUEST || t.status === TICKET_STATUS.MATCH).length === 0}

@@ -17,8 +17,9 @@
 		localProfile: string;
 
 	onMount(() => {
-		loadProfiles();
-		loadLocalStorage();
+		goto(ROUTES.HOME);
+		// loadProfiles();
+		// loadLocalStorage();
 	});
 
 	function loadProfiles() {
