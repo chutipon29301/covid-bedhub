@@ -101,9 +101,13 @@
 				<div class="text-center text-lg">
 					{$_('not_accept_ticket')}
 				</div>
-				<div class="text-center pt-4 text-sm text-gray-600">
+				<a
+					class="text-center pt-4 text-sm text-gray-600 underline"
+					href="https://www.facebook.com/thaibedhub"
+					target="_blank"
+				>
 					{$_('not_accept_ticket_detail')}
-				</div>
+				</a>
 				<!-- <div
 					class="border border-indigo-300 px-16 sm:px-24 py-12 cursor-pointer rounded-lg shadow-md"
 					on:click={() => navigate()}
